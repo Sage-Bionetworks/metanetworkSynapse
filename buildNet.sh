@@ -97,35 +97,35 @@ echo "numberCore: $numberCore"
 
 #if sparrow:
 if [ $sparrow -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowMPI"
 fi
 
 #if aracne
 if [ $aracne -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv
 fi
 
 #if wgcna
 if [ $wgcna -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv
 fi
 
 #if lasso
 if [ $lasso -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoBICMPI"
 fi
 
 #if ridge
 if [ $ridge -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeBICMPI"
 fi
 
 #if genie3
 if [ $genie3 -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "genie3MPI"
 fi
 
 #if tigress
 if [ $tigress -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigressMPI"
 fi

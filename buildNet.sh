@@ -102,12 +102,12 @@ fi
 
 #if aracne
 if [ $aracne -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $pathv
+  Rscript buildOtherNet.R $dataFile $pathv "aracne"
 fi
 
 #if wgcna
 if [ $wgcna -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $pathv
+  Rscript buildOtherNet.R $dataFile $pathv "wgcna"
 fi
 
 #if lasso

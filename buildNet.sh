@@ -29,16 +29,13 @@ genie3=0
 tigress=0
 sva=0
 
-while getopts ":d:y:c:p:n:sawlrgtv" opt; do
+while getopts ":d:p:n:sawlrgtv" opt; do
   case $opt in
     d)
       dataFile=$OPTARG
       ;;
-    y)
-      synapseIdFile=$OPTARG
-      ;;
-    c)
-      codeUrlFile=$OPTARG
+    p)
+      pathv=$OPTARG
       ;;
     s)
       sparrow=1
@@ -63,9 +60,6 @@ while getopts ":d:y:c:p:n:sawlrgtv" opt; do
       ;;
     v)
       sva=1
-      ;;
-    p)
-      projectId=$OPTARG
       ;;
     n)
       numberCore=$OPTARG
@@ -103,35 +97,35 @@ echo "numberCore: $numberCore"
 
 #if sparrow:
 if [ $sparrow -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) "/shared/CMC/CMCSPARROW/"
+  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
 fi
 
 #if aracne
 if [ $aracne -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) "/shared/CMC/CMCSPARROW/"
+  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
 fi
 
 #if wgcna
 if [ $wgcna -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) "/shared/CMC/CMCSPARROW/"
+  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
 fi
 
 #if lasso
 if [ $lasso -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) "/shared/CMC/CMCSPARROW/"
+  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
 fi
 
 #if ridge
 if [ $ridge -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) "/shared/CMC/CMCSPARROW/"
+  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
 fi
 
 #if genie3
 if [ $genie3 -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) "/shared/CMC/CMCSPARROW/"
+  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
 fi
 
 #if tigress
 if [ $tigress -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) "/shared/CMC/CMCSPARROW/"
+  mpirun -np 1 Rscript buildMpiSparrowNet.R $dataFile $((numberCore-1)) $pathv
 fi

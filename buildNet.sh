@@ -1,5 +1,8 @@
 #!/bin/bash
 
+###bash script to build networks on an EC2 starcluster instance using the metaNet R package
+###Author: Benjamin A Logsdon, 2015
+
 #d data file
 
 #y file with syn ids used to run analysis

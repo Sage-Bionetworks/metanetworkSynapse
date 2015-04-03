@@ -1,13 +1,23 @@
 require(synapseClient)
 synapseLogin()
 
+#normalization method (if applicable)
+#network inference method
+#file with syn ids of data used to run network analysis
+#file with code urls of code used to run network analysis
+#syn id of project to post networks to
+#tissue type of data used to build networks
+#disease state
+#organism
+#what type of edge summary is present in file
+
+
 file=as.character(commandArgs(TRUE)[[1]])
 disease=as.character(commandArgs(TRUE)[[2]])
 normalization=as.character(commandArgs(TRUE)[[3]])
 method=as.character(commandArgs(TRUE)[[4]])
-synGene=as.character(commandArgs(TRUE)[[5]])
-synTF=as.character(commandArgs(TRUE)[[6]])
-synMeta=as.character(commandArgs(TRUE)[[7]])
+synIdFile <- as.character(commandArgs(TRUE)[[5]])
+synCodeUrlFile <- as.character(commandArgs(TRUE)[[6]])
 
 #load('result.rda')
 #write.csv(result,file=file,quote=F)

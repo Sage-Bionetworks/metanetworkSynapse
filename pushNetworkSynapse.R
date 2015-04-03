@@ -49,7 +49,7 @@ networkAnnotation <- list(
 #set annotations
 synSetAnnotations(synNet) <- networkAnnotation
 
-#define provenance
+#define provenance: FIX FIX FIX
 act <- Activity(name = paste0(method,' ',disease,' network analysis'),
                 used = list(list(entity=synGene,wasExecuted=FALSE),list(entity=synTF,wasExecuted=FALSE),list(entity=synMeta,wasExecuted=FALSE)),
                 executed=list("https://github.com/blogsdon/CMCSPARROW/blob/master/grabCMCdata.sh","https://github.com/blogsdon/CMCSPARROW/blob/master/runcmcsparrow.sh"))

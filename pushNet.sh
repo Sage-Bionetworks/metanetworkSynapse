@@ -13,8 +13,6 @@
 #disease state
 #organism
 #what type of edge summary is present in file
-
-
 sparrow=0
 aracne=0
 wgcna=0
@@ -23,7 +21,7 @@ ridge=0
 genie3=0
 tigress=0
 
-while getopts ":p:c:g:sawlrgtv:o:d:u:q:" opt; do
+while getopts ":p:c:g:sawlrgtv:o:d:u:" opt; do
   case $opt in
     p)
       parentId=$OPTARG
@@ -67,9 +65,6 @@ while getopts ":p:c:g:sawlrgtv:o:d:u:q:" opt; do
     u)
       tissueType=$OPTARG
       ;;
-    q)
-      edgeType=$OPTARG
-      ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
       exit 1
@@ -94,30 +89,29 @@ echo "normalization: $normalization"
 echo "parentId: $parentId"
 
 if [ $sparrow -eq "1" ]; then
-  #mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowMPI"
-  Rscript pushNetworkSynapse.R
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "sparrow" $normalization $tissueType $disease $organism "zstatistic"
 fi
 
 if [ $aracne -eq "1" ]; then
-
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "aracne" $normalization $tissueType $disease $organism "indicator"
 fi
 
 if [ $wgcna -eq "1" ]; then
-
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "wgcna" $normalization $tissueType $disease $organism "weight"
 fi
 
 if [ $lasso -eq "1" ]; then
-
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"
 fi
 
 if [ $ridge -eq "1" ]; then
-
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"
 fi
 
 if [ $genie3 -eq "1" ]; then
-
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "genie3" $normalization $tissueType $disease $organism "weight"
 fi
 
 if [ $tigress -eq "1" ]; then
-
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"
 fi

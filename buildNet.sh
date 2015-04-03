@@ -27,9 +27,8 @@ lasso=0
 ridge=0
 genie3=0
 tigress=0
-sva=0
 
-while getopts ":d:p:n:sawlrgtv" opt; do
+while getopts ":d:p:n:sawlrgt" opt; do
   case $opt in
     d)
       dataFile=$OPTARG
@@ -58,9 +57,6 @@ while getopts ":d:p:n:sawlrgtv" opt; do
     t)
       tigress=1
       ;;
-    v)
-      sva=1
-      ;;
     n)
       numberCore=$OPTARG
       ;;
@@ -76,8 +72,6 @@ while getopts ":d:p:n:sawlrgtv" opt; do
 done
 
 echo "dataFile: $dataFile"
-echo "synapseIdFile: $synapseIdFile"
-echo "codeUrlFile: $codeUrlFile"
 echo "sparrow: $sparrow"
 echo "aracne: $aracne"
 echo "wgcna: $wgcna"
@@ -85,8 +79,6 @@ echo "lasso: $lasso"
 echo "ridge: $ridge"
 echo "genie3: $genie3"
 echo "tigress: $tigress"
-echo "sva: $sva"
-echo "projectId: $projectId"
 echo "numberCore: $numberCore"
 
 #$ -S /bin/bash

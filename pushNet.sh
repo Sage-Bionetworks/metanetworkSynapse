@@ -4,6 +4,17 @@
 ###Author: Benjamin A Logsdon, 2015
 
 
+#syn id of parentId to post networks to
+#file with syn ids of data used to run network analysis
+#file with code urls of code used to run network analysis
+#network inference method
+#normalization method (if applicable)
+#tissue type of data used to build networks
+#disease state
+#organism
+#what type of edge summary is present in file
+
+
 sparrow=0
 aracne=0
 wgcna=0
@@ -11,12 +22,11 @@ lasso=0
 ridge=0
 genie3=0
 tigress=0
-sva=0
 
-while getopts ":p:c:g:sawlrgtv" opt; do
+while getopts ":p:c:g:sawlrgtv:o:d:u:q:" opt; do
   case $opt in
     p)
-      projectId=$OPTARG
+      parentId=$OPTARG
       ;;
     c)
       codeUrlFile=$OPTARG
@@ -46,7 +56,19 @@ while getopts ":p:c:g:sawlrgtv" opt; do
       tigress=1
       ;;
     v)
-      sva=1
+      normalization=$OPTARG
+      ;;
+    o)
+      organism=$OPTARG
+      ;;
+    d)
+      disease=$OPTARG
+      ;;
+    u)
+      tissueType=$OPTARG
+      ;;
+    q)
+      edgeType=$OPTARG
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -68,10 +90,34 @@ echo "lasso: $lasso"
 echo "ridge: $ridge"
 echo "genie3: $genie3"
 echo "tigress: $tigress"
-echo "sva: $sva"
-echo "projectId: $projectId"
+echo "normalization: $normalization"
+echo "parentId: $parentId"
 
 if [ $sparrow -eq "1" ]; then
   #mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowMPI"
-  Rscript 
+  Rscript pushNetworkSynapse.R
+fi
+
+if [ $aracne -eq "1" ]; then
+
+fi
+
+if [ $wgcna -eq "1" ]; then
+
+fi
+
+if [ $lasso -eq "1" ]; then
+
+fi
+
+if [ $ridge -eq "1" ]; then
+
+fi
+
+if [ $genie3 -eq "1" ]; then
+
+fi
+
+if [ $tigress -eq "1" ]; then
+
 fi

@@ -13,7 +13,7 @@ synapseLogin()
 #organism
 #what type of edge summary is present in file
 
-parentId=as.character(commandArgs(TRUE)[[1]])
+parentId <- as.character(commandArgs(TRUE)[[1]])
 synIdFile <- as.character(commandArgs(TRUE)[[2]])
 synCodeUrlFile <- as.character(commandArgs(TRUE)[[3]])
 method <- as.character(commandArgs(TRUE)[[4]])
@@ -28,8 +28,8 @@ edgeType <- as.character(commandArgs(TRUE)[[9]])
 load(paste0('result_',method,'.rda'))
 
 #write to csv
-file <- ...
-write.csv(...)
+file <- paste0(method,'_',disease,'_',normalization,'.csv')
+write.csv(network,file=file,quote=F)
 
 #make synapse object
 synNet <- File(file,parentId=parentId)
@@ -48,7 +48,6 @@ networkAnnotation <- list(
 
 #set annotations
 synSetAnnotations(synNet) <- networkAnnotation
-
 
 #define provenance
 act <- Activity(name = paste0(method,' ',disease,' network analysis'),

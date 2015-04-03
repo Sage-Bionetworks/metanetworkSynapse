@@ -16,8 +16,6 @@
 #g run genie3
 #t run tigress
 
-#v whether or not sva normalization was run
-#p project id of where to upload results
 #n number of cores in cluster
 
 sparrow=0

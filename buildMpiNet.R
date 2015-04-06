@@ -9,5 +9,5 @@ functionName <- as.character(commandArgs(TRUE)[[4]])
 cat(fileName,nodes,pathv,functionName,'\n')
 
 data <- data.matrix(read.csv(fileName,row.names=1))
-do.call(what=functionName,args=list(data=data,nodes=nodes,pathv=pathv))
+#do.call(what=functionName,args=list(data=data,nodes=nodes,pathv=pathv))
 #sparrowMPI(data,nodes,pathv)

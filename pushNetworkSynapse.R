@@ -30,6 +30,7 @@ load(paste0('result_',method,'.rda'))
 #write to csv
 file <- paste0(method,'_',disease,'_',normalization,'.csv')
 write.csv(network,file=file,quote=F)
+#Sys.sleep(5)
 
 #make synapse object
 synNet <- File(file,parentId=parentId)

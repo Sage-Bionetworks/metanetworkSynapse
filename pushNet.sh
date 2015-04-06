@@ -22,7 +22,7 @@ ridge=0
 genie3=0
 tigress=0
 
-while getopts ":p:c:g:sawlrgtv:o:d:u:" opt; do
+while getopts ":p:c:b:sawlrgtv:o:d:u:" opt; do
   case $opt in
     p)
       parentId=$OPTARG
@@ -30,7 +30,7 @@ while getopts ":p:c:g:sawlrgtv:o:d:u:" opt; do
     c)
       codeUrlFile=$OPTARG
       ;;
-    g)
+    b)
       synapseIdFile=$OPTARG
       ;;
     s)

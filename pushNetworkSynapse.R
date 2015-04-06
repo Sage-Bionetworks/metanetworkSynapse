@@ -50,8 +50,8 @@ networkAnnotation <- list(
 synSetAnnotations(synNet) <- networkAnnotation
 
 #define provenance
-usedEntity <- readLines(file=synIdFile);
-codeUrl <- readLines(file=synCodeUrlFile);
+usedEntity <- readLines(synIdFile);
+codeUrl <- readLines(synCodeUrlFile);
 
 act <- Activity(name = paste0(method,' ',disease,' network analysis'),
                 used = as.list(usedEntity),

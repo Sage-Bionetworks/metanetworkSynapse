@@ -7,7 +7,6 @@
 #$ -V
 #$ -cwd
 #$ -N Job1
-#$ -pe orte $numberCore
 #$ -e error.txt
 #$ -o out.txt
 
@@ -20,8 +19,6 @@ echo "ridge: $ridge"
 echo "genie3: $genie3"
 echo "tigress: $tigress"
 echo "numberCore: $numberCore"
-
-
 
 #if sparrow:
 if [ $sparrow -eq "1" ]; then

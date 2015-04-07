@@ -3,20 +3,13 @@
 ###bash script to build networks on an EC2 starcluster instance using the metaNet R package
 ###Author: Benjamin A Logsdon, 2015
 
-#d data file
-
-#y file with syn ids used to run analysis
-#c file with code urls used to run analysis
-
-#s run sparrow
-#a run aracne
-#w run wgcna
-#l run lasso
-#r run ridge
-#g run genie3
-#t run tigress
-
-#n number of cores in cluster
+#$ -S /bin/bash
+#$ -V
+#$ -cwd
+#$ -N Job1
+#$ -pe orte $numberCore
+#$ -e error.txt
+#$ -o out.txt
 
 echo "dataFile: $dataFile"
 echo "sparrow: $sparrow"
@@ -28,13 +21,7 @@ echo "genie3: $genie3"
 echo "tigress: $tigress"
 echo "numberCore: $numberCore"
 
-#$ -S /bin/bash
-#$ -V
-#$ -cwd
-#$ -N Job1
-#$ -pe orte $numberCore
-#$ -e /shared/CMC/error.txt
-#$ -o /shared/CMC/out.txt
+
 
 #if sparrow:
 if [ $sparrow -eq "1" ]; then

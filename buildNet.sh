@@ -25,7 +25,7 @@ echo "numberCore: $numberCore"
 
 #if sparrow:
 if [ $sparrow -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowMPI"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile 16 $pathv "sparrowMPI"
 fi
 
 #if aracne

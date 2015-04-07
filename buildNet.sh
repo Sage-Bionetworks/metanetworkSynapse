@@ -33,6 +33,8 @@ echo "numberCore: $numberCore"
 #$ -cwd
 #$ -N Job1
 #$ -pe orte $numberCore
+#$ -e /shared/CMC/error.txt
+#$ -o /shared/CMC/out.txt
 
 #if sparrow:
 if [ $sparrow -eq "1" ]; then

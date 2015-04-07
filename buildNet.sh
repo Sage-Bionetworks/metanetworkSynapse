@@ -18,57 +18,6 @@
 
 #n number of cores in cluster
 
-sparrow=0
-aracne=0
-wgcna=0
-lasso=0
-ridge=0
-genie3=0
-tigress=0
-
-while getopts ":d:p:n:sawlrgt" opt; do
-  case $opt in
-    d)
-      dataFile=$OPTARG
-      ;;
-    p)
-      pathv=$OPTARG
-      ;;
-    s)
-      sparrow=1
-      ;;
-    a)
-      aracne=1
-      ;;
-    w)
-      wgcna=1
-      ;;
-    l)
-      lasso=1
-      ;;
-    r)
-      ridge=1
-      ;;
-    g)
-      genie3=1
-      ;;
-    t)
-      tigress=1
-      ;;
-    n)
-      numberCore=$OPTARG
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-      ;;
-  esac
-done
-
 echo "dataFile: $dataFile"
 echo "sparrow: $sparrow"
 echo "aracne: $aracne"

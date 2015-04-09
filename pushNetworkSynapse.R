@@ -32,7 +32,7 @@ if (method=='genie3'|method=='ridge'){
   network <- applyScaleFree(network);
 } else if (method=='sparrow'){
   network <- applySparrowBonferroni(network);
-} else if (method=='aracne'|method=='lasso'|method='tigress'){
+} else if (method=='aracne'|method=='lasso'|method=='tigress'){
   network <- network!=0;
 }
 diag(network) <- 0

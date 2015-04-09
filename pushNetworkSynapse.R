@@ -2,7 +2,7 @@
 
 require(synapseClient)
 synapseLogin()
-
+require(metaNet)
 #syn id of project to post networks to
 #file with syn ids of data used to run network analysis
 #file with code urls of code used to run network analysis

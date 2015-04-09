@@ -3,7 +3,6 @@
 ###bash script to push networks to Synapse after running buildNet.sh
 ###Author: Benjamin A Logsdon, 2015
 
-
 #syn id of parentId to post networks to
 #file with syn ids of data used to run network analysis
 #file with code urls of code used to run network analysis

@@ -27,6 +27,19 @@ edgeType <- as.character(commandArgs(TRUE)[[9]])
 #load data
 load(paste0('result_',method,'.rda'))
 
+
+if (method=='genie3'|method='ridge'){
+  network <- applyScaleFree(network);
+} else if (method=='sparrow'){
+  network <- applySparrowBonferroni(network);
+} else if (method=='aracne'|method=='lasso'|method='tigress'){
+  network <- network!=0;
+}
+diag(network) <- 0
+network <- apply(network,2,as.integer)
+rownames(network) <- colnames(network)
+
+
 #write to csv
 file <- paste0(method,'_',disease,'_',normalization,'.csv')
 write.csv(network,file=file,quote=F)

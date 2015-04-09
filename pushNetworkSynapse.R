@@ -28,7 +28,7 @@ edgeType <- as.character(commandArgs(TRUE)[[9]])
 load(paste0('result_',method,'.rda'))
 
 
-if (method=='genie3'|method='ridge'){
+if (method=='genie3'|method=='ridge'){
   network <- applyScaleFree(network);
 } else if (method=='sparrow'){
   network <- applySparrowBonferroni(network);

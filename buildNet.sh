@@ -10,19 +10,17 @@
 #$ -e error.txt
 #$ -o out.txt
 
-echo "dataFile: $dataFile"
-echo "sparrow: $sparrow"
-echo "aracne: $aracne"
-echo "wgcna: $wgcna"
-echo "lasso: $lasso"
-echo "ridge: $ridge"
-echo "genie3: $genie3"
-echo "tigress: $tigress"
-echo "numberCore: $numberCore"
-
 #if sparrow:
-if [ $sparrow -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowMPI"
+if [ $sparrowZ -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowZ"
+fi
+
+if [ $sparrow2Z -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrow2Z"
+fi
+
+if [ $sparrow2ZFDR -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrow2ZFDR"
 fi
 
 #if aracne
@@ -36,21 +34,46 @@ if [ $wgcna -eq "1" ]; then
 fi
 
 #if lasso
-if [ $lasso -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoBICMPI"
+if [ $lassoBIC -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoBIC"
 fi
 
+if [ $lassoAIC -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoAIC"
+fi
+
+if [ $lassoCV1se -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCV1se"
+fi
+
+if [ $lassoCVmin -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCVmin"
+fi
+
+
 #if ridge
-if [ $ridge -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeBICMPI"
+if [ $ridgeBIC -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeBIC"
+fi
+
+if [ $ridgeAIC -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeAIC"
+fi
+
+if [ $ridgeCV1se -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCV1se"
+fi
+
+if [ $ridgeCVmin -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCVmin"
 fi
 
 #if genie3
 if [ $genie3 -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "genie3MPI"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "genie3"
 fi
 
 #if tigress
 if [ $tigress -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigressMPI"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigress"
 fi

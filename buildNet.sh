@@ -50,7 +50,6 @@ if [ $lassoCVmin -eq "1" ]; then
   mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCVmin"
 fi
 
-
 #if ridge
 if [ $ridgeBIC -eq "1" ]; then
   mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeBIC"

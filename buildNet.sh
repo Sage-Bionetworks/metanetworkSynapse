@@ -28,6 +28,18 @@ if [ $aracne -eq "1" ]; then
   Rscript buildOtherNet.R $dataFile $pathv "aracne"
 fi
 
+if [ $aracneFull -eq "1"]; then
+  Rscript buildOtherNet.R $dataFile $pathv "aracne" 1
+fi
+
+if [ $correlationBonferroni -eq "1"]; then
+  Rscript buildOtherNet.R $dataFile $pathv "correlationBonferroni"
+fi
+
+if [ $correlationFDR -eq "1"]; then
+  Rscript buildOtherNet.R $dataFile $pathv "correlationFDR"
+fi
+
 #if wgcna
 if [ $wgcna -eq "1" ]; then
   Rscript buildOtherNet.R $dataFile $pathv "wgcna"

@@ -25,7 +25,7 @@ fi
 
 #if aracne
 if [ $aracne -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "aracne"
+  Rscript buildOtherNet.R $dataFile $pathv "aracne" "NULL"
 fi
 
 if [ $aracneFull -eq "1"]; then
@@ -33,16 +33,16 @@ if [ $aracneFull -eq "1"]; then
 fi
 
 if [ $correlationBonferroni -eq "1"]; then
-  Rscript buildOtherNet.R $dataFile $pathv "correlationBonferroni"
+  Rscript buildOtherNet.R $dataFile $pathv "correlationBonferroni" "NULL"
 fi
 
 if [ $correlationFDR -eq "1"]; then
-  Rscript buildOtherNet.R $dataFile $pathv "correlationFDR"
+  Rscript buildOtherNet.R $dataFile $pathv "correlationFDR" "NULL"
 fi
 
 #if wgcna
 if [ $wgcna -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "wgcna"
+  Rscript buildOtherNet.R $dataFile $pathv "wgcna" "NULL"
 fi
 
 #if lasso

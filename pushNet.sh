@@ -13,53 +13,81 @@
 #organism
 #what type of edge summary is present in file
 
-sparrow=0
-aracne=0
-wgcna=0
-lasso=0
-ridge=0
-genie3=0
-tigress=0
+sparrow1=0 #d
+sparrow2=0 #e
+aracne=0 #f
+correlation=0 #g
+lassoCV1se=0 #h
+lassoCVmin=0 #i
+lassoAIC=0 #j
+lassoBIC=0 #k
+ridgeCV1se=0 #l
+ridgeCVmin=0 #m
+ridgeAIC=0 #n
+ridgeBIC=0 #o
+genie3=0 #p
+tigress=0 #q
 
-while getopts ":p:c:b:sawlrgtv:o:d:u:" opt; do
+while getopts ":a:b:c:defghijklmnopqr:s:t:u:" opt; do
   case $opt in
-    p)
+    a)
       parentId=$OPTARG
       ;;
-    c)
+    b)
       codeUrlFile=$OPTARG
       ;;
-    b)
+    c)
       synapseIdFile=$OPTARG
       ;;
-    s)
-      sparrow=1
+    d)
+      sparrow1=1
       ;;
-    a)
+    e)
+      sparrow2=1
+      ;;
+    f)
       aracne=1
       ;;
-    w)
-      wgcna=1
+    g)
+      correlation=1
+      ;;
+    h)
+      lassoCV1se=1
+      ;;
+    i)
+      lassoCVmin=1
+      ;;
+    j)
+      lassoAIC=1
+      ;;
+    k)
+      lassoBIC=1
       ;;
     l)
-      lasso=1
+      ridgeCV1se=1
       ;;
-    r)
-      ridge=1
+    m)
+      ridgeCVmin=1
       ;;
-    g)
-      genie3=1
-      ;;
-    t)
-      tigress=1
-      ;;
-    v)
-      normalization=$OPTARG
+    n)
+      ridgeAIC=1
       ;;
     o)
+      ridgeBIC=1
+      ;;
+    p)
+      genie3=1
+      ;;
+    q)
+      tigress=1
+      ;;
+    r)
+      normalization=$OPTARG
+      ;;
+    s)
       organism=$OPTARG
       ;;
-    d)
+    t)
       disease=$OPTARG
       ;;
     u)
@@ -75,18 +103,6 @@ while getopts ":p:c:b:sawlrgtv:o:d:u:" opt; do
       ;;
   esac
 done
-
-echo "synapseIdFile: $synapseIdFile"
-echo "codeUrlFile: $codeUrlFile"
-echo "sparrow: $sparrow"
-echo "aracne: $aracne"
-echo "wgcna: $wgcna"
-echo "lasso: $lasso"
-echo "ridge: $ridge"
-echo "genie3: $genie3"
-echo "tigress: $tigress"
-echo "normalization: $normalization"
-echo "parentId: $parentId"
 
 if [ $sparrow -eq "1" ]; then
   #Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "sparrow" $normalization $tissueType $disease $organism "zstatistic"

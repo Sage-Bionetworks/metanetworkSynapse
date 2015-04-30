@@ -25,7 +25,11 @@ edgeType <- as.character(commandArgs(TRUE)[[9]])
 
 
 #load data
-load(paste0('result_',method,'.rda'))
+#load(paste0('result_',method,'.rda'))
+if(method=='sparrow1'){
+  load('result_sparrowZ.rda')
+}
+
 
 
 if (method=='genie3'|method=='ridge'){

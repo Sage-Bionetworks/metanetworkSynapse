@@ -105,36 +105,66 @@ while getopts ":a:b:c:defghijklmnopqr:s:t:u:" opt; do
 done
 
 if [ $sparrow -eq "1" ]; then
-  #Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "sparrow" $normalization $tissueType $disease $organism "zstatistic"
-  Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "sparrow" $normalization $tissueType $disease $organism "zstatistic"  
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "sparrow" $normalization $tissueType $disease $organism "zstatistic"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "sparrow" $normalization $tissueType $disease $organism "zstatistic"  
 fi
 
 if [ $aracne -eq "1" ]; then
-  #Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "aracne" $normalization $tissueType $disease $organism "indicator"
-  Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "aracne" $normalization $tissueType $disease $organism "indicator"  
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "aracne" $normalization $tissueType $disease $organism "indicator"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "aracne" $normalization $tissueType $disease $organism "indicator"  
 fi
 
-if [ $wgcna -eq "1" ]; then
-  #Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "wgcna" $normalization $tissueType $disease $organism "weight"
-  Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "wgcna" $normalization $tissueType $disease $organism "weight"  
+if [ $correlation -eq "1" ]; then
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "wgcna" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "wgcna" $normalization $tissueType $disease $organism "weight"  
 fi
 
-if [ $lasso -eq "1" ]; then
-  #Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"
-  Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"  
+if [ $lassoCV1se -eq "1" ]; then
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"  
 fi
 
-if [ $ridge -eq "1" ]; then
-  #Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"
-  Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"  
+if [ $lassoCVmin -eq "1" ]; then
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"  
+fi
+
+if [ $lassoAIC -eq "1" ]; then
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"  
+fi
+
+if [ $lassoBIC -eq "1" ]; then
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"  
+fi
+
+if [ $ridgeCV1se -eq "1" ]; then
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"  
+fi
+
+if [ $ridgeCVmin -eq "1" ]; then
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"  
+fi
+
+if [ $ridgeAIC -eq "1" ]; then
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"  
+fi
+
+if [ $ridgeBIC -eq "1" ]; then
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"  
 fi
 
 if [ $genie3 -eq "1" ]; then
-  #Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "genie3" $normalization $tissueType $disease $organism "weight"
-  Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "genie3" $normalization $tissueType $disease $organism "weight"  
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "genie3" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "genie3" $normalization $tissueType $disease $organism "weight"  
 fi
 
 if [ $tigress -eq "1" ]; then
-  #Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"
-  Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"  
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"  
 fi

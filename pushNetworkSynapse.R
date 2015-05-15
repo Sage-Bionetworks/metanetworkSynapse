@@ -3,6 +3,7 @@
 require(synapseClient)
 synapseLogin()
 require(metaNet)
+
 #syn id of project to post networks to
 #file with syn ids of data used to run network analysis
 #file with code urls of code used to run network analysis
@@ -28,8 +29,35 @@ edgeType <- as.character(commandArgs(TRUE)[[9]])
 #load(paste0('result_',method,'.rda'))
 if(method=='sparrow1'){
   load('result_sparrowZ.rda')
+} else if (method=='sparrow2'){
+  
+  
+} else if (method=='aracne'){
+  
+}else if (method=='correlation'){
+  
+} else if (method=='lassoCV1se'){
+  
+}else if (method=='lassoCVmin'){
+  
+}else if (method=='lassoAIC'){
+  
+}else if (method=='lassoBIC'){
+  
+}else if (method=='ridgeCV1se'){
+  
+}else if (method=='ridgeCVmin'){
+  
+}else if (method=='ridgeBIC'){
+  
+}else if (method=='ridgeAIC'){
+  
+}else if (method=='tigress'){
+  
+}else if (method=='genie3'){
+  
 }
-
+#enumurate methods
 
 
 if (method=='genie3'|method=='ridge'){

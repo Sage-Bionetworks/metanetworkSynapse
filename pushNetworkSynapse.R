@@ -27,49 +27,75 @@ edgeType <- as.character(commandArgs(TRUE)[[9]])
 
 #load data
 #load(paste0('result_',method,'.rda'))
+
+#load sparsities
+sparsity <- data.frame(t(read.csv('sparsity.csv',header=F,row.names=1)))
+
 if(method=='sparrow1'){
   load('result_sparrowZ.rda')
+  #
 } else if (method=='sparrow2'){
-  
-  
+  load('result_sparrow2Z.rda')
+  networkBonf <- network
+  load('result_sparrow2ZFDR.rda')
+  networkFDR <- network
+  #
 } else if (method=='aracne'){
-  
-}else if (method=='correlation'){
-  
+  load('result_aracneFull.rda')
+  #
+} else if (method=='correlation'){
+  #
+  load('result_correlation.rda')
 } else if (method=='lassoCV1se'){
-  
-}else if (method=='lassoCVmin'){
-  
-}else if (method=='lassoAIC'){
-  
-}else if (method=='lassoBIC'){
-  
-}else if (method=='ridgeCV1se'){
-  
-}else if (method=='ridgeCVmin'){
-  
-}else if (method=='ridgeBIC'){
-  
-}else if (method=='ridgeAIC'){
-  
-}else if (method=='tigress'){
-  
-}else if (method=='genie3'){
-  
+  #
+  load('result_lassoCV1se.rda')
+} else if (method=='lassoCVmin'){
+  #
+  load('result_lassoCVmin.rda')
+} else if (method=='lassoAIC'){
+  #
+  load('result_lassoAIC.rda')
+} else if (method=='lassoBIC'){
+  #
+  load('result_lassoBIC.rda')
+} else if (method=='ridgeCV1se'){
+  #
+  load('result_ridgeCV1se.rda')
+} else if (method=='ridgeCVmin'){
+  #
+  load('result_ridgeCVmin.rda')
+} else if (method=='ridgeBIC'){
+  #
+  load('result_ridgeBIC.rda')
+} else if (method=='ridgeAIC'){
+  #
+  load('result_ridgeAIC.rda')
+} else if (method=='tigress'){
+  #
+  load('result_tigress.rda')
+} else if (method=='genie3'){
+  #
+  load('result_genie3.rda')
 }
 #enumurate methods
-
-
-if (method=='genie3'|method=='ridge'){
-  network <- applyScaleFree(network);
-} else if (method=='sparrow'){
-  network <- applySparrowBonferroni(network);
-} else if (method=='aracne'|method=='lasso'|method=='tigress'){
-  network <- network!=0;
+if(method!='sparrow2'){
+  diag(network) <- 0
+  network <- network/2 + t(network/2)
+  allNetworks<-deployNetworkSparsity(network,sparsity)
+}else{
+  allNetworks<- deployNetworkSparsity2(networkBonf,networkFDR,sparsity)
 }
-diag(network) <- 0
-network <- apply(network,2,as.integer)
-rownames(network) <- colnames(network)
+
+#if (method=='genie3'|method=='ridge'){
+#  network <- applyScaleFree(network);
+#} else if (method=='sparrow'){
+#  network <- applySparrowBonferroni(network);
+#} else if (method=='aracne'|method=='lasso'|method=='tigress'){
+#  network <- network!=0;
+#}
+#diag(network) <- 0
+#network <- apply(network,2,as.integer)
+#rownames(network) <- colnames(network)
 
 
 #write to csv

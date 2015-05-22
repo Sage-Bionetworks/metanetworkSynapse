@@ -56,10 +56,14 @@ if(method=='sparrow1'){
 }else if (method=='genie3'){
   load('result_genie3.rda')
 }
+
 #enumurate methods
+
+sparsity <- read.csv('sparsity.csv',stringsAsFactors=F,row.names=1)
+diag(network) <- 0
+
 network <- network %>% symmetrisize
-
-
+multiNetowrk <- sparsity %>% lapply(arbitrarySparsity,network)
 
 if (method=='genie3'|method=='ridge'){
   network <- applyScaleFree(network);

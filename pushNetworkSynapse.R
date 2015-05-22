@@ -70,8 +70,8 @@ multiNetwork$edgeList <- rankedEdgeList(network)
 
 
 #write to csv
-file <- paste0(method,'_',disease,'_',normalization,'.csv')
-write.csv(network,file=file,quote=F)
+file <- paste0(method,'_',disease,'_',normalization,'.rda')
+save(multiNetwork,file=file,quote=F)
 #Sys.sleep(5)
 
 #make synapse object
@@ -83,10 +83,9 @@ networkAnnotation <- list(
   disease = disease,
   normalization = normalization,
   method = method,
-  fileType = 'csv',
+  fileType = 'rda',
   organism = organism,
-  dataType = 'metaData',
-  edgeType = edgeType
+  dataType = 'metaData'
 )
 
 #set annotations

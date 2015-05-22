@@ -30,34 +30,35 @@ edgeType <- as.character(commandArgs(TRUE)[[9]])
 if(method=='sparrow1'){
   load('result_sparrowZ.rda')
 } else if (method=='sparrow2'){
-  
-  
-} else if (method=='aracne'){
-  
+  load('result_sparrow2Z.rda')
+}else if (method=='aracne'){
+  load('result_aracneFull.rda')
 }else if (method=='correlation'){
-  
-} else if (method=='lassoCV1se'){
-  
+  load('result_correlation.rda')
+}else if (method=='lassoCV1se'){
+  load('result_lassoCV1se.rda')
 }else if (method=='lassoCVmin'){
-  
+  load('result_lassoCVmin.rda')
 }else if (method=='lassoAIC'){
-  
+  load('result_lassoAIC.rda')
 }else if (method=='lassoBIC'){
-  
+  load('result_lassoBIC.rda')
 }else if (method=='ridgeCV1se'){
-  
+  load('result_ridgeCV1se.rda')
 }else if (method=='ridgeCVmin'){
-  
+  load('result_ridgeCVmin.rda')
 }else if (method=='ridgeBIC'){
-  
+  load('result_ridgeBIC.rda')
 }else if (method=='ridgeAIC'){
-  
+  load('result_ridgeAIC.rda')
 }else if (method=='tigress'){
-  
+  load('result_tigress.rda')
 }else if (method=='genie3'){
-  
+  load('result_genie3.rda')
 }
 #enumurate methods
+network <- network %>% symmetrisize
+
 
 
 if (method=='genie3'|method=='ridge'){

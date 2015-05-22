@@ -60,21 +60,13 @@ if(method=='sparrow1'){
 #enumurate methods
 
 sparsity <- read.csv('sparsity.csv',stringsAsFactors=F,row.names=1)
+colnames(network) <- rownames(network)
+network  <- network %>% as.matrix
 diag(network) <- 0
-
 network <- network %>% symmetrisize
-multiNetowrk <- sparsity %>% lapply(arbitrarySparsity,network)
-
-if (method=='genie3'|method=='ridge'){
-  network <- applyScaleFree(network);
-} else if (method=='sparrow'){
-  network <- applySparrowBonferroni(network);
-} else if (method=='aracne'|method=='lasso'|method=='tigress'){
-  network <- network!=0;
-}
-diag(network) <- 0
-network <- apply(network,2,as.integer)
-rownames(network) <- colnames(network)
+multiNetwork <- sparsity %>% lapply(arbitrarySparsity,network)
+multiNetwork$scaleFreeNetwork <- applyScaleFree(network)
+multiNetwork$edgeList <- rankedEdgeList(network)
 
 
 #write to csv

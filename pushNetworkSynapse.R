@@ -27,8 +27,13 @@ edgeType <- as.character(commandArgs(TRUE)[[9]])
 
 #load data
 #load(paste0('result_',method,'.rda'))
+
+#load sparsities
+sparsity <- data.frame(t(read.csv('sparsity.csv',header=F,row.names=1)))
+
 if(method=='sparrow1'){
   load('result_sparrowZ.rda')
+  #
 } else if (method=='sparrow2'){
   load('result_sparrow2Z.rda')
 }else if (method=='aracne'){
@@ -67,7 +72,6 @@ network <- network %>% symmetrisize
 multiNetwork <- sparsity %>% lapply(arbitrarySparsity,network)
 multiNetwork$scaleFreeNetwork <- applyScaleFree(network)
 multiNetwork$edgeList <- rankedEdgeList(network)
-
 
 #write to csv
 file <- paste0(method,'_',disease,'_',normalization,'.rda')

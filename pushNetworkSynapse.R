@@ -33,7 +33,6 @@ sparsity <- data.frame(t(read.csv('sparsity.csv',header=F,row.names=1)))
 
 if(method=='sparrow1'){
   load('result_sparrowZ.rda')
-  #
 } else if (method=='sparrow2'){
   load('result_sparrow2Z.rda')
 }else if (method=='aracne'){
@@ -69,22 +68,16 @@ if(method=='sparrow1'){
 network  <- network %>% as.matrix
 diag(network) <- 0
 network <- network %>% symmetrisize
-multiNetwork <- sparsity %>% lapply(arbitrarySparsity,network)
+#multiNetwork <- sparsity %>% lapply(arbitrarySparsity,network)
 #multiNetwork$scaleFreeNetwork <- applyScaleFree(network)
-#multiNetwork$edgeList <- rankedEdgeList(network,symmetric = TRUE)
-
-
-#return 
-sparsifyMatrices <- function(x){
-  require(Matrix)
-  return(Matrix(x,sparse = TRUE))
-}
-
-sparsematrix <- lapply(multiNetwork,sparsifyMatrices)
+nEdgesScaleFreeNetwork <- applyScaleFree(network)
+cat(paste0(method,'ScaleFree,',nEdgesScaleFreeNetwork,'\n'),append = T,file = 'sparsity.csv')
+edgeList <- rankedEdgeList(network,symmetric = TRUE)
 
 #write to csv
-file <- paste0(method,'_',disease,'_',normalization,'.rda')
-save(multiNetwork,file=file,quote=F)
+file <- paste0(method,'_',disease,'_',normalization,'.csv')
+write.csv(edgeList,file=file,row.names=F,quote=F)
+#save(multiNetwork,file=file,quote=F)
 #Sys.sleep(5)
 
 #make synapse object
@@ -96,7 +89,7 @@ networkAnnotation <- list(
   disease = disease,
   normalization = normalization,
   method = method,
-  fileType = 'rda',
+  fileType = 'csv',
   organism = organism,
   dataType = 'metaData'
 )

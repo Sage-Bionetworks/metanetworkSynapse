@@ -64,14 +64,23 @@ if(method=='sparrow1'){
 
 #enumurate methods
 
-sparsity <- read.csv('sparsity.csv',stringsAsFactors=F,row.names=1)
-colnames(network) <- rownames(network)
+#sparsity <- read.csv('sparsity.csv',stringsAsFactors=F,row.names=1,header=F)
+#colnames(network) <- rownames(network)
 network  <- network %>% as.matrix
 diag(network) <- 0
 network <- network %>% symmetrisize
 multiNetwork <- sparsity %>% lapply(arbitrarySparsity,network)
-multiNetwork$scaleFreeNetwork <- applyScaleFree(network)
-multiNetwork$edgeList <- rankedEdgeList(network)
+#multiNetwork$scaleFreeNetwork <- applyScaleFree(network)
+#multiNetwork$edgeList <- rankedEdgeList(network,symmetric = TRUE)
+
+
+#return 
+sparsifyMatrices <- function(x){
+  require(Matrix)
+  return(Matrix(x,sparse = TRUE))
+}
+
+sparsematrix <- lapply(multiNetwork,sparsifyMatrices)
 
 #write to csv
 file <- paste0(method,'_',disease,'_',normalization,'.rda')

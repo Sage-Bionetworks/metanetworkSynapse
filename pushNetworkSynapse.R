@@ -80,9 +80,9 @@ if(method!='sparsity'){
   
   #write to csv
 }else{
-  edgeList <- sparsity
+  edgeList <- t(sparsity)
 }
-write.csv(edgeList,file=file,row.names=F,quote=F)
+write.csv(edgeList,file=file,quote=F)
 #save(multiNetwork,file=file,quote=F)
 #Sys.sleep(5)
 

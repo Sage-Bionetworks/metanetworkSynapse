@@ -93,6 +93,9 @@ while getopts ":a:b:c:defghijklmnopqr:s:t:u:" opt; do
     u)
       tissueType=$OPTARG
       ;;
+    v)
+      sparsity=1
+      ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
       exit 1
@@ -172,4 +175,8 @@ fi
 if [ $tigress -eq "1" ]; then
   Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"
   #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"  
+fi
+
+if [ $sparsity -eq "1" ]; then
+  Rscript pushNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "sparsity" $normalization $tissueType $disease $organism "weight"
 fi

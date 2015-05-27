@@ -65,17 +65,22 @@ if(method=='sparrow1'){
 
 #sparsity <- read.csv('sparsity.csv',stringsAsFactors=F,row.names=1,header=F)
 #colnames(network) <- rownames(network)
-network  <- network %>% as.matrix
-diag(network) <- 0
-network <- network %>% symmetrisize
-#multiNetwork <- sparsity %>% lapply(arbitrarySparsity,network)
-#multiNetwork$scaleFreeNetwork <- applyScaleFree(network)
-nEdgesScaleFreeNetwork <- applyScaleFree(network)
-cat(paste0(method,'ScaleFree,',nEdgesScaleFreeNetwork,'\n'),append = T,file = 'sparsity.csv')
-edgeList <- rankedEdgeList(network,symmetric = TRUE)
-
-#write to csv
 file <- paste0(method,'_',disease,'_',normalization,'.csv')
+
+if(method!='sparsity'){
+  network  <- network %>% as.matrix
+  diag(network) <- 0
+  network <- network %>% symmetrisize
+  #multiNetwork <- sparsity %>% lapply(arbitrarySparsity,network)
+  #multiNetwork$scaleFreeNetwork <- applyScaleFree(network)
+  nEdgesScaleFreeNetwork <- applyScaleFree(network)
+  cat(paste0(method,'ScaleFree,',nEdgesScaleFreeNetwork,'\n'),append = T,file = 'sparsity.csv')
+  edgeList <- rankedEdgeList(network,symmetric = TRUE)
+  
+  #write to csv
+}else{
+  edgeList <- sparsity
+}
 write.csv(edgeList,file=file,row.names=F,quote=F)
 #save(multiNetwork,file=file,quote=F)
 #Sys.sleep(5)

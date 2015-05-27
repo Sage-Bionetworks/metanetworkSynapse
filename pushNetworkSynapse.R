@@ -74,8 +74,11 @@ if(method!='sparsity'){
   network <- network %>% symmetrisize
   #multiNetwork <- sparsity %>% lapply(arbitrarySparsity,network)
   #multiNetwork$scaleFreeNetwork <- applyScaleFree(network)
-  nEdgesScaleFreeNetwork <- applyScaleFree(network)
-  cat(paste0(method,'ScaleFree,',nEdgesScaleFreeNetwork,'\n'),append = T,file = 'sparsity.csv')
+  nEdgesScaleFreeNetwork <- NA
+  try(nEdgesScaleFreeNetwork <- applyScaleFree(network),silent=T)
+  if(!is.na(nEdgesScaleFreeNetwork)){
+    cat(paste0(method,'ScaleFree,',nEdgesScaleFreeNetwork,'\n'),append = T,file = 'sparsity.csv')
+  }
   edgeList <- rankedEdgeList(network,symmetric = TRUE)
   
   #write to csv

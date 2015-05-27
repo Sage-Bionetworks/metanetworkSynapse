@@ -8,6 +8,8 @@ cat(fileName,nodes,pathv,'\n')
 functionName <- as.character(commandArgs(TRUE)[[4]])
 cat(fileName,nodes,pathv,functionName,'\n')
 
+outputpath <- as.character(commandArgs(TRUE)[[5]])
+
 data <- data.matrix(read.csv(fileName,row.names=1))
-do.call(what=mpiWrapper,args=list(data=data,nodes=nodes,pathv=pathv,regressionFunction=functionName))
+do.call(what=mpiWrapper,args=list(data=data,nodes=nodes,pathv=pathv,regressionFunction=functionName,outputpath=outputpath))
 #sparrowMPI(data,nodes,pathv)

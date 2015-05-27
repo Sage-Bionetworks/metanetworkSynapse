@@ -4,13 +4,14 @@ fileName <- as.character(commandArgs(TRUE)[[1]])
 pathv <- as.character(commandArgs(TRUE)[[2]])
 functionName <- as.character(commandArgs(TRUE)[[3]])
 pval <- as.character(commandArgs(TRUE)[[4]])
+outputpath <- as.character(commandArgs(TRUE)[[5]])
 if(pval=='NULL'){
   pval <- NULL
 }else{
   pval <- as.numeric(pval)
 }
 data <- data.matrix(read.csv(fileName,row.names=1))
-argList <- list(data=data,path=pathv)
+argList <- list(data=data,path=pathv,outputpath=outputpath)
 if(functionName=='aracne'){
   installAracne()
   argList$pval <- pval

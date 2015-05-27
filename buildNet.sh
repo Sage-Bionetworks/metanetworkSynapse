@@ -12,83 +12,83 @@
 
 #if sparrow:
 if [ $sparrowZ -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowZ"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowZ" $outputpath
 fi
 
 if [ $sparrow2Z -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrow2Z"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrow2Z" $outputpath
 fi
 
 if [ $sparrow2ZFDR -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrow2ZFDR"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrow2ZFDR" $outputpath
 fi
 
 #if aracne
 if [ $aracne -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "aracne" "NULL"
+  Rscript buildOtherNet.R $dataFile $pathv "aracne" "NULL" $outputpath
 fi
 
 if [ $aracneFull -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "aracne" 1
+  Rscript buildOtherNet.R $dataFile $pathv "aracne" 1 $outputpath
 fi
 
 if [ $correlation -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "correlation" "NULL"
+  Rscript buildOtherNet.R $dataFile $pathv "correlation" "NULL" $outputpath
 fi
 
 if [ $correlationBonferroni -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "correlationBonferroni" "NULL"
+  Rscript buildOtherNet.R $dataFile $pathv "correlationBonferroni" "NULL" $outputpath
 fi
 
 if [ $correlationFDR -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "correlationFDR" "NULL"
+  Rscript buildOtherNet.R $dataFile $pathv "correlationFDR" "NULL" $outputpath
 fi
 
 #if wgcna
 if [ $wgcna -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "wgcna" "NULL"
+  Rscript buildOtherNet.R $dataFile $pathv "wgcna" "NULL" $outputpath
 fi
 
 #if lasso
 if [ $lassoBIC -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoBIC"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoBIC" $outputpath
 fi
 
 if [ $lassoAIC -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoAIC"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoAIC" $outputpath
 fi
 
 if [ $lassoCV1se -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCV1se"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCV1se" $outputpath
 fi
 
 if [ $lassoCVmin -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCVmin"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCVmin" $outputpath
 fi
 
 #if ridge
 if [ $ridgeBIC -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeBIC"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeBIC" $outputpath
 fi
 
 if [ $ridgeAIC -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeAIC"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeAIC" $outputpath
 fi
 
 if [ $ridgeCV1se -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCV1se"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCV1se" $outputpath
 fi
 
 if [ $ridgeCVmin -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCVmin"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCVmin" $outputpath
 fi
 
 #if genie3
 if [ $genie3 -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "genie3"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "genie3" $outputpath
 fi
 
 #if tigress
 if [ $tigress -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigress"
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigress" $outputpath
 fi

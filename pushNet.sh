@@ -28,7 +28,7 @@ ridgeBIC=0 #o
 genie3=0 #p
 tigress=0 #q
 
-while getopts ":a:b:c:defghijklmnopqr:s:t:u:" opt; do
+while getopts ":a:b:c:defghijklmnopqr:s:t:u:v" opt; do
   case $opt in
     a)
       parentId=$OPTARG

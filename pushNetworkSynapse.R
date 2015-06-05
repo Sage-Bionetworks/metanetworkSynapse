@@ -69,16 +69,20 @@ if(method=='sparrow1'){
 file <- paste0(method,'_',disease,'_',normalization,'.csv')
 
 if(method!='sparsity'){
+  cat('changing to matrix\n')
   network  <- network %>% as.matrix
   diag(network) <- 0
+  cat('symmetrisizing\n')
   network <- network %>% symmetrisize
   #multiNetwork <- sparsity %>% lapply(arbitrarySparsity,network)
   #multiNetwork$scaleFreeNetwork <- applyScaleFree(network)
   nEdgesScaleFreeNetwork <- NA
+  cat('make scale free\n')
   try(nEdgesScaleFreeNetwork <- applyScaleFree(network),silent=T)
   if(!is.na(nEdgesScaleFreeNetwork)){
     cat(paste0(method,'ScaleFree,',nEdgesScaleFreeNetwork,'\n'),append = T,file = 'sparsity.csv')
   }
+  cat('apply ranked edge list\n')
   edgeList <- rankedEdgeList(network,symmetric = TRUE)
   
   #write to csv

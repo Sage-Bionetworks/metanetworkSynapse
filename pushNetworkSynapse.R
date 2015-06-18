@@ -77,8 +77,8 @@ if(method!='sparsity'){
   #multiNetwork <- sparsity %>% lapply(arbitrarySparsity,network)
   #multiNetwork$scaleFreeNetwork <- applyScaleFree(network)
   nEdgesScaleFreeNetwork <- NA
-  #cat('make scale free\n')
-  #try(nEdgesScaleFreeNetwork <- applyScaleFree(network),silent=T)
+  cat('make scale free\n')
+  try(nEdgesScaleFreeNetwork <- applyScaleFree(network),silent=T)
   if(!is.na(nEdgesScaleFreeNetwork)){
     cat(paste0(method,'ScaleFree,',nEdgesScaleFreeNetwork,'\n'),append = T,file = 'sparsity.csv')
   }

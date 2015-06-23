@@ -53,7 +53,7 @@ makeMultiSparseNetwork <- function(sparsitySyn,networkSyn,geneSyn,uploadFolder,e
 }
 
 sparsitySyn <- as.character(commandArgs(TRUE)[[1]])
-networkSyn <- as.numeric(commandArgs(TRUE)[[2]])
+networkSyn <- as.character(commandArgs(TRUE)[[2]])
 geneSyn <- as.character(commandArgs(TRUE)[[3]])
 uploadFolder <- as.character(commandArgs(TRUE)[[4]])
 executedFile <- as.character(commandArgs(TRUE)[[5]])

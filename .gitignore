@@ -1,3 +1,9 @@
 .Rproj.user
 .Rhistory
 .RData
+lassoBIC.rda
+lassoBICsparrow1Bonferroni.rda
+lassoBICsparrow1FDR.rda
+lassoBICsparrow2Bonferroni.rda
+lassoBICsparrow2FDR.rda
+sparrow2.rda

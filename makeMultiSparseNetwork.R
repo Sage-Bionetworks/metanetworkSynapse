@@ -45,7 +45,6 @@ makeMultiSparseNetwork <- function(sparsitySyn,networkSyn,geneSyn,uploadFolder){
     anno$networkStorageType <- 'sparse'
     synSetAnnotations(synObj) <- anno
     act <- Activity(name='sparsify networks',used=as.list(c(sparsitySyn,networkSyn,geneSyn)),executed=as.list(c('')))
-    
     synObj <- synStore(synObj)
   }
   

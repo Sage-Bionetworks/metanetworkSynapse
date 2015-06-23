@@ -1,4 +1,4 @@
-makeMultiSparseNetwork <- function(sparsitySyn,networkSyn,geneSyn,uploadFolder){
+makeMultiSparseNetwork <- function(sparsitySyn,networkSyn,geneSyn,uploadFolder,executed){
   require(synapseClient)
   synapseLogin()
   library(Matrix)
@@ -44,8 +44,19 @@ makeMultiSparseNetwork <- function(sparsitySyn,networkSyn,geneSyn,uploadFolder){
     anno$sparsityMethod <- sparsityMethod
     anno$networkStorageType <- 'sparse'
     synSetAnnotations(synObj) <- anno
-    act <- Activity(name='sparsify networks',used=as.list(c(sparsitySyn,networkSyn,geneSyn)),executed=as.list(c('')))
+    act <- Activity(name='sparsify networks',used=as.list(c(sparsitySyn,networkSyn,geneSyn)),executed=as.list(executed))
+    act <- storeEntity(act)
+    generatedBy(synObj) <- act
     synObj <- synStore(synObj)
   }
   
 }
+
+sparsitySyn <- as.character(commandArgs(TRUE)[[1]])
+networkSyn <- as.numeric(commandArgs(TRUE)[[2]])
+geneSyn <- as.character(commandArgs(TRUE)[[3]])
+uploadFolder <- as.character(commandArgs(TRUE)[[4]])
+executedFile <- as.character(commandArgs(TRUE)[[5]])
+executed <- scan(executedFile,what='character')
+
+makeMultiSparseNetwork(sparsitySyn,networkSyn,geneSyn,uploadFolder,executed)

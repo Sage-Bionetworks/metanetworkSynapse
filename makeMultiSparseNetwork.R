@@ -26,7 +26,7 @@ makeMultiSparseNetwork <- function(sparsitySyn,networkSyn,geneSyn,uploadFolder,e
   }
   nNodes <- nrow(gene)
   
-  allNetworks<-sapply(spar$V2[spar$V2<nrow(network)],edgeListToMatrix,network,rownames(gene),nNodes)
+  allNetworks<-sapply(spar$V2[spar$V2<=nrow(network)],edgeListToMatrix,network,rownames(gene),nNodes)
   
   anno <- as.list(synGetAnnotations(networkSyn))
   

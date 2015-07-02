@@ -39,7 +39,7 @@ makeMultiSparseNetwork <- function(sparsitySyn,networkSyn,geneSyn,uploadFolder,e
   foldId <- synGetProperties(synFolder)$id
   
   for (i in 1:length(allNetworks)){
-    sparsityMethod <- rownames(spar)[spar$V2<nrow(network)][i]
+    sparsityMethod <- rownames(spar)[spar$V2<=nrow(network)][i]
     fileName <- paste0(anno$method,sparsityMethod,'.rda')
     sparseNetwork <- allNetworks[[i]]
     save(sparseNetwork,file=fileName)

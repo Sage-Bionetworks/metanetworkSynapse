@@ -2,6 +2,9 @@ makeMultiSparseNetwork <- function(sparsitySyn,networkSyn,geneSyn,uploadFolder,e
   require(synapseClient)
   synapseLogin()
   library(Matrix)
+  #set remote cache
+  synapseCacheDir("/shared/.synapseCache/")
+  
   sparObj <- synGet(sparsitySyn)
   networkSyn <- synGet(networkSyn)
   geneSyn <- synGet(geneSyn)

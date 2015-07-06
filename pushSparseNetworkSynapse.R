@@ -68,6 +68,16 @@ if(!is.na(nEdgesScaleFreeNetwork)){
 }
 cat('apply ranked edge list\n')
 
+anno <- list(
+  tissueType = tissueType,
+  disease = disease,
+  normalization = normalization,
+  method = method,
+  fileType = 'rda',
+  organism = organism,
+  dataType = 'metaData'
+)
+
 #make folder
 synFolder <- Folder(name=paste0(anno$method,'Sparse'),parentId=parentId)
 synFolder <- synStore(synFolder)
@@ -85,15 +95,7 @@ nets <- nets[dropNA]
 #}
 nets <- sapply(nets,makeSparse)
 
-anno <- list(
-  tissueType = tissueType,
-  disease = disease,
-  normalization = normalization,
-  method = method,
-  fileType = 'rda',
-  organism = organism,
-  dataType = 'metaData'
-)
+
 
 
 for(i in 1:length(nets)){

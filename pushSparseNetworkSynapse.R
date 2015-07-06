@@ -24,16 +24,7 @@ tissueType <- as.character(commandArgs(TRUE)[[6]])
 disease <- as.character(commandArgs(TRUE)[[7]])
 organism <- as.character(commandArgs(TRUE)[[8]])
 edgeType <- as.character(commandArgs(TRUE)[[9]])
-#sparsitySyn <- as.character(commandArgs(TRUE)[[10]])
-#sparObj <- synGet(sparsitySyn)
-#spar <- read.csv(sparObj@filePath,stringsAsFactors=F,row.names=1)
-
-
-#load data
-#load(paste0('result_',method,'.rda'))
-
-#load sparsities
-sparsity <- data.frame(t(read.csv('sparsity.csv',header=F,row.names=1)))
+spar <- data.frame(t(read.csv('sparsity.csv',header=F,row.names=1)))
 
 if(method=='sparrow1'){
   load('result_sparrowZ.rda')
@@ -65,34 +56,54 @@ if(method=='sparrow1'){
   load('result_genie3.rda')
 }
 
-#enumurate methods
-
-#sparsity <- read.csv('sparsity.csv',stringsAsFactors=F,row.names=1,header=F)
-#colnames(network) <- rownames(network)
-##CHANGE FILE NAME
-file <- paste0(method,'_',disease,'_',normalization,'.csv')
-
 
 
 library(Matrix)
-  cat('changing to matrix\n')
-  network  <- network %>% as.matrix
-  diag(network) <- 0
-  cat('symmetrisizing\n')
-  network <- network %>% symmetrisize
-  #multiNetwork <- sparsity %>% lapply(arbitrarySparsity,network)
-  #multiNetwork$scaleFreeNetwork <- applyScaleFree(network)
-  nEdgesScaleFreeNetwork <- NA
-  #cat('make scale free\n')
-  #try(nEdgesScaleFreeNetwork <- applyScaleFree(network),silent=T)
-  if(!is.na(nEdgesScaleFreeNetwork)){
-    cat(paste0(method,'ScaleFree,',nEdgesScaleFreeNetwork,'\n'),append = T,file = 'sparsity.csv')
-  }
-  cat('apply ranked edge list\n')
-  #edgeList <- rankedEdgeList(network,symmetric = TRUE)
+cat('changing to matrix\n')
+network  <- network %>% as.matrix
+diag(network) <- 0
+cat('symmetrisizing\n')
+network <- network %>% symmetrisize
+nEdgesScaleFreeNetwork <- NA
+if(!is.na(nEdgesScaleFreeNetwork)){
+  cat(paste0(method,'ScaleFree,',nEdgesScaleFreeNetwork,'\n'),append = T,file = 'sparsity.csv')
+}
+cat('apply ranked edge list\n')
 
+#make folder
+synFolder <- Folder(name=paste0(anno$method,'Sparse'),parentId=uploadFolder)
+synFolder <- synStore(synFolder)
+foldId <- synGetProperties(synFolder)$id
 
-  
+makeSparse <- function(x){
+  require(Matrix)
+  return(Matrix(x,sparse=TRUE))
+}
+
+nets <- sapply(spar$V2,arbitrarySparsity,network)
+dropNA <- which(!is.na(nets))
+#if(length(dropNA)>0){
+nets <- nets[dropNA]
+#}
+nets <- sapply(nets,makeSparse)
+for(i in 1:length(nets)){
+  sparsityMethod <- rownames(spar)[spar$V2[dropNA]][i]
+  fileName <- paste0(anno$method,sparsityMethod,'.rda')
+  sparseNetwork <- allNetworks[[i]]
+  save(sparseNetwork,file=fileName)
+  synObj <- File(fileName,parentId=foldId)
+  anno$sparsityMethod <- sparsityMethod
+  anno$networkStorageType <- 'sparse'
+  synSetAnnotations(synObj) <- anno
+  act <- Activity(name='sparsify networks',used=as.list(c(sparsitySyn,networkSyn,geneSyn)),executed=as.list(executed))
+  act <- storeEntity(act)
+  generatedBy(synObj) <- act
+  synObj <- synStore(synObj)  
+}
+
+##CHANGE FILE NAME
+file <- paste0(method,'_',disease,'_',normalization,'.csv')
+
 #WRITE TO RDA
 
 #make synapse object
@@ -104,7 +115,7 @@ networkAnnotation <- list(
   disease = disease,
   normalization = normalization,
   method = method,
-  fileType = 'csv',
+  fileType = 'rda',
   organism = organism,
   dataType = 'metaData'
 )

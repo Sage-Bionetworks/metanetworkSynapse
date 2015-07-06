@@ -24,7 +24,7 @@ tissueType <- as.character(commandArgs(TRUE)[[6]])
 disease <- as.character(commandArgs(TRUE)[[7]])
 organism <- as.character(commandArgs(TRUE)[[8]])
 edgeType <- as.character(commandArgs(TRUE)[[9]])
-spar <- data.frame(t(read.csv('sparsity.csv',header=F,row.names=1)))
+spar <- data.frame((read.csv('sparsity.csv',header=F,row.names=1)))
 
 if(method=='sparrow1'){
   load('result_sparrowZ.rda')
@@ -88,18 +88,19 @@ makeSparse <- function(x){
   return(Matrix(x,sparse=TRUE))
 }
 
-nets <- sapply(spar$V2,arbitrarySparsity,network)
+nets <- lapply(spar$V2,arbitrarySparsity,network)
+gc()
 dropNA <- which(!is.na(nets))
 #if(length(dropNA)>0){
 nets <- nets[dropNA]
 #}
-nets <- sapply(nets,makeSparse)
-
+nets <- lapply(nets,makeSparse)
+gc()
 
 
 
 for(i in 1:length(nets)){
-  sparsityMethod <- rownames(spar)[spar$V2[dropNA]][i]
+  sparsityMethod <- rownames(spar)[dropNA][i]
   fileName <- paste0(anno$method,sparsityMethod,'.rda')
   sparseNetwork <- nets[[i]]
   save(sparseNetwork,file=fileName)

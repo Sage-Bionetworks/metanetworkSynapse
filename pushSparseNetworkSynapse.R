@@ -56,8 +56,6 @@ if(method=='sparrow1'){
   load('result_genie3.rda')
 }
 
-
-
 library(Matrix)
 cat('changing to matrix\n')
 network  <- network %>% as.matrix
@@ -71,7 +69,7 @@ if(!is.na(nEdgesScaleFreeNetwork)){
 cat('apply ranked edge list\n')
 
 #make folder
-synFolder <- Folder(name=paste0(anno$method,'Sparse'),parentId=uploadFolder)
+synFolder <- Folder(name=paste0(anno$method,'Sparse'),parentId=parentId)
 synFolder <- synStore(synFolder)
 foldId <- synGetProperties(synFolder)$id
 
@@ -86,31 +84,8 @@ dropNA <- which(!is.na(nets))
 nets <- nets[dropNA]
 #}
 nets <- sapply(nets,makeSparse)
-for(i in 1:length(nets)){
-  sparsityMethod <- rownames(spar)[spar$V2[dropNA]][i]
-  fileName <- paste0(anno$method,sparsityMethod,'.rda')
-  sparseNetwork <- allNetworks[[i]]
-  save(sparseNetwork,file=fileName)
-  synObj <- File(fileName,parentId=foldId)
-  anno$sparsityMethod <- sparsityMethod
-  anno$networkStorageType <- 'sparse'
-  synSetAnnotations(synObj) <- anno
-  act <- Activity(name='sparsify networks',used=as.list(c(sparsitySyn,networkSyn,geneSyn)),executed=as.list(executed))
-  act <- storeEntity(act)
-  generatedBy(synObj) <- act
-  synObj <- synStore(synObj)  
-}
 
-##CHANGE FILE NAME
-file <- paste0(method,'_',disease,'_',normalization,'.csv')
-
-#WRITE TO RDA
-
-#make synapse object
-synNet <- File(file,parentId=parentId)
-
-#definte annotation
-networkAnnotation <- list(
+anno <- list(
   tissueType = tissueType,
   disease = disease,
   normalization = normalization,
@@ -120,19 +95,26 @@ networkAnnotation <- list(
   dataType = 'metaData'
 )
 
-#set annotations
-synSetAnnotations(synNet) <- networkAnnotation
 
-#define provenance
-usedEntity <- readLines(synIdFile);
-codeUrl <- readLines(synCodeUrlFile);
+for(i in 1:length(nets)){
+  sparsityMethod <- rownames(spar)[spar$V2[dropNA]][i]
+  fileName <- paste0(anno$method,sparsityMethod,'.rda')
+  sparseNetwork <- nets[[i]]
+  save(sparseNetwork,file=fileName)
+  synObj <- File(fileName,parentId=foldId)
+  anno$sparsityMethod <- sparsityMethod
+  anno$networkStorageType <- 'sparse'
+  synSetAnnotations(synObj) <- anno
+  #act <- Activity(name='sparsify networks',used=as.list(c(sparsitySyn,networkSyn,geneSyn)),executed=as.list(executed))
+  #act <- storeEntity(act)
+  usedEntity <- readLines(synIdFile);
+  codeUrl <- readLines(synCodeUrlFile);
+  act <- Activity(name = paste0(method,' ',disease,' network analysis'),
+                  used = as.list(usedEntity),
+                  executed=as.list(codeUrl))
+  
+  act <- storeEntity(act)  
+  generatedBy(synObj) <- act
+  synObj <- synStore(synObj)  
+}
 
-act <- Activity(name = paste0(method,' ',disease,' network analysis'),
-                used = as.list(usedEntity),
-                executed=as.list(codeUrl))
-
-act <- storeEntity(act)
-generatedBy(synNet) <- act
-
-#store in Synapse
-synNet <- synStore(synNet)

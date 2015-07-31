@@ -1,4 +1,4 @@
-require(metaNet)
+require(metanetwork)
 
 fileName <- as.character(commandArgs(TRUE)[[1]])
 pathv <- as.character(commandArgs(TRUE)[[2]])

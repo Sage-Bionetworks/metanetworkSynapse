@@ -2,7 +2,7 @@
 
 require(synapseClient)
 synapseLogin()
-require(metaNet)
+require(metanetwork)
 require(dplyr)
 
 #syn id of project to post networks to

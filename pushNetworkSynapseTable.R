@@ -13,7 +13,7 @@ nGenes <- as.numeric(commandArgs(TRUE)[[4]])
 
 netFiles <- read.csv(networkFiles)
 
-methodNames <- sapply(netFiles,function(x) return(strsplit(x,'_')[[1]][2]))
+methodNames <- sapply(netFiles,function(x) return(strsplit(x,'_')[[1]][1]))
 
 allNetworks <- lapply(netFiles,function(char){x <- fread(char);gc();return(x);})
 generateMasterEdgeNames <- function(n){

@@ -11,7 +11,12 @@ tableName <- as.character(commandArgs(TRUE)[[2]])
 networkFiles <- as.character(commandArgs(TRUE)[[3]])
 nGenes <- as.numeric(commandArgs(TRUE)[[4]])
 
-netFiles <- read.csv(networkFiles)
+projectId <- 'syn3455058'
+tableName <- 'Schizophrenia Network Edges'
+networkFiles <- 'edgeFiles.txt'
+nGenes <- 16423
+
+netFiles <- scan(networkFiles,what='character')
 
 methodNames <- sapply(netFiles,function(x) return(strsplit(x,'_')[[1]][1]))
 

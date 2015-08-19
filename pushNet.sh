@@ -27,6 +27,7 @@ ridgeAIC=0 #n
 ridgeBIC=0 #o
 genie3=0 #p
 tigress=0 #q
+sparsityconsensus=0 #y
 
 while getopts ":a:b:c:defghijklmnopqr:s:t:u:vx:" opt; do
   case $opt in
@@ -80,6 +81,9 @@ while getopts ":a:b:c:defghijklmnopqr:s:t:u:vx:" opt; do
       ;;
     q)
       tigress=1
+      ;;
+    y)
+      sparsityconsensus=1
       ;;
     r)
       normalization=$OPTARG
@@ -182,4 +186,8 @@ fi
 
 if [ $sparsity -eq "1" ]; then
   Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "sparsity" $normalization $tissueType $disease $organism "weight"
+fi
+
+if [$sparsityconsensus -eq "1" ]; then
+  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "sparsityconsensus" $normalization $tissueType $disease $organism "weight"
 fi

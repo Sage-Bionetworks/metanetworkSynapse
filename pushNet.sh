@@ -29,7 +29,7 @@ genie3=0 #p
 tigress=0 #q
 sparsityconsensus=0 #y
 
-while getopts ":a:b:c:defghijklmnopqr:s:t:u:vx:" opt; do
+while getopts ":a:b:c:defghijklmnopqyr:s:t:u:vx:" opt; do
   case $opt in
     a)
       parentId=$OPTARG

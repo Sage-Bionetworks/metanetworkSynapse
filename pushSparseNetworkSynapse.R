@@ -54,7 +54,7 @@ if(method=='sparrow1'){
   load('result_tigress.rda')
 }else if (method=='genie3'){
   load('result_genie3.rda')
-}else if (method='sparsityconsensus'){
+}else if (method=='sparsityconsensus'){
   load('result_sparsityconsensus.rda')
 }
 

@@ -188,6 +188,6 @@ if [ $sparsity -eq "1" ]; then
   Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "sparsity" $normalization $tissueType $disease $organism "weight"
 fi
 
-if [$sparsityconsensus -eq "1" ]; then
+if [ $sparsityconsensus -eq "1" ]; then
   Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "sparsityconsensus" $normalization $tissueType $disease $organism "weight"
 fi

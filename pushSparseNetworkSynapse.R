@@ -56,6 +56,8 @@ if(method=='sparrow1'){
   load('result_genie3.rda')
 }else if (method=='sparsityconsensus'){
   load('result_sparsityconsensus.rda')
+}else if (method=='rankconsensus'){
+  load('result_rankConsensus.rda')
 }
 
 library(Matrix)

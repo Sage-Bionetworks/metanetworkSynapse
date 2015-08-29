@@ -28,8 +28,9 @@ ridgeBIC=0 #o
 genie3=0 #p
 tigress=0 #q
 sparsityconsensus=0 #y
+rankconsensus=0 #z
 
-while getopts ":a:b:c:defghijklmnopqyr:s:t:u:vx:" opt; do
+while getopts ":a:b:c:defghijklmnopqyzr:s:t:u:vx:" opt; do
   case $opt in
     a)
       parentId=$OPTARG
@@ -84,6 +85,9 @@ while getopts ":a:b:c:defghijklmnopqyr:s:t:u:vx:" opt; do
       ;;
     y)
       sparsityconsensus=1
+      ;;
+    z)
+      rankconsensus=1
       ;;
     r)
       normalization=$OPTARG

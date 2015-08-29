@@ -195,3 +195,8 @@ fi
 if [ $sparsityconsensus -eq "1" ]; then
   Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "sparsityconsensus" $normalization $tissueType $disease $organism "weight"
 fi
+
+if [ $rankconsensus -eq "1" ]; then
+  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "rankconsensus" $normalization $tissueType $disease $organism "weight"
+fi
+

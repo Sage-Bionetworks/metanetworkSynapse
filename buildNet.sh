@@ -83,6 +83,22 @@ if [ $ridgeCVmin -eq "1" ]; then
   mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCVmin" $outputpath
 fi
 
+if [ $elasticNetCVmin -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "elasticNetCVmin" $outputpath
+fi
+
+if [ $elasticNetCV1se -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "elasticNetCV1se" $outputpath
+fi
+
+if [ $elasticNetAIC -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "elasticNetAIC" $outputpath
+fi
+
+if [ $elasticNetBIC -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "elasticNetBIC" $outputpath
+fi
+
 #if genie3
 if [ $genie3 -eq "1" ]; then
   mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "genie3" $outputpath

@@ -108,3 +108,8 @@ fi
 if [ $tigress -eq "1" ]; then
   mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigress" $outputpath
 fi
+
+#if tigress
+if [ $tigressRootN -eq "1" ]; then
+  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigressRootN" $outputpath
+fi

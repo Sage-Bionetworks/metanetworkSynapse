@@ -13,6 +13,9 @@
 #if sparrow:
 if [ $sparrowZ -eq "1" ]; then
   mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowZ" $outputpath
+  #push results to s3
+  #delete local results
+  aws s3 mv $outputpath/result_sparrowZ.rda $s3
 fi
 
 if [ $sparrow2Z -eq "1" ]; then

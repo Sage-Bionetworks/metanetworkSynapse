@@ -129,9 +129,11 @@ fi
 #if tigress
 if [ $tigress -eq "1" ]; then
   mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigress" $outputpath
+  aws s3 mv $outputpath/result_tigress.rda $s3
 fi
 
 #if tigress
 if [ $tigressRootN -eq "1" ]; then
   mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigressRootN" $outputpath
+  aws s3 mv $outputpath/result_tigressRootN.rda $s3
 fi

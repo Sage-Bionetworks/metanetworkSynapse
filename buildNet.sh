@@ -3,13 +3,6 @@
 ###bash script to build networks on an EC2 starcluster instance using the metaNet R package
 ###Author: Benjamin A Logsdon, 2015
 
-#$ -S /bin/bash
-#$ -V
-#$ -cwd
-#$ -N Job1
-#$ -e error.txt
-#$ -o out.txt
-
 #if sparrow:
 if [ $sparrowZ -eq "1" ]; then
   mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowZ" $outputpath

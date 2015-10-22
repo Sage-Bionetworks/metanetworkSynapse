@@ -77,3 +77,6 @@ network[whichLowerTri] <- 0
 network <- network+t(network)
 
 save(network,file='result_rankConsensus.rda')
+str <- paste0('aws s3 mv result_rankConsensus.rda ',s3path)
+
+

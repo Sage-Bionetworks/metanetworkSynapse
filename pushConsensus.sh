@@ -1,3 +1,2 @@
 #!/bin/bash
-
-qsub 
+Rscript pushConsensus.R $synFile $codeFile $method $s3path

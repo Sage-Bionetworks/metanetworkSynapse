@@ -7,13 +7,9 @@
 ###file with methods to grab
 ###s3 path
 
-synFile <- commandArgs(TRUE)[[1]]
-codeFile <- commandArgs(TRUE)[[2]]
-method <- commandArgs(TRUE)[[3]]
-s3path <- commandArgs(TRUE)[[4]]
+method <- commandArgs(TRUE)[[1]]
+s3path <- commandArgs(TRUE)[[2]]
 
-synFiles <- scan(synFile,what='character')
-codeFiles <- scan(codeFile,what='character')
 methods <- scan(method,what='character')
 
 s3commandConstructor <- function(x,s3path){
@@ -26,7 +22,7 @@ sapply(foo,system)
 
 require(bit64)
 require(dplyr)
-load('result_sparrowZ.rda')
+load(methods[1])
 network <- as.matrix(network)
 network <- network+t(network)
 gc()
@@ -57,9 +53,7 @@ internal <- function(str,w1){
   save(aggregateRank,file='aggregateRank.rda')
 }
 
-methods <- c('result_lassoAIC.rda','result_lassoBIC.rda','result_lassoCV1se.rda','result_lassoCVmin.rda','result_ridgeAIC.rda','result_ridgeBIC.rda','result_ridgeCV1se.rda','result_ridgeCVmin.rda','result_sparrow2Z.rda','result_elasticNetAIC.rda','result_elasticNetBIC.rda','result_elasticNetCV1se.rda','result_elasticNetCVmin.rda')
-
-sapply(methods,internal,whichUpperTri)
+sapply(methods[-1],internal,whichUpperTri)
 
 rm(list=ls())
 gc()
@@ -68,7 +62,7 @@ load('aggregateRank.rda')
 finalRank <- rank(-aggregateRank,ties.method = 'min')
 finalRank <- finalRank/max(finalRank)
 
-load('result_lassoAIC.rda')
+load(methods[1])
 network <- as.matrix(network)
 whichUpperTri <- which(upper.tri(network))
 whichLowerTri <- which(lower.tri(network))
@@ -78,5 +72,5 @@ network <- network+t(network)
 
 save(network,file='result_rankConsensus.rda')
 str <- paste0('aws s3 mv result_rankConsensus.rda ',s3path)
-
+system('rm *.rda')
 

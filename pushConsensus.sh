@@ -1,2 +1,2 @@
 #!/bin/bash
-Rscript pushConsensus.R $method $s3path
+Rscript /shared/metanetworkSynapse/pushConsensus.R $method $s3path

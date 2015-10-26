@@ -7,23 +7,23 @@
 ###file with methods to grab
 ###s3 path
 
-method <- commandArgs(TRUE)[[1]]
+method_file <- commandArgs(TRUE)[[1]]
 s3path <- commandArgs(TRUE)[[2]]
 
-methods <- scan(method,what='character')
+method_list <- scan(method_file,what='character')
 
 s3commandConstructor <- function(x,s3path){
   return(paste0('aws s3 cp ',s3path,x,' ./'))
 }
 cat('copying files from s3 to local directory\n')
-foo <- sapply(methods,s3commandConstructor,s3path)
+foo <- sapply(method_list,s3commandConstructor,s3path)
 sapply(foo,system)
 
 
 require(bit64)
 require(dplyr)
 cat('loading first file\n')
-load(methods[1])
+load(method_list[1])
 cat('symmetrisizing first file\n')
 network <- as.matrix(network)
 network <- network+t(network)
@@ -55,7 +55,7 @@ internal <- function(str,w1){
   save(aggregateRank,file='aggregateRank.rda')
 }
 
-sapply(methods[-1],internal,whichUpperTri)
+sapply(method_list[-1],internal,whichUpperTri)
 
 rm(list=ls())
 gc()
@@ -64,7 +64,7 @@ load('aggregateRank.rda')
 finalRank <- rank(-aggregateRank,ties.method = 'min')
 finalRank <- finalRank/max(finalRank)
 
-load(methods[1])
+load(method_list[1])
 network <- as.matrix(network)
 whichUpperTri <- which(upper.tri(network))
 whichLowerTri <- which(lower.tri(network))

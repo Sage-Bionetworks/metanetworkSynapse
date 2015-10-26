@@ -15,14 +15,16 @@ methods <- scan(method,what='character')
 s3commandConstructor <- function(x,s3path){
   return(paste0('aws s3 cp ',s3path,x,' ./'))
 }
-
+cat('copying files from s3 to local directory\n')
 foo <- sapply(methods,s3commandConstructor,s3path)
 sapply(foo,system)
 
 
 require(bit64)
 require(dplyr)
+cat('loading first file\n')
 load(methods[1])
+cat('symmetrisizing first file\n')
 network <- as.matrix(network)
 network <- network+t(network)
 gc()
@@ -38,7 +40,7 @@ save(aggregateRank,file='aggregateRank.rda')
 
 
 internal <- function(str,w1){
-  cat(str,'\n')
+  cat('loading',str,'\n')
   load(str)
   load('aggregateRank.rda')
   network <- as.matrix(network)
@@ -57,7 +59,7 @@ sapply(methods[-1],internal,whichUpperTri)
 
 rm(list=ls())
 gc()
-
+cat('turning into matrix\n')
 load('aggregateRank.rda')
 finalRank <- rank(-aggregateRank,ties.method = 'min')
 finalRank <- finalRank/max(finalRank)

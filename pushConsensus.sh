@@ -1,2 +1,2 @@
 #!/bin/bash
-Rscript pushConsensus.R $synFile $codeFile $method $s3path
+Rscript pushConsensus.R $method $s3path

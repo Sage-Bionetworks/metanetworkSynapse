@@ -47,19 +47,23 @@ internal <- function(str,w1){
   network <- network+t(network)
   gc()
   b <- network[w1]
+  print(b[1:5])
   rm(network)
   gc()
   foo <- rank(-abs(b),ties.method='min') %>% as.integer64
+  print(foo[1:5])
   aggregateRank <- aggregateRank + foo
+  print(aggregateRank[1:5])
   gc()
   save(aggregateRank,file='aggregateRank.rda')
 }
 
 sapply(method_list[-1],internal,whichUpperTri)
 
-rm(list=ls())
+#rm(list=ls())
 gc()
 cat('turning into matrix\n')
+require(bit64)
 load('aggregateRank.rda')
 finalRank <- rank(-aggregateRank,ties.method = 'min')
 finalRank <- finalRank/max(finalRank)
@@ -74,5 +78,6 @@ network <- network+t(network)
 
 save(network,file='result_rankConsensus.rda')
 str <- paste0('aws s3 mv result_rankConsensus.rda ',s3path)
-system('rm *.rda')
+system(str)
+#system('rm *.rda')
 

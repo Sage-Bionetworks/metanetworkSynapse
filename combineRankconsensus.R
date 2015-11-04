@@ -8,7 +8,7 @@ method_file <- commandArgs(TRUE)[[1]]
 s3path <- commandArgs(TRUE)[[2]]
 
 method_list <- scan(method_file,what='character')
-
+print(method_list)
 getLocal <- function(x){
   foo <- strsplit(x,'ROSMAP/')[[1]][2]
   foo <- strsplit(foo,'/result')[[1]][1]
@@ -16,7 +16,7 @@ getLocal <- function(x){
 }
 
 method_list2 <- sapply(method_list,getLocal)
-
+print(method_list2)
 s3commandConstructor <- function(x){
   foo <- getLocal(x)
   return(paste0('aws s3 cp ',x,' ',foo))

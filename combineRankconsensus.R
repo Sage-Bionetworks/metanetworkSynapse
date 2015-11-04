@@ -9,8 +9,17 @@ s3path <- commandArgs(TRUE)[[2]]
 
 method_list <- scan(method_file,what='character')
 
+getLocal <- function(x){
+  foo <- strsplit(x,'ROSMAP/')[[1]][2]
+  foo <- strsplit(foo,'/result')[[1]][1]
+  return(paste0('./result_rankConsensus',foo,'.rda'))
+}
+
+method_list2 <- sapply(method_list,getLocal)
+
 s3commandConstructor <- function(x){
-  return(paste0('aws s3 cp ',x,' ./'))
+  foo <- getLocal(x)
+  return(paste0('aws s3 cp ',x,' ',foo))
 }
 cat('copying files from s3 to local directory\n')
 foo <- sapply(method_list,s3commandConstructor)
@@ -20,7 +29,7 @@ sapply(foo,system)
 require(bit64)
 require(dplyr)
 cat('loading first file\n')
-load(method_list[1])
+load(method_list2[1])
 cat('symmetrisizing first file\n')
 network <- as.matrix(network)
 network <- network+t(network)
@@ -55,7 +64,7 @@ internal <- function(str,w1){
   save(aggregateRank,file='aggregateRank.rda')
 }
 
-sapply(method_list[-1],internal,whichUpperTri)
+sapply(method_list2[-1],internal,whichUpperTri)
 
 #rm(list=ls())
 gc()
@@ -65,7 +74,7 @@ load('aggregateRank.rda')
 finalRank <- rank(-aggregateRank,ties.method = 'min')
 finalRank <- finalRank/max(finalRank)
 
-load(method_list[1])
+load(method_list2[1])
 network <- as.matrix(network)
 whichUpperTri <- which(upper.tri(network))
 whichLowerTri <- which(lower.tri(network))
@@ -76,4 +85,4 @@ network <- network+t(network)
 save(network,file='result_rankConsensusCombined.rda')
 str <- paste0('aws s3 mv result_rankConsensusCombined.rda ',s3path)
 system(str)
-system('rm *.rda')
+#system('rm *.rda')

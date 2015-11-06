@@ -130,3 +130,5 @@ if [ $tigressRootN -eq "1" ]; then
   mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigressRootN" $outputpath
   aws s3 mv $outputpath/result_tigressRootN.rda $s3
 fi
+
+aws s3 cp $outputpath/sparsity.csv $s3

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ###bash script to push networks to Synapse after running buildNet.sh
-###Author: Benjamin A Logsdon, 2015
+###Author: Benjamin A Logsdon, 2016
 
 #syn id of parentId to post networks to
 #file with syn ids of data used to run network analysis
@@ -14,23 +14,19 @@
 #what type of edge summary is present in file
 
 sparrow1=0 #d
-sparrow2=0 #e
-aracne=0 #f
-correlation=0 #g
-lassoCV1se=0 #h
-lassoCVmin=0 #i
-lassoAIC=0 #j
-lassoBIC=0 #k
-ridgeCV1se=0 #l
-ridgeCVmin=0 #m
-ridgeAIC=0 #n
-ridgeBIC=0 #o
-genie3=0 #p
-tigress=0 #q
-sparsityconsensus=0 #y
-rankconsensus=0 #z
+aracne=0 #e
+correlation=0 #f
+lassoCV1se=0 #g
+ridgeCV1se=0 #h
+genie3=0 #i
+tigress=0 #j
+c3net=0 #k
+mrnet=0 #l
+wgcnaST=0 #m
+wgcnaTOM=0 #n
+rankconsensus=0 #o
 
-while getopts ":a:b:c:defghijklmnopqyzr:s:t:u:vx:" opt; do
+while getopts ":a:b:c:defghijklmnor:s:t:u:vx:" opt; do
   case $opt in
     a)
       parentId=$OPTARG
@@ -45,48 +41,36 @@ while getopts ":a:b:c:defghijklmnopqyzr:s:t:u:vx:" opt; do
       sparrow1=1
       ;;
     e)
-      sparrow2=1
-      ;;
-    f)
       aracne=1
       ;;
-    g)
+    f)
       correlation=1
       ;;
-    h)
+    g)
       lassoCV1se=1
       ;;
-    i)
-      lassoCVmin=1
-      ;;
-    j)
-      lassoAIC=1
-      ;;
-    k)
-      lassoBIC=1
-      ;;
-    l)
+    h)
       ridgeCV1se=1
       ;;
-    m)
-      ridgeCVmin=1
-      ;;
-    n)
-      ridgeAIC=1
-      ;;
-    o)
-      ridgeBIC=1
-      ;;
-    p)
+    i)
       genie3=1
       ;;
-    q)
+    j)
       tigress=1
       ;;
-    y)
-      sparsityconsensus=1
+    k)
+      c3net=1
+      ;;   
+    l)
+      mrnet=1
+      ;;   
+    m)
+      wgcnaST=1
       ;;
-    z)
+    n)
+      wgcnaTOM=1
+      ;;      
+    o)
       rankconsensus=1
       ;;
     r)
@@ -123,11 +107,6 @@ if [ $sparrow1 -eq "1" ]; then
   #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "sparrow" $normalization $tissueType $disease $organism "zstatistic"  
 fi
 
-if [ $sparrow2 -eq "1" ]; then
-  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "sparrow2" $normalization $tissueType $disease $organism "zstatistic"
-  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "sparrow" $normalization $tissueType $disease $organism "zstatistic"  
-fi
-
 if [ $aracne -eq "1" ]; then
   Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "aracne" $normalization $tissueType $disease $organism "mi"
   #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "aracne" $normalization $tissueType $disease $organism "indicator"  
@@ -143,38 +122,8 @@ if [ $lassoCV1se -eq "1" ]; then
   #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"  
 fi
 
-if [ $lassoCVmin -eq "1" ]; then
-  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "lassoCVmin" $normalization $tissueType $disease $organism "weight"
-  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"  
-fi
-
-if [ $lassoAIC -eq "1" ]; then
-  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "lassoAIC" $normalization $tissueType $disease $organism "weight"
-  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"  
-fi
-
-if [ $lassoBIC -eq "1" ]; then
-  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "lassoBIC" $normalization $tissueType $disease $organism "weight"
-  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "lasso" $normalization $tissueType $disease $organism "weight"  
-fi
-
 if [ $ridgeCV1se -eq "1" ]; then
   Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "ridgeCV1se" $normalization $tissueType $disease $organism "weight"
-  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"  
-fi
-
-if [ $ridgeCVmin -eq "1" ]; then
-  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "ridgeCVmin" $normalization $tissueType $disease $organism "weight"
-  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"  
-fi
-
-if [ $ridgeAIC -eq "1" ]; then
-  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "ridgeAIC" $normalization $tissueType $disease $organism "weight"
-  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"  
-fi
-
-if [ $ridgeBIC -eq "1" ]; then
-  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "ridgeBIC" $normalization $tissueType $disease $organism "weight"
   #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "ridge" $normalization $tissueType $disease $organism "weight"  
 fi
 
@@ -188,12 +137,28 @@ if [ $tigress -eq "1" ]; then
   #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"  
 fi
 
-if [ $sparsity -eq "1" ]; then
-  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "sparsity" $normalization $tissueType $disease $organism "weight"
+if [ $c3net -eq "1" ]; then
+  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "c3net" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"  
 fi
 
-if [ $sparsityconsensus -eq "1" ]; then
-  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "sparsityconsensus" $normalization $tissueType $disease $organism "weight"
+if [ $mrnet -eq "1" ]; then
+  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "mrnet" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"  
+fi
+
+if [ $wgcnaST -eq "1" ]; then
+  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "wgcnaST" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"  
+fi
+
+if [ $wgcnaTOM -eq "1" ]; then
+  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "wgcnaTOM" $normalization $tissueType $disease $organism "weight"
+  #Rscript pushSparseNetworkSynapse.R $parentId $synapseIdFile $codeUrlFile "tigress" $normalization $tissueType $disease $organism "weight"  
+fi
+
+if [ $sparsity -eq "1" ]; then
+  Rscript $outputpath $parentId $synapseIdFile $codeUrlFile "sparsity" $normalization $tissueType $disease $organism "weight"
 fi
 
 if [ $rankconsensus -eq "1" ]; then

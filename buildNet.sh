@@ -11,50 +11,48 @@ if [ $sparrowZ -eq "1" ]; then
   #add annotations, provenance, etc...
 fi
 
-
-
 if [ $mrnet -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "mrnetWrapper" "NULL" $outputpath
+  Rscript $pathv/buildOtherNet.R $dataFile $pathv "mrnetWrapper" "NULL" $outputpath
   aws s3 mv $outputpath/result_mrnet.rda $s3
 fi
 
 if [ $c3net -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "c3netWrapper" "NULL" $outputpath
+  Rscript $pathv/buildOtherNet.R $dataFile $pathv "c3netWrapper" "NULL" $outputpath
   aws s3 mv $outputpath/result_c3net.rda $s3
 fi
 
 #if lasso
 if [ $lassoCV1se -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCV1se" $outputpath
+  mpirun -np 1 Rscript $pathv/buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCV1se" $outputpath
   aws s3 mv $outputpath/result_lassoCV1se.rda $s3
 fi
 
 #if ridge
 if [ $ridgeCV1se -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCV1se" $outputpath
+  mpirun -np 1 Rscript $pathv/buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCV1se" $outputpath
   aws s3 mv $outputpath/result_ridgeCV1se.rda $s3
 fi
 
 #if genie3
 if [ $genie3 -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "genie3" $outputpath
+  mpirun -np 1 Rscript $pathv/buildMpiNet.R $dataFile $((numberCore-1)) $pathv "genie3" $outputpath
   aws s3 mv $outputpath/result_genie3.rda $s3
 fi
 
 #if tigress
 if [ $tigress -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigress" $outputpath
+  mpirun -np 1 Rscript $pathv/buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigress" $outputpath
   aws s3 mv $outputpath/result_tigress.rda $s3
 fi
 
 #if aracne
 if [ $aracne -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "aracne" "NULL" $outputpath
+  Rscript $pathv/buildOtherNet.R $dataFile $pathv "aracne" "NULL" $outputpath
   aws s3 mv $outputpath/result_aracne.rda $s3
 fi
 
 if [ $correlation -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "correlation" "NULL" $outputpath
+  Rscript $pathv/buildOtherNet.R $dataFile $pathv "correlation" "NULL" $outputpath
   aws s3 mv $outputpath/result_correlation.rda $s3
 fi
 

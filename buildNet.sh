@@ -5,7 +5,7 @@
 
 #if sparrow:
 if [ $sparrowZ -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowZ" $outputpath
+  mpirun -np 1 Rscript $pathv/buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowZ" $outputpath
   aws s3 mv $outputpath/result_sparrowZ.rda $s3
   #run script linking to synapse
   #add annotations, provenance, etc...

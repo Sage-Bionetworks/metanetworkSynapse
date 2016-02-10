@@ -48,7 +48,7 @@ fi
 #if aracne
 if [ $aracne -eq "1" ]; then
   Rscript $pathv/buildOtherNet.R $dataFile $pathv "aracne" "NULL" $outputpath
-  aws s3 mv $outputpath/result_aracne.rda $s3
+  aws s3 mv $outputpath/result_aracneFull.rda $s3
 fi
 
 if [ $correlation -eq "1" ]; then

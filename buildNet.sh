@@ -47,7 +47,7 @@ fi
 
 #if aracne
 if [ $aracne -eq "1" ]; then
-  Rscript $pathv/buildOtherNet.R $dataFile $pathv "aracne" "NULL" $outputpath
+  Rscript $pathv/buildOtherNet.R $dataFile $pathv "aracne" 1 $outputpath
   aws s3 mv $outputpath/aracneNetwork.csv $s3
 fi
 

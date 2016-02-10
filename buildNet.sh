@@ -58,11 +58,11 @@ fi
 
 #if wgcna
 if [ $wgcnaST -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "wgcnaSoftThreshold" "NULL" $outputpath
+  Rscript $pathv/buildOtherNet.R $dataFile $pathv "wgcnaSoftThreshold" "NULL" $outputpath
   aws s3 mv $outputpath/result_wgcnaST.rda $s3
 fi
 
 if [ $wgcnaTOM -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "wgcnaTOM" "NULL" $outputpath
+  Rscript $pathv/buildOtherNet.R $dataFile $pathv "wgcnaTOM" "NULL" $outputpath
   aws s3 mv $outputpath/result_wgcnaTOM.rda $s3
 fi

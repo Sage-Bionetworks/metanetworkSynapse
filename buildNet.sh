@@ -5,13 +5,18 @@
 
 #if sparrow:
 if [ $sparrowZ -eq "1" ]; then
+  #build network
   mpirun -np 1 Rscript $pathv/buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowZ" $outputpath
+  #compute md5
+  Rscript $pathv/computeMD5.R $outputpath/sparrowZNetwork.csv $outputpath/tempmd5.out
+  #push to s3
   aws s3 mv $outputpath/sparrowZNetwork.csv $s3
-  #run script linking to synapse
-  #add annotations, provenance, etc...
+  #link file to synapse, add provenance, add annotations
+  Rscript $pathv/s3LinkToSynapse.R $s3b/sparrowZNetwork.csv $outputpath/tempmd5.out $parentId $annotationFile $provenanceFile
 fi
 
 if [ $mrnet -eq "1" ]; then
+  #build
   Rscript $pathv/buildOtherNet.R $dataFile $pathv "mrnetWrapper" "NULL" $outputpath
   aws s3 mv $outputpath/mrnetNetwork.csv $s3
 fi
@@ -49,11 +54,6 @@ fi
 if [ $aracne -eq "1" ]; then
   Rscript $pathv/buildOtherNet.R $dataFile $pathv "aracne" 1 $outputpath
   aws s3 mv $outputpath/aracneNetwork.csv $s3
-fi
-
-if [ $correlation -eq "1" ]; then
-  Rscript $pathv/buildOtherNet.R $dataFile $pathv "correlation" "NULL" $outputpath
-  aws s3 mv $outputpath/correlationNetwork.csv $s3
 fi
 
 #if wgcna

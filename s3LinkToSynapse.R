@@ -3,7 +3,8 @@ md5location <- as.character(commandArgs(TRUE)[[2]])
 parentId <- as.character(commandArgs(TRUE)[[3]])
 annotationFile <- as.character(commandArgs(TRUE)[[4]])
 provenanceFile <- as.character(commandArgs(TRUE)[[5]])
-s3LinkToSynapse <- function(s3file,md5location,parentId,annotationFile,provenanceFile,activityName='networkInference',AWSbucketName='metanetworks'){
+method <- as.character(commandArgs(TRUE)[[6]])
+s3LinkToSynapse <- function(s3file,md5location,parentId,annotationFile,provenanceFile,method,activityName='Network Inference',AWSbucketName='metanetworks'){
     require(synapseClient)
     synapseLogin()
     md5 <- readLines(md5location)
@@ -39,10 +40,11 @@ s3LinkToSynapse <- function(s3file,md5location,parentId,annotationFile,provenanc
     foo <- synGet(s3fileEntity$id,downloadFile=F)
     annos <- read.csv(annotationFile,header=F,stringsAsFactors=F,row.names=1)
     annos <- as.list(data.frame(t(annos),stringsAsFactors=F))
+    annos$method <- method
     synSetAnnotations(foo) <- annos
     provenance <- read.csv(provenanceFile,header=T,stringsAsFactors=F)
     used <- provenance$provenance[which(provenance$executed==FALSE)]
     executed <- provenance$provenance[which(provenance$executed==TRUE)]
-    foo <- synStore(foo,used=used,executed=executed,activityName=activityName)
+    foo <- synStore(foo,used=used,executed=executed,activityName=activityName,forceVersion=F)
 }
-s3LinkToSynapse(s3file,md5location,parentId,annotationFile,provenanceFile)
+s3LinkToSynapse(s3file,md5location,parentId,annotationFile,provenanceFile,method)

@@ -43,8 +43,8 @@ s3LinkToSynapse <- function(s3file,md5location,parentId,annotationFile,provenanc
     annos$method <- method
     synSetAnnotations(foo) <- annos
     provenance <- read.csv(provenanceFile,header=T,stringsAsFactors=F)
-    used <- provenance$provenance[which(provenance$executed==FALSE)]
-    executed <- provenance$provenance[which(provenance$executed==TRUE)]
+    used <- as.list(provenance$provenance[which(provenance$executed==FALSE)])
+    executed <- as.list(provenance$provenance[which(provenance$executed==TRUE)])
     foo <- synStore(foo,used=used,executed=executed,activityName=activityName,forceVersion=F)
 }
 s3LinkToSynapse(s3file,md5location,parentId,annotationFile,provenanceFile,method)

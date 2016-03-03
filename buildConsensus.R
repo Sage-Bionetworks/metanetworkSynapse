@@ -11,12 +11,13 @@ buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile){
   #get all networks from Synapse
   foo <- synQuery(paste0('select name,id from file where parentId==\',networkFolderId,\''))
   bar <- lapply(foo$file.id,synGet,downloadLocation=outputpath)
+  #print(foo)
 
   #update provenanceFile
   provenance <- read.csv(provenanceFile,stringsAsFactors=F,row.names=F)
   provenance <- rbind(provenance,cbind(foo$file.id,rep(FALSE,nrow(foo))))
   write.csv(provenance,paste0(outputpath,'rankConsensusProvenanceFile.txt'),quote=F,row.names=F)
-
+  #print(provenance)
   #load networks into R session
 
   loadNetwork <- function(file){
@@ -37,3 +38,4 @@ buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile){
   write.csv(network,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
 
 }
+buildConsensus(fileName,outputpath,networkFolderId,provenanceFile)

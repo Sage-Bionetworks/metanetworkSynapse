@@ -19,7 +19,7 @@ outputpath="/shared/testNetwork/"
 s3b="testNetwork"
 
 #id of folder on Synapse that files will go to
-parentId="syn5646308"
+parentId="syn5705293"
 
 #path to csv file with annotations to add to file on Synapse
 annotationFile="/shared/testNetwork/annoFile.txt"

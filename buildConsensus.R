@@ -14,7 +14,7 @@ buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile){
   #print(foo)
 
   #update provenanceFile
-  provenance <- read.csv(provenanceFile,stringsAsFactors=F,row.names=F)
+  provenance <- read.csv(provenanceFile,stringsAsFactors=F)
   provenance <- rbind(provenance,cbind(foo$file.id,rep(FALSE,nrow(foo))))
   write.csv(provenance,paste0(outputpath,'rankConsensusProvenanceFile.txt'),quote=F,row.names=F)
   #print(provenance)

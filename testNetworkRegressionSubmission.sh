@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #number of cores to reserve for job
-nthreads=1
+nthreads=8
 
 #full s3 path where networks will go
 s3="s3://metanetworks/testNetwork/"

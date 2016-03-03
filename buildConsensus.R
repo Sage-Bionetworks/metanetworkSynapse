@@ -9,7 +9,7 @@ buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile){
   synapseLogin()
 
   #get all networks from Synapse
-  foo <- synQuery(paste0('select name,id from file where parentId==\',networkFolderId,\''))
+  foo <- synQuery(paste0('select name,id from file where parentId==\'',networkFolderId,'\''))
   bar <- lapply(foo$file.id,synGet,downloadLocation=outputpath)
   #print(foo)
 

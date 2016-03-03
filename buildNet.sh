@@ -91,29 +91,6 @@ if [ $tigress -eq "1" ]; then
 
 fi
 
-#if aracne
-if [ $aracne -eq "1" ]; then
-  Rscript $pathv/buildOtherNet.R $dataFile $pathv "aracne" 1 $outputpath
-
-  Rscript $pathv/computeMD5.R $outputpath/aracneNetwork.csv $outputpath/aracnetempmd5.out
-
-  aws s3 mv $outputpath/aracneNetwork.csv $s3
-
-  Rscript $pathv/s3LinkToSynapse.R $s3b/aracneNetwork.csv $outputpath/aracnetempmd5.out $parentId $annotationFile $provenanceFile "aracne"
-
-fi
-
-#if wgcna
-if [ $wgcnaST -eq "1" ]; then
-  Rscript $pathv/buildOtherNet.R $dataFile $pathv "wgcnaSoftThreshold" "NULL" $outputpath
-
-  Rscript $pathv/computeMD5.R $outputpath/wgcnaSoftThresholdNetwork.csv $outputpath/wgcnaSoftThresholdtempmd5.out
-
-  aws s3 mv $outputpath/wgcnaSoftThresholdNetwork.csv $s3
-
-  Rscript $pathv/s3LinkToSynapse.R $s3b/wgcnaSoftThresholdNetwork.csv $outputpath/wgcnaSoftThresholdtempmd5.out $parentId $annotationFile $provenanceFile "wgcnaSoftThreshold"
-
-fi
 
 if [ $wgcnaTOM -eq "1" ]; then
   Rscript $pathv/buildOtherNet.R $dataFile $pathv "wgcnaTOM" "NULL" $outputpath

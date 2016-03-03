@@ -32,6 +32,7 @@ buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile){
 
   networkFiles <- sapply(bar,function(x){return(x@filePath)})
   networks <- lapply(networkFiles,loadNetwork)
+  networks <- lapply(networks,data.matrix)
 
   #build rank consensus
   rankConsensusNetwork <- metanetwork::rankConsensus(networks)

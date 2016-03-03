@@ -35,7 +35,7 @@ buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile){
   networks <- lapply(networks,data.matrix)
 
   #build rank consensus
-  rankConsensusNetwork <- metanetwork::rankConsensus(networks)
+  network <- metanetwork::rankConsensus(networks)
 
   write.csv(network,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
 

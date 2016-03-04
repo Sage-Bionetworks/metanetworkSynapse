@@ -2,8 +2,9 @@ fileName <- as.character(commandArgs(TRUE)[[1]])
 outputpath <- as.character(commandArgs(TRUE)[[2]])
 networkFolderId <- as.character(commandArgs(TRUE)[[3]])
 provenanceFile <- as.character(commandArgs(TRUE)[[4]])
+dataFile <- as.character(commandArgs(TRUE)[[5]])
 
-buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile){
+buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile,dataFile){
   library(synapseClient)
   library(metanetwork)
   synapseLogin()
@@ -34,10 +35,19 @@ buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile){
   networks <- lapply(networkFiles,loadNetwork)
   networks <- lapply(networks,data.matrix)
 
-  #build rank consensus
-  network <- metanetwork::rankConsensus(networks)
+  networks$rankConsensus <- metanetwork::rankConsensus(networks)
 
-  write.csv(network,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
-
+  if(!is.null(dataFile)){
+    library(Matrix)
+    networkMethods <- sapply(bar,synGetAnnotation,name='method')
+    #build rank consensus
+    networkMethods <- c(networkMethods,'rankConsensus')
+    dataSet <- read.csv(dataFile,stringsAsFactors=F,row.names=1)
+    dataSet <- data.matrix(dataSet)
+    bicNetworks <- lapply(networks,computeBICcurve,dataSet,maxEdges=1e5)
+    names(bicNetworks) <- networkMethods
+    save(bicNetworks,file=paste0(outputpath,'bicNetworks.rda'))
+  }
+  write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
 }
-buildConsensus(fileName,outputpath,networkFolderId,provenanceFile)
+buildConsensus(fileName,outputpath,networkFolderId,provenanceFile,dataFile)

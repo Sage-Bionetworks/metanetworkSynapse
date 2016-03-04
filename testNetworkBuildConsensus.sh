@@ -29,10 +29,10 @@ annotationFile="/shared/testNetwork/annoFile.txt"
 provenanceFile="/shared/testNetwork/provenanceFile.txt"
 
 #path to error output
-errorOutput="/shared/testNetwork/Regressionerror.txt"
+errorOutput="/shared/testNetwork/Aggregationerror.txt"
 
 #path to out output
-outOutput="/shared/testNetwork/Regressionout.txt"
+outOutput="/shared/testNetwork/Aggregationout.txt"
 
 #job script name
 jobname="testNetworkaggregation"

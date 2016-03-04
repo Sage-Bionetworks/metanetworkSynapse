@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-Rscript $pathv/buildConsensus.R $dataFile $outputpath $networkFolderId $provenanceFile $dataFile
+Rscript $pathv/buildConsensus.R $dataFile $outputpath $networkFolderId $provenanceFile
 #compute md5
 
 provenanceFileUpdated=$outputpath/rankConsensusProvenanceFile.txt

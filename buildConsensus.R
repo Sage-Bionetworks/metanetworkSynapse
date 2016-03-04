@@ -2,9 +2,8 @@ fileName <- as.character(commandArgs(TRUE)[[1]])
 outputpath <- as.character(commandArgs(TRUE)[[2]])
 networkFolderId <- as.character(commandArgs(TRUE)[[3]])
 provenanceFile <- as.character(commandArgs(TRUE)[[4]])
-dataFile <- as.character(commandArgs(TRUE)[[5]])
 
-buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile,dataFile){
+buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
   library(synapseClient)
   library(metanetwork)
   synapseLogin()
@@ -50,4 +49,4 @@ buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile,dat
   }
   write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
 }
-buildConsensus(fileName,outputpath,networkFolderId,provenanceFile,dataFile)
+buildConsensus(outputpath,networkFolderId,provenanceFile,fileName)

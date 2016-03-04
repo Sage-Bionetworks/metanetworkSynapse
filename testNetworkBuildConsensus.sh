@@ -18,7 +18,7 @@ outputpath="/local/testNetwork/"
 s3b="testNetwork"
 
 #id of folder with networks to combine
-networkFolderId="syn5705293"
+networkFolderId="syn5706584"
 
 #id of folder on Synapse that file will go to
 parentId="syn5646308"

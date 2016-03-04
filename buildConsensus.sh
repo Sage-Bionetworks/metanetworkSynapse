@@ -15,6 +15,7 @@ aws s3 mv $outputpath/rankConsensusNetwork.csv $s3
 Rscript $pathv/s3LinkToSynapse.R $s3b/rankConsensusNetwork.csv $outputpath/rankconsensustempmd5.out $parentId $annotationFile $provenanceFileUpdated "rankConsensus"
 
 
-aws s3 mv $outputpath/bicNetworks.rda $s3
+
 Rscript $pathv/computeMD5.R $outputpath/bicNetworks.rda $outputpath/bicnetworkstempmd5.out
+aws s3 mv $outputpath/bicNetworks.rda $s3
 Rscript $pathv/s3LinkToSynapse.R $s3b/bicNetworks.rda $outputpath/bicnetworkstempmd5.out $parentId $annotationFile $provenanceFileUpdated "bic"

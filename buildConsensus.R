@@ -36,12 +36,12 @@ buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
 
   networks$rankConsensus <- metanetwork::rankConsensus(networks)
 
-  if(!is.null(dataFile)){
+  if(!is.null(fileName)){
     library(Matrix)
     networkMethods <- sapply(bar,synGetAnnotation,which='method')
     #build rank consensus
     networkMethods <- c(networkMethods,'rankConsensus')
-    dataSet <- read.csv(dataFile,stringsAsFactors=F,row.names=1)
+    dataSet <- read.csv(fileName,stringsAsFactors=F,row.names=1)
     dataSet <- data.matrix(dataSet)
     bicNetworks <- lapply(networks,computeBICcurve,dataSet,maxEdges=1e5)
     names(bicNetworks) <- networkMethods

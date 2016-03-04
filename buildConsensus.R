@@ -39,7 +39,7 @@ buildConsensus = function(fileName,outputpath,networkFolderId,provenanceFile,dat
 
   if(!is.null(dataFile)){
     library(Matrix)
-    networkMethods <- sapply(bar,synGetAnnotation,name='method')
+    networkMethods <- sapply(bar,synGetAnnotation,which='method')
     #build rank consensus
     networkMethods <- c(networkMethods,'rankConsensus')
     dataSet <- read.csv(dataFile,stringsAsFactors=F,row.names=1)

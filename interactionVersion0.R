@@ -1,6 +1,6 @@
 generateStatistics <- function(networkId,backgroundId,storageLocation,method,provenanceURL){
   networkObj <- synGet(networkId,downloadLocation = './')
-  backgroundObj <- synGet(backgroundId)
+  backgroundObj <- synGet(as.character(backgroundId))
   
   loadNetwork <- function(file){
     library(data.table)
@@ -52,7 +52,7 @@ require(synapseClient)
 synapseLogin()
 
 
-foo <- synQuery('select name,id,study,tissueTypeAbrv,disease,cogdx,fileType from file where projectId==\'syn5584871\' and analysisType==\'statisticalNetworkReconstruction\'')
+foo <- synQuery('select name,id,study,tissueTypeAbrv,disease,cogdx,fileType,method from file where projectId==\'syn5584871\' and analysisType==\'statisticalNetworkReconstruction\'')
 
 library(dplyr)
 foo2 <- filter(foo,!is.na(file.tissueTypeAbrv) & !is.na(file.study))
@@ -63,6 +63,8 @@ foo2 <- filter(foo2,file.fileType=='csv' & !is.na(interactionReference))
 View(foo2)
 
 foo2$resultLocation <- sapply(foo2$file.id,rSynapseUtilities::getGrandParent)
+foo2$interactionReference <- as.character(foo2$interactionReference)
 
-mapply(generateStatistics,)
+generateStatistics <- function(networkId,backgroundId,storageLocation,method,provenanceURL)
+mapply(generateStatistics,networkId=foo2$file.id[1:2],backgroundId=foo2$interactionReference[1:2],storageLocation=foo2$resultLocation[1:2],method=foo2$file.method[1:2],provenanceURL='https://github.com/blogsdon/metanetworkSynapse/blob/1cba157afbea53a98b007ebf10d584464421fbcb/interactionVersion0.R')
 

@@ -2,28 +2,59 @@ generateStatistics <- function(networkId,backgroundId,storageLocation,method,pro
   networkObj <- synGet(networkId,downloadLocation = './')
   backgroundObj <- synGet(as.character(backgroundId))
   
-  loadNetwork <- function(file){
-    library(data.table)
-    sparrowNetwork <- data.table::fread(file,stringsAsFactors=FALSE,data.table=F)
-    rownames(sparrowNetwork) <- sparrowNetwork$V1
-    sparrowNetwork <- sparrowNetwork[,-1]
-    gc()
-    return(sparrowNetwork)
+  #network <- loadNetwork(networkObj@filePath)
+  load(networkObj@filePath)
+  load(backgroundObj@filePath)
+  #library(ROCR)
+
+  referenceSet <- which(net2!=0)
+  diag(net2) <- 0
+  gc()
+  net2[which(lower.tri(net2))] <- 0
+  
+  getEdge = function(x){
+    return(which(x$network!=0))
   }
   
-  network <- loadNetwork(networkObj@filePath)
-  load(backgroundObj@filePath)
-  library(ROCR)
+  testSets <- lapply(bicNetworks,getEdge)
   
-  upperTriangular = which(upper.tri(network))
-  predvec <- as.matrix(network)[upperTriangular]
-  truevec <- as.matrix(net2)[upperTriangular]
-  predictionObj <- prediction(predvec,truevec)
-  #return(predictionObj)
-  save(predictionObj,file=paste0(method,'BiogridPrediction.rda'))
-  foobar<-File(paste0(method,'BiogridPrediction.rda'),parentId=storageLocation)
+  makeTables <- function(x,y,n){
+    table1 <- matrix(0,2,2)
+    table1[2,2] <- length(intersect(x,y))
+    table1[1,2] <- length(x)-table1[2,2]
+    table1[2,1] <- length(y)-table1[2,2]
+    table1[1,1] <- n - sum(table1)
+    return(table1)
+  }
+  #makeTables(referenceSet,testSets[[1]],choose(ncol(net2),2))
+  allTables<-sapply(testSets,makeTables,referenceSet,choose(ncol(net2),2))
+  rownames(allTables) <- c('TN','FN','FP','TP')
+  allTables <- t(allTables)
+  allTables <- data.frame(allTables,stringsAsFactors = F)
+  
+  n1 <- rownames(allTables)
+  allTables$method <- n1
+  
+  allTables <- dplyr::mutate(allTables,
+                TPR = TP/(TP+FN),
+                SPC = TN/(TN+FP),
+                PPV = TP/(TP+FP),
+                NPV = TN/(TN+FN),
+                FPR = FP/(FP+TN),
+                FNR = FN/(TP+FN),
+                FDR = FP/(TP+FP),
+                ACC = (TP+TN)/(TP+FP+FN+TN),
+                F1 = 2*TP/(2*TP+FP+FN),
+                MCC = (TP*TN - FP*FN)/(sqrt((TP+FP)*(TP+FN)*(TN+FP)*(TN+FN))))
+  
+  #allTables$Precision <- allTables$TP/(allTables$TP + allTables$FP)
+  #allTables$TPR <- 
+
+  #save(predictionObj,file=paste0(method,'BiogridPrediction.rda'))
+  write.csv(allTables,file='BiogridPrediction.csv',quote=F,row.names=F)
+  foobar<-File(paste0(method,'BiogridPrediction.csv'),parentId=storageLocation)
   #foo <- synStore(foo,used=used,executed=executed,activityName=activityName,forceVersion=F)
-  synSetAnnotations(foobar) <- list(fileType='rda',
+  synSetAnnotations(foobar) <- list(fileType='csv',
                                     dataType='analysis',
                                     analysisType='interactionNetworkPrediction',
                                     interactionNetworkType='PPI',
@@ -59,7 +90,8 @@ foo2 <- filter(foo,!is.na(file.tissueTypeAbrv) & !is.na(file.study))
 interactionReference<- mapply(whichInteractionMatrix,foo2$file.tissueTypeAbrv,foo2$file.study,SIMPLIFY = TRUE)
 foo2 <- cbind(foo2,interactionReference)
 
-foo2 <- filter(foo2,file.fileType=='csv' & !is.na(interactionReference))
+#foo2 <- filter(foo2,file.fileType=='csv' & !is.na(interactionReference))
+foo2 <- filter(foo2,file.fileType=='rda' & !is.na(interactionReference))
 View(foo2)
 
 foo2$resultLocation <- sapply(foo2$file.id,rSynapseUtilities::getGrandParent)

@@ -11,6 +11,7 @@ generateStatistics <- function(networkId,backgroundId,storageLocation,method,pro
   diag(net2) <- 0
   gc()
   net2[which(lower.tri(net2))] <- 0
+  gc()
   
   getEdge = function(x){
     return(which(x$network!=0))
@@ -97,6 +98,6 @@ View(foo2)
 foo2$resultLocation <- sapply(foo2$file.id,rSynapseUtilities::getGrandParent)
 foo2$interactionReference <- as.character(foo2$interactionReference)
 
-generateStatistics <- function(networkId,backgroundId,storageLocation,method,provenanceURL)
-mapply(generateStatistics,networkId=foo2$file.id[1:2],backgroundId=foo2$interactionReference[1:2],storageLocation=foo2$resultLocation[1:2],method=foo2$file.method[1:2],provenanceURL='https://github.com/blogsdon/metanetworkSynapse/blob/1cba157afbea53a98b007ebf10d584464421fbcb/interactionVersion0.R')
+#generateStatistics <- function(networkId,backgroundId,storageLocation,method,provenanceURL)
+mapply(generateStatistics,networkId=foo2$file.id,backgroundId=foo2$interactionReference,storageLocation=foo2$resultLocation,method=foo2$file.method,provenanceURL='https://github.com/blogsdon/metanetworkSynapse/blob/b169bcdc70019aed60247e1608c9b30d32965de9/interactionVersion0.R')
 

@@ -12,7 +12,7 @@ if(pval=='NULL'){
 }
 data <- data.matrix(read.csv(fileName,row.names=1))
 argList <- list(data=data,path=pathv,outputpath=outputpath)
-if(functionName=='aracne'){
+if(functionName=='aracne' | functionName=='mrnetWrapper'){
   installAracne(path=pathv)
   argList$pval <- pval
 }

@@ -1,134 +1,110 @@
 #!/bin/bash
 
-###bash script to build networks on an EC2 starcluster instance using the metaNet R package
-###Author: Benjamin A Logsdon, 2015
+###bash script to build networks on an EC2 starcluster instance using the metanetwork R package
+###Authors: Benjamin A Logsdon, Thanneer M Perumal 2016
 
 #if sparrow:
 if [ $sparrowZ -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowZ" $outputpath
-  aws s3 mv $outputpath/result_sparrowZ.rda $s3
+  #build network
+  mpirun -np 1 Rscript $pathv/buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrowZ" $outputpath
+  #compute md5
+  Rscript $pathv/computeMD5.R $outputpath/sparrowZNetwork.csv $outputpath/sparrowtempmd5.out
+  #push to s3
+  aws s3 mv $outputpath/sparrowZNetwork.csv $s3
+  #link file to synapse, add provenance, add annotations
+  Rscript $pathv/s3LinkToSynapse.R $s3b/sparrowZNetwork.csv $outputpath/sparrowtempmd5.out $parentId $annotationFile $provenanceFile "sparrow"
 fi
 
-if [ $sparrow2Z -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrow2Z" $outputpath
-  aws s3 mv $outputpath/result_sparrow2Z.rda $s3
+if [ $mrnet -eq "1" ]; then
+  #build network
+  Rscript $pathv/buildOtherNet.R $dataFile $pathv "mrnetWrapper" "NULL" $outputpath
+  #compute md5
+  Rscript $pathv/computeMD5.R $outputpath/mrnetNetwork.csv $outputpath/mrnettempmd5.out
+  #push to s3
+  aws s3 mv $outputpath/mrnetNetwork.csv $s3
+  #link file to Synapse, add provenance, add annotations
+  Rscript $pathv/s3LinkToSynapse.R $s3b/mrnetNetwork.csv $outputpath/mrnettempmd5.out $parentId $annotationFile $provenanceFile "mrnet"
+
+  Rscript $pathv/computeMD5.R $outputpath/aracneNetwork.csv $outputpath/aracnetempmd5.out
+
+  aws s3 mv $outputpath/aracneNetwork.csv $s3
+
+  Rscript $pathv/s3LinkToSynapse.R $s3b/aracneNetwork.csv $outputpath/aracnetempmd5.out $parentId $annotationFile $provenanceFile "aracne"
 fi
 
-if [ $sparrow2ZFDR -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "sparrow2ZFDR" $outputpath
-  aws s3 mv $outputpath/result_sparrow2ZFDR.rda $s3
-fi
+if [ $c3net -eq "1" ]; then
+  Rscript $pathv/buildOtherNet.R $dataFile $pathv "c3netWrapper" "NULL" $outputpath
 
-#if aracne
-if [ $aracne -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "aracne" "NULL" $outputpath
-  aws s3 mv $outputpath/result_aracne.rda $s3
-fi
+  Rscript $pathv/computeMD5.R $outputpath/c3netNetwork.csv $outputpath/c3nettempmd5.out
 
-if [ $aracneFull -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "aracne" 1 $outputpath
-  aws s3 mv $outputpath/result_aracneFull.rda $s3
-fi
+  aws s3 mv $outputpath/c3netNetwork.csv $s3
 
-if [ $correlation -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "correlation" "NULL" $outputpath
-  aws s3 mv $outputpath/result_correlation.rda $s3
-fi
+  Rscript $pathv/s3LinkToSynapse.R $s3b/c3netNetwork.csv $outputpath/c3nettempmd5.out $parentId $annotationFile $provenanceFile "c3net"
 
-if [ $correlationBonferroni -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "correlationBonferroni" "NULL" $outputpath
-  aws s3 mv $outputpath/result_correlationBonferroni.rda $s3
-fi
-
-if [ $correlationFDR -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "correlationFDR" "NULL" $outputpath
-  aws s3 mv $outputpath/result_correlationFDR.rda $s3
-fi
-
-#if wgcna
-if [ $wgcna -eq "1" ]; then
-  Rscript buildOtherNet.R $dataFile $pathv "wgcna" "NULL" $outputpath
-  aws s3 mv $outputpath/result_wgcna.rda $s3
 fi
 
 #if lasso
-if [ $lassoBIC -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoBIC" $outputpath
-  aws s3 mv $outputpath/result_lassoBIC.rda $s3
-fi
-
-if [ $lassoAIC -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoAIC" $outputpath
-  aws s3 mv $outputpath/result_lassoAIC.rda $s3
-fi
-
 if [ $lassoCV1se -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCV1se" $outputpath
-  aws s3 mv $outputpath/result_lassoCV1se.rda $s3
-fi
+  mpirun -np 1 Rscript $pathv/buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCV1se" $outputpath
 
-if [ $lassoCVmin -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "lassoCVmin" $outputpath
-  aws s3 mv $outputpath/result_lassoCVmin.rda $s3
+  Rscript $pathv/computeMD5.R $outputpath/lassoCV1seNetwork.csv $outputpath/lassoCV1setempmd5.out
+
+  aws s3 mv $outputpath/lassoCV1seNetwork.csv $s3
+
+  Rscript $pathv/s3LinkToSynapse.R $s3b/lassoCV1seNetwork.csv $outputpath/lassoCV1setempmd5.out $parentId $annotationFile $provenanceFile "lasso"
+
 fi
 
 #if ridge
-if [ $ridgeBIC -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeBIC" $outputpath
-  aws s3 mv $outputpath/result_ridgeBIC.rda $s3
-fi
-
-if [ $ridgeAIC -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeAIC" $outputpath
-  aws s3 mv $outputpath/result_ridgeAIC.rda $s3
-fi
-
 if [ $ridgeCV1se -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCV1se" $outputpath
-  aws s3 mv $outputpath/result_ridgeCV1se.rda $s3
-fi
+  mpirun -np 1 Rscript $pathv/buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCV1se" $outputpath
 
-if [ $ridgeCVmin -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "ridgeCVmin" $outputpath
-  aws s3 mv $outputpath/result_ridgeCVmin.rda $s3
-fi
+  Rscript $pathv/computeMD5.R $outputpath/ridgeCV1seNetwork.csv $outputpath/ridgetempmd5.out
 
-if [ $elasticNetCVmin -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "elasticNetCVmin" $outputpath
-  aws s3 mv $outputpath/result_elasticNetCVmin.rda $s3
-fi
+  aws s3 mv $outputpath/ridgeCV1seNetwork.csv $s3
 
-if [ $elasticNetCV1se -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "elasticNetCV1se" $outputpath
-  aws s3 mv $outputpath/result_elasticNetCV1se.rda $s3
-fi
+  Rscript $pathv/s3LinkToSynapse.R $s3b/ridgeCV1seNetwork.csv $outputpath/ridgetempmd5.out $parentId $annotationFile $provenanceFile "ridge"
 
-if [ $elasticNetAIC -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "elasticNetAIC" $outputpath
-  aws s3 mv $outputpath/result_elasticNetAIC.rda $s3
-fi
-
-if [ $elasticNetBIC -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "elasticNetBIC" $outputpath
-  aws s3 mv $outputpath/result_elasticNetBIC.rda $s3
 fi
 
 #if genie3
 if [ $genie3 -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "genie3" $outputpath
-  aws s3 mv $outputpath/result_genie3.rda $s3
+  mpirun -np 1 Rscript $pathv/buildMpiNet.R $dataFile $((numberCore-1)) $pathv "genie3" $outputpath
+
+  Rscript $pathv/computeMD5.R $outputpath/genie3Network.csv $outputpath/genie3tempmd5.out
+
+  aws s3 mv $outputpath/genie3Network.csv $s3
+
+  Rscript $pathv/s3LinkToSynapse.R $s3b/genie3Network.csv $outputpath/genie3tempmd5.out $parentId $annotationFile $provenanceFile "genie3"
+
 fi
 
 #if tigress
 if [ $tigress -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigress" $outputpath
-  aws s3 mv $outputpath/result_tigress.rda $s3
+  mpirun -np 1 Rscript $pathv/buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigress" $outputpath
+
+  Rscript $pathv/computeMD5.R $outputpath/tigressNetwork.csv $outputpath/tigresstempmd5.out
+
+  aws s3 mv $outputpath/tigressNetwork.csv $s3
+
+  Rscript $pathv/s3LinkToSynapse.R $s3b/tigressNetwork.csv $outputpath/tigresstempmd5.out $parentId $annotationFile $provenanceFile "tigress"
+
 fi
 
-#if tigress
-if [ $tigressRootN -eq "1" ]; then
-  mpirun -np 1 Rscript buildMpiNet.R $dataFile $((numberCore-1)) $pathv "tigressRootN" $outputpath
-  aws s3 mv $outputpath/result_tigressRootN.rda $s3
-fi
 
-aws s3 cp $outputpath/sparsity.csv $s3
+if [ $wgcnaTOM -eq "1" ]; then
+  Rscript $pathv/buildOtherNet.R $dataFile $pathv "wgcnaTOM" "NULL" $outputpath
+
+  Rscript $pathv/computeMD5.R $outputpath/wgcnaTopologicalOverlapMatrixNetwork.csv $outputpath/wgcnaTOMtempmd5.out
+
+  aws s3 mv $outputpath/wgcnaTopologicalOverlapMatrixNetwork.csv $s3
+
+  Rscript $pathv/s3LinkToSynapse.R $s3b/wgcnaTopologicalOverlapMatrixNetwork.csv $outputpath/wgcnaTOMtempmd5.out $parentId $annotationFile $provenanceFile "wgcnaTopologicalOverlapMatrix"
+
+  Rscript $pathv/computeMD5.R $outputpath/wgcnaSoftThresholdNetwork.csv $outputpath/wgcnaSoftThresholdtempmd5.out
+
+  aws s3 mv $outputpath/wgcnaSoftThresholdNetwork.csv $s3
+
+  Rscript $pathv/s3LinkToSynapse.R $s3b/wgcnaSoftThresholdNetwork.csv $outputpath/wgcnaSoftThresholdtempmd5.out $parentId $annotationFile $provenanceFile "wgcnaSoftThreshold"
+
+fi

@@ -4,7 +4,7 @@ parentId <- as.character(commandArgs(TRUE)[[3]])
 annotationFile <- as.character(commandArgs(TRUE)[[4]])
 provenanceFile <- as.character(commandArgs(TRUE)[[5]])
 method <- as.character(commandArgs(TRUE)[[6]])
-s3LinkToSynapse <- function(s3file,md5location,parentId,annotationFile,provenanceFile,method,activityName='Network Inference',AWSbucketName='metanetworks'){
+s3LinkToSynapse <- function(s3file,md5location,parentId,annotationFile,provenanceFile,method,activityName='Network Inference',AWSbucketName='metanetworksynpasetestbucket'){
     require(synapseClient)
     synapseLogin()
     md5 <- readLines(md5location)

@@ -24,4 +24,4 @@ echo "qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,c3net=0,mrnet=0,wgcnaTOM=0,
 
 qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,c3net=0,mrnet=0,wgcnaTOM=0,sparrowZ=1,lassoCV1se=1,ridgeCV1se=1,genie3=1,tigress=1,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile -pe mpi $nthreads -S /bin/bash -V -cwd -N $jobname -e $errorOutput -o $outOutput $pathv/buildNet.sh
 
-#s3=$s3 dataFile=$dataFile pathv=$pathv c3net=0 mrnet=0 wgcnaTOM=0 sparrowZ=1 lassoCV1se=1 ridgeCV1se=1 genie3=1 tigress=1 numberCore=$nthreads outputpath=$outputpath s3b=$s3b parentId=$parentId annotationFile=$annotationFile provenanceFile=$provenanceFile $pathv/pushNetS3.sh
+#s3=$s3 dataFile=$dataFile pathv=$pathv c3net=0 mrnet=0 wgcnaTOM=0 sparrowZ=1 lassoCV1se=1 ridgeCV1se=1 genie3=1 tigress=1 numberCore=$nthreads outputpath=$outputpath s3b=$s3b parentId=$parentId annotationFile=$annotationFile provenanceFile=$provenanceFile bucket=$bucket $pathv/pushNetS3.sh

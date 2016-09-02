@@ -1,7 +1,10 @@
 #!/bin/bash
 
+#bucket name
+bucket="metanetworksynpasetestbucket"
+
 #full s3 path where networks will go
-s3="s3://metanetworksynpasetestbucket/testNetwork/"
+s3="s3://$bucket/testNetwork/"
 
 #location of data file
 dataFile="/shared/testNetwork/testData.csv"

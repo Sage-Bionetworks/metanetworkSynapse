@@ -21,4 +21,4 @@ jobname="networkAggregation"
 
 qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,networkFolderId=$networkFolderId -pe mpi $nthreads -S /bin/bash -V -cwd -N $jobname -e $errorOutput -o $outOutput $pathv/buildConsensus.sh
 
-#s3=$s3 dataFile=$dataFile pathv=$pathv outputpath=$outputpath s3b=$s3b parentId=$parentId annotationFile=$annotationFile provenanceFile=$provenanceFile networkFolderId=$networkFolderId $pathv/pushNetS3.sh
+#s3=$s3 dataFile=$dataFile pathv=$pathv outputpath=$outputpath s3b=$s3b parentId=$parentId annotationFile=$annotationFile provenanceFile=$provenanceFile networkFolderId=$networkFolderId bucket=$bucket $pathv/pushNetS3.sh

@@ -35,18 +35,26 @@ buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
   networks <- lapply(networks,data.matrix)
 
   networks$rankConsensus <- metanetwork::rankConsensus(networks)
-
+  cat('built rank consensus\n')
   if(!is.null(fileName)){
     library(Matrix)
     networkMethods <- sapply(bar,synGetAnnotation,which='method')
+    cat('grabbed methods\n')
     #build rank consensus
+    cat('updated methods\n')
     networkMethods <- c(networkMethods,'rankConsensus')
+    cat('reading in data\n')
     dataSet <- read.csv(fileName,stringsAsFactors=F,row.names=1)
+    cat('turning data into data matrix\n')
     dataSet <- data.matrix(dataSet)
-    bicNetworks <- lapply(networks,computeBICcurve,dataSet,maxEdges=1e5)
+    cat('build bicNetworks\n')
+    bicNetworks <- lapply(networks,metanetwork::computeBICcurve,dataSet,maxEdges=1e5)
+    cat('make names of bicNetworks\n')
     names(bicNetworks) <- networkMethods
+    cat('save bicNetworks\n')
     save(bicNetworks,file=paste0(outputpath,'bicNetworks.rda'))
   }
+  cat('write rank consensus\n')
   write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
 }
 buildConsensus(outputpath,networkFolderId,provenanceFile,fileName)

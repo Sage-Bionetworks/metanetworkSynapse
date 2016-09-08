@@ -48,9 +48,10 @@ buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
     cat('turning data into data matrix\n')
     dataSet <- data.matrix(dataSet)
     cat('build bicNetworks\n')
-    bicNetworks <- lapply(networks,metanetwork::computeBICcurve,dataSet,maxEdges=1e5)
+    #bicNetworks <- lapply(networks,metanetwork::computeBICcurve,dataSet,maxEdges=1e5)
+    bicNetworks <- metanetwork::computeBICcurve(networks$rankConsensus,dataSet,maxEdges=1e5)
     cat('make names of bicNetworks\n')
-    names(bicNetworks) <- networkMethods
+    names(bicNetworks) <- 'rankConsensus'
     cat('save bicNetworks\n')
     save(bicNetworks,file=paste0(outputpath,'bicNetworks.rda'))
   }

@@ -63,7 +63,7 @@ if [ $lassoCV1se -eq "1" ]; then
 
   aws s3 mv $outputpath/lassoCV1seNetwork.csv $s3
 
-  Rscript $pathv/s3LinkToSynapse.R $s3b/lassoCV1seNetwork.csv $outputpath/lassoCV1setempmd5.out $parentId $annotationFile $provenanceFile "lasso"
+  Rscript $pathv/s3LinkToSynapse.R $s3b/lassoCV1seNetwork.csv $outputpath/lassoCV1setempmd5.out $parentId $annotationFile $provenanceFile "lassoCV1se"
 
 fi
 
@@ -74,7 +74,7 @@ if [ $lassoAIC -eq "1" ]; then
 
   aws s3 mv $outputpath/lassoAICNetwork.csv $s3
 
-  Rscript $pathv/s3LinkToSynapse.R $s3b/lassoAICNetwork.csv $outputpath/lassoAICtempmd5.out $parentId $annotationFile $provenanceFile "lasso"
+  Rscript $pathv/s3LinkToSynapse.R $s3b/lassoAICNetwork.csv $outputpath/lassoAICtempmd5.out $parentId $annotationFile $provenanceFile "lassoAIC"
 
 fi
 
@@ -85,7 +85,7 @@ if [ $lassoBIC -eq "1" ]; then
 
   aws s3 mv $outputpath/lassoBICNetwork.csv $s3
 
-  Rscript $pathv/s3LinkToSynapse.R $s3b/lassoBICNetwork.csv $outputpath/lassoBICtempmd5.out $parentId $annotationFile $provenanceFile "lasso"
+  Rscript $pathv/s3LinkToSynapse.R $s3b/lassoBICNetwork.csv $outputpath/lassoBICtempmd5.out $parentId $annotationFile $provenanceFile "lassoBIC"
 
 fi
 
@@ -96,7 +96,7 @@ if [ $lassoCVmin -eq "1" ]; then
 
   aws s3 mv $outputpath/lassoCVminNetwork.csv $s3
 
-  Rscript $pathv/s3LinkToSynapse.R $s3b/lassoCVminNetwork.csv $outputpath/lassoCVmintempmd5.out $parentId $annotationFile $provenanceFile "lasso"
+  Rscript $pathv/s3LinkToSynapse.R $s3b/lassoCVminNetwork.csv $outputpath/lassoCVmintempmd5.out $parentId $annotationFile $provenanceFile "lassoCVmin"
 
 fi
 
@@ -108,7 +108,7 @@ if [ $ridgeCV1se -eq "1" ]; then
 
   aws s3 mv $outputpath/ridgeCV1seNetwork.csv $s3
 
-  Rscript $pathv/s3LinkToSynapse.R $s3b/ridgeCV1seNetwork.csv $outputpath/ridgeCV1setempmd5.out $parentId $annotationFile $provenanceFile "ridge"
+  Rscript $pathv/s3LinkToSynapse.R $s3b/ridgeCV1seNetwork.csv $outputpath/ridgeCV1setempmd5.out $parentId $annotationFile $provenanceFile "ridgeCV1se"
 
 fi
 
@@ -119,7 +119,7 @@ if [ $ridgeCVmin -eq "1" ]; then
 
   aws s3 mv $outputpath/ridgeCVminNetwork.csv $s3
 
-  Rscript $pathv/s3LinkToSynapse.R $s3b/ridgeCVminNetwork.csv $outputpath/ridgeCVmintempmd5.out $parentId $annotationFile $provenanceFile "ridge"
+  Rscript $pathv/s3LinkToSynapse.R $s3b/ridgeCVminNetwork.csv $outputpath/ridgeCVmintempmd5.out $parentId $annotationFile $provenanceFile "ridgeCVmin"
 
 fi
 
@@ -130,7 +130,7 @@ if [ $ridgeAIC -eq "1" ]; then
 
   aws s3 mv $outputpath/ridgeAICNetwork.csv $s3
 
-  Rscript $pathv/s3LinkToSynapse.R $s3b/ridgeAICNetwork.csv $outputpath/ridgeAICtempmd5.out $parentId $annotationFile $provenanceFile "ridge"
+  Rscript $pathv/s3LinkToSynapse.R $s3b/ridgeAICNetwork.csv $outputpath/ridgeAICtempmd5.out $parentId $annotationFile $provenanceFile "ridgeAIC"
 
 fi
 
@@ -141,7 +141,7 @@ if [ $ridgeBIC -eq "1" ]; then
 
   aws s3 mv $outputpath/ridgeBICNetwork.csv $s3
 
-  Rscript $pathv/s3LinkToSynapse.R $s3b/ridgeBICNetwork.csv $outputpath/ridgeBICtempmd5.out $parentId $annotationFile $provenanceFile "ridge"
+  Rscript $pathv/s3LinkToSynapse.R $s3b/ridgeBICNetwork.csv $outputpath/ridgeBICtempmd5.out $parentId $annotationFile $provenanceFile "ridgeBIC"
 
 fi
 

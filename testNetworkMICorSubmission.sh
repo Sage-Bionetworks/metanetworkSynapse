@@ -1,6 +1,9 @@
 #!/bin/bash
 
-. ./config.sh
+#location of metanetwork synapse scripts
+pathv="/shared/metanetworkSynapse/"
+
+. $pathv/config.sh
 
 #number of cores to reserve for job
 nthreads=1
@@ -10,12 +13,6 @@ annotationFile="$outputpath/annoFile.txt"
 
 #path to csv file with provenance to add to file on synapse
 provenanceFile="$outputpath/provenanceFile.txt"
-
-# where to put error files
-errorOutput="$outputpath/errorLogs"
-
-# where to put output files
-outOutput="$outputpath/outLogs"
 
 # prefixes
 c3="c3net"

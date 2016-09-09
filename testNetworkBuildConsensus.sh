@@ -1,6 +1,9 @@
 #!/bin/sh
 
-. ./config.sh
+#location of metanetwork synapse scripts
+pathv="/shared/metanetworkSynapse/"
+
+. $pathv/config.sh
 
 #number of cores to reserve for job
 nthreads=8
@@ -9,12 +12,6 @@ nthreads=8
 annotationFile="$outputpath/buildConsensusAnnoFile.txt"
 
 provenanceFile="$outputpath/buildConsensusProvenanceFile.txt"
-
-#path to error output
-errorOutput="$outputpath/errorLogs"
-
-#path to out output
-outOutput="$outputpath/outLogs"
 
 #job script name
 jobname="networkAggregation"

@@ -1,8 +1,11 @@
 #!/bin/bash
 
-. ./config.sh
-
 module load openmpi-x86_64
+
+#location of metanetwork synapse scripts
+pathv="/shared/metanetworkSynapse/"
+
+. $pathv/config.sh
 
 #number of cores to reserve for job
 nthreads=8
@@ -15,12 +18,6 @@ provenanceFile="$outputpath/provenanceFile.txt"
 
 #job script name
 jobname="networkRegression"
-
-# where to put error files
-errorOutput="$outputpath/errorLogs"
-
-# where to put output files
-outOutput="$outputpath/outLogs"
 
 #prefixes
 sparrowZ="sparrow"

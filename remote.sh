@@ -10,7 +10,7 @@ sudo chown centos /shared/rlibs
 module load openmpi-x86_64
 Rscript -e 'install.packages("Rmpi", configure.args = paste("--with-Rmpi-include=/usr/include/openmpi-x86_64","--with-Rmpi-libpath=/usr/lib64/openmpi/lib","--with-Rmpi-type=OPENMPI"))'
 sh ~/rpackages_provisioner.sh
-Rscript -e 'install.packages(c("bit64", "parmigene", "c3net", "ROCR", "Matrix", "glasso"))'
+Rscript -e 'install.packages(c("bit64", "parmigene", "c3net", "ROCR", "Matrix", "glasso", "utility"))'
 git clone https://github.com/philerooski/metanetworkSynapse.git /shared/metanetworkSynapse
 
 # test network

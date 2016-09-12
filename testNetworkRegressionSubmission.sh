@@ -8,13 +8,18 @@ pathv="/shared/metanetworkSynapse/"
 . $pathv/config.sh
 
 #number of cores to reserve for job
-nthreads=4
+nthreads=8
+
+#number of cores to reserve for pushing networks to S3/Synapse
+nthreadsPush=1
 
 #path to csv file with annotations to add to file on Synapse
 annotationFile="$outputpath/annoFile.txt"
 
 #path to csv file with provenance to add to file on synapse
 provenanceFile="$outputpath/provenanceFile.txt"
+
+### build nets ###
 
 qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile -pe mpi $nthreads -S /bin/bash -V -cwd -N "sparrowZ" -e "$errorOutput/sparrowZerror.txt" -o "$outOutput/sparrowZout.txt" $pathv/networkScripts/sparrowZ.sh
 
@@ -38,4 +43,26 @@ qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$
 
 qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile -pe mpi $nthreads -S /bin/bash -V -cwd -N  "tigress" -e "$errorOutput/tigresserror.txt" -o "$outOutput/tigressout.txt" $pathv/networkScripts/tigress.sh
 
-#s3=$s3 dataFile=$dataFile pathv=$pathv c3net=0 mrnet=0 wgcnaTOM=0 sparrowZ=1 lassoCV1se=1 ridgeCV1se=1 genie3=1 tigress=1 numberCore=$nthreads outputpath=$outputpath s3b=$s3b parentId=$parentId annotationFile=$annotationFile provenanceFile=$provenanceFile bucket=$bucket $pathv/pushNetS3.sh
+### push nets ###
+
+qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,bucket=$bucket -pe mpi $nthreadsPush -S /bin/bash -V -cwd -hold_jid "sparrowZ" -N "push-sparrowZ" -e "$errorOutput/push/sparrowZerror.txt" -o "$outOutput/push/sparrowZout.txt" $pathv/pushScripts/sparrowZ.sh
+
+qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,bucket=$bucket -pe mpi $nthreadsPush -S /bin/bash -V -cwd -hold_jid "sparrow2Z" -N "push-sparrow2Z" -e "$errorOutput/push/sparrow2Zerror.txt" -o "$outOutput/push/sparrow2Zout.txt" $pathv/pushScripts/sparrow2Z.sh
+
+qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,bucket=$bucket -pe mpi $nthreadsPush -S /bin/bash -V -cwd -hold_jid "lassoAIC" -N "push-lassoAIC" -e "$errorOutput/push/lassoAICerror.txt" -o "$outOutput/push/lassoAICout.txt" $pathv/pushScripts/lassoAIC.sh
+
+qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,bucket=$bucket -pe mpi $nthreadsPush -S /bin/bash -V -cwd -hold_jid "lassoBIC" -N "push-lassoBIC" -e "$errorOutput/push/lassoBIC.txt" -o "$outOutput/push/lassoBIC.txt" $pathv/pushScripts/lassoBIC.sh
+
+qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,bucket=$bucket -pe mpi $nthreadsPush -S /bin/bash -V -cwd -hold_jid "lassoCV1se" -N "push-lassoCV1se" -e "$errorOutput/push/lassoCV1seerror.txt" -o "$outOutput/push/lassoCV1seout.txt" $pathv/pushScripts/lassoCV1se.sh
+
+qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,bucket=$bucket -pe mpi $nthreadsPush -S /bin/bash -V -cwd -hold_jid "ridgeAIC" -N "push-ridgeAIC" -e "$errorOutput/push/ridgeAICerror.txt" -o "$outOutput/push/ridgeAICout.txt" $pathv/pushScripts/ridgeAIC.sh
+
+qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,bucket=$bucket -pe mpi $nthreadsPush -S /bin/bash -V -cwd -hold_jid "ridgeBIC" -N "push-ridgeBIC" -e "$errorOutput/push/ridgeBICerror.txt" -o "$outOutput/push/ridgeBICout.txt" $pathv/pushScripts/ridgeBIC.sh
+
+qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,bucket=$bucket -pe mpi $nthreadsPush -S /bin/bash -V -cwd -hold_jid "ridgeCV1se" -N "push-ridgeCV1se" -e "$errorOutput/push/ridgeCV1seerror.txt" -o "$outOutput/push/ridgeCV1seout.txt" $pathv/pushScripts/ridgeCV1se.sh
+
+qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,bucket=$bucket -pe mpi $nthreadsPush -S /bin/bash -V -cwd -hold_jid "ridgeCVmin" -N "push-ridgeCVmin" -e "$errorOutput/push/ridgeCVminerror.txt" -o "$outOutput/push/ridgeCVminout.txt" $pathv/pushScripts/ridgeCVmin.sh
+
+qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,bucket=$bucket -pe mpi $nthreadsPush -S /bin/bash -V -cwd -hold_jid "genie3" -N "push-genie3" -e "$errorOutput/push/genie3error.txt" -o "$outOutput/push/genie3out.txt" $pathv/pushScripts/genie3.sh
+
+qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile,bucket=$bucket -pe mpi $nthreadsPush -S /bin/bash -V -cwd -hold_jid "tigress" -N "push-tigress" -e "$errorOutput/push/tigresserror.txt" -o "$outOutput/push/tigressout.txt" $pathv/pushScripts/tigress.sh

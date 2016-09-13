@@ -8,5 +8,5 @@ scp -i $key ./remote.sh ~/.synapseConfig centos@$address:~/
 ssh -i $key centos@$address 'mkdir /shared/.aws'
 scp -i $key ~/.aws/credentials centos@$address:/shared/.aws/
 
-# run setup script on remote and add PS1 and AWS_CONFIG_FILE environment vars to .bashrc
+# run setup script on remote
 ssh -i $key centos@$address 'sh ~/remote.sh ${synId}'

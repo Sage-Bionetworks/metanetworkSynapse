@@ -5,6 +5,7 @@ synId=$1
 sudo yum update -y
 echo "export PS1=\"\n\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;38m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]@\h[\[$(tput sgr0)\]\[\033[38;5;214m\]\W\[$(tput sgr0)\]\[\033[38;5;15m\]]: \[$(tput sgr0)\]\"" >> ~/.bashrc
 echo "export AWS_CONFIG_FILE=\"/shared/.aws/credentials\"" >> ~/.bashrc
+source ~/.bashrc
 mkdir /shared/rlibs
 sudo chown centos /shared/rlibs
 module load openmpi-x86_64

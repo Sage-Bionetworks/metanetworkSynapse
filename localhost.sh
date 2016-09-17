@@ -1,4 +1,5 @@
 #!/bin/bash
+# must be run within metanetworkSynapse
 key=$1
 address=$2
 synId=$3

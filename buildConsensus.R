@@ -8,7 +8,6 @@ buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
   library(metanetwork)
   synapseLogin()
 
-  cat(provenanceFile)
   provenance <- read.csv(provenanceFile,stringsAsFactors=F)
   provenance <- as.matrix(provenance)
 

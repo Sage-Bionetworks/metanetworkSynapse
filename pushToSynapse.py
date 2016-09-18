@@ -10,19 +10,23 @@ def read_args():
     parser.add_argument('provenanceFile', help="Corresponding provenance file")
     parser.add_argument('method', help="name of method used to generate file")
     args = parser.parse_args()
-    return args.file, args.parentId, args.annotationFile, args.provenanceFile, args.method
+    return (args.file, args.parentId, args.annotationFile,
+        args.provenanceFile, args.method)
 
 def push(filePath, parentId, annotationFile, provenanceFile, method):
     syn = synapseclient.login()
-    with open(annotationFile, 'a') as f:
-        f.write('method %s' % method)
+    with open(annotationFile, 'r') as f:
+        entries = f.split('\n')
+        annotations = {s[0] : s[1] for s in [pair.split(',') for pair in entries]}
+        annotations['method'] = method
     with open(provenanceFile, 'r') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=',')
         used = [r['provenance'] for r in reader if r['executed'] == 'FALSE']
         executed= [r['provenance'] for r in reader if r['executed'] == 'TRUE']
-    activity = synapseclient.Activity(name='Network Inference', 
+    activity = synapseclient.Activity(name='Network Inference',
             description=method, used=used, executed=executed)
     synFile = synapseclient.File(filePath, parent=parentId)
+    syn.setAnnotations(synFile, annotations)
     syn.store(obj=synFile, activity=activity)
 
 def main():

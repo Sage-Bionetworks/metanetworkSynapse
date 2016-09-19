@@ -16,7 +16,7 @@ def read_args():
 def push(filePath, parentId, annotationFile, provenanceFile, method):
     syn = synapseclient.login()
     with open(annotationFile, 'r') as f:
-        entries = f.split('\n')
+        entries = f.read().strip().split('\n')
         annotations = {s[0] : s[1] for s in [pair.split(',') for pair in entries]}
         annotations['method'] = method
     with open(provenanceFile, 'r') as csvfile:
@@ -26,8 +26,8 @@ def push(filePath, parentId, annotationFile, provenanceFile, method):
     activity = synapseclient.Activity(name='Network Inference',
             description=method, used=used, executed=executed)
     synFile = synapseclient.File(filePath, parent=parentId)
-    syn.setAnnotations(synFile, annotations)
-    syn.store(obj=synFile, activity=activity)
+    synEntity = syn.store(obj=synFile, activity=activity)
+    syn.setAnnotations(synEntity, annotations)
 
 def main():
     filePath, parentId, annotationFile, provenanceFile, method = read_args()

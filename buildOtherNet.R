@@ -1,5 +1,6 @@
 require(metanetwork)
 library(reader)
+library(methods)
 
 fileName <- as.character(commandArgs(TRUE)[[1]])
 pathv <- as.character(commandArgs(TRUE)[[2]])
@@ -11,6 +12,7 @@ if(pval=='NULL'){
 }else{
   pval <- as.numeric(pval)
 }
+cat(fileName)
 data <- data.matrix(reader(fileName,row.names=1))
 argList <- list(data=data,path=pathv,outputpath=outputpath)
 if(functionName=='aracne' | functionName=='mrnetWrapper'){

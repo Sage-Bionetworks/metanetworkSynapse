@@ -6,6 +6,7 @@ provenanceFile <- as.character(commandArgs(TRUE)[[4]])
 buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
   library(synapseClient)
   library(metanetwork)
+  library(reader)
   synapseLogin()
 
   provenance <- read.csv(provenanceFile,stringsAsFactors=F)
@@ -45,7 +46,7 @@ buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
     cat('updated methods\n')
     networkMethods <- c(networkMethods,'rankConsensus')
     cat('reading in data\n')
-    dataSet <- read.csv(fileName,stringsAsFactors=F,row.names=1)
+    dataSet <- reader(fileName,stringsAsFactors=F,row.names=1)
     cat('turning data into data matrix\n')
     dataSet <- data.matrix(dataSet)
     cat('build bicNetworks\n')

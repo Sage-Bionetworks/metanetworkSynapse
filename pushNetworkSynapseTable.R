@@ -5,6 +5,7 @@ synapseLogin()
 require(metanetwork)
 require(dplyr)
 require(data.table)
+require(reader)
 
 projectId <- as.character(commandArgs(TRUE)[[1]])
 tableName <- as.character(commandArgs(TRUE)[[2]])
@@ -38,7 +39,7 @@ colnames(fullEdgeMatrix) <- c('id','var1','var2',methodNames)
 fullEdgeMatrix <- data.frame(fullEdgeMatrix,stringsAsFactors = FALSE)
 fullEdgeMatrix$id <- en$names
 b <- synGet('syn4550165')
-key <- read.csv(b@filePath,stringsAsFactors = FALSE)
+key <- reader(b@filePath,stringsAsFactors = FALSE)
 
 fullEdgeMatrix$var1 <- key$geneName[en$vars[,1]]
 fullEdgeMatrix$var2 <- key$geneName[en$vars[,2]]

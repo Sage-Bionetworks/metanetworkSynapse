@@ -11,7 +11,7 @@ sudo chown centos /shared/rlibs
 module load openmpi-x86_64
 Rscript -e 'install.packages("Rmpi", configure.args = paste("--with-Rmpi-include=/usr/include/openmpi-x86_64","--with-Rmpi-libpath=/usr/lib64/openmpi/lib","--with-Rmpi-type=OPENMPI"))'
 sh ~/rpackages_provisioner.sh
-Rscript -e 'install.packages(c("bit64", "parmigene", "c3net", "ROCR", "Matrix", "glasso", "utility"))'
+Rscript -e 'install.packages(c("bit64", "parmigene", "c3net", "ROCR", "Matrix", "glasso", "utility", "reader"))'
 
 # python2.7 and dependencies install
 sudo yum -y groupinstall 'Development Tools'
@@ -22,12 +22,12 @@ cd Python-2.7.10
 ./configure --with-threads --enable-shared
 make
 sudo make altinstall
-wget https://bootstrap.pypa.io/get-pip.py
-sudo python2.7 get-pip.py
 sudo ln -s /usr/local/bin/python2.7 /usr/bin/python2.7
 echo "/usr/local/lib/python2.7" | sudo tee --append /etc/ld.so.conf.d/python27.conf
 echo "/usr/local/lib" | sudo tee --append /etc/ld.so.conf.d/python27.conf
 sudo ldconfig
+wget https://bootstrap.pypa.io/get-pip.py
+sudo python2.7 get-pip.py
 pip2.7 install --user --upgrade synapseclient
 pip2.7 install --user --upgrade argparse
 cd ..

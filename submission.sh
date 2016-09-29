@@ -2,8 +2,8 @@
 
 module load openmpi-x86_64
 
-#location of metanetwork synapse scripts
-pathv="/shared/metanetworkSynapseGtex/"
+#location of metanetwork synapse scripts (i.e. the directory this script should be in)
+pathv=`dirname $0`
 
 . $pathv/config.sh
 

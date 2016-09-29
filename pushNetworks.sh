@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #location of metanetwork synapse scripts
-pathv="/shared/metanetworkSynapse/"
+pathv=`dirname $0`
 
 . $pathv/config.sh
 

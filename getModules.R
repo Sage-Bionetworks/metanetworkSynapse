@@ -49,7 +49,7 @@ all.objs <- lapply(mod.methods, function(method, all.bic.neworks){
 
     # Get the adjacency matrix
     adj <- bicNetworks$network
-    
+    browser()
     # Get modules
     mod <- findModules.algo(adj)
 

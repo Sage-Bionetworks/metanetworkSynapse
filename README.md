@@ -1,3 +1,4 @@
+THIS IS THE CRANIO BRANCH
 #metanetworkSynapse
 ###Simulating Data
 To run the test scripts, first simulate some data, e.g. using the [metanetwork](https://github.com/blogsdon/metanetwork/tree/metanetworkReboot) r-package.

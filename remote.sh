@@ -43,8 +43,11 @@ echo "hello,goodbye" > /shared/testNetwork/buildConsensusAnnoFile.txt
 
 # actual network
 mkdir -p /shared/network/errorLogs/; mkdir -p /shared/network/outLogs/
-Rscript -e "library(synapseClient); synapseLogin(); synGet('$synId', downloadLocation='/shared/network/')"
+cd /shared/network
+git clone https://github.com/philerooski/brainRegNetwork.git
+Rscript brainRegNetwork/getData.R $synId
 echo -e "provenance,executed\n${synId},FALSE" > /shared/network/provenanceFile.txt
+echo -e "https://github.com/philerooski/brainRegNetwork/blob/master/getData.R,TRUE" >> /shared/network/provenanceFile.txt
 echo -e "fileType,csv\ndataType,analysis\nanalysisType,statisticalNetworkReconstruction\nnormalizationStatus,TRUE" > /shared/network/annoFile.txt
 sh /shared/metanetworkSynapse/testNetworkMICorSubmission.sh
 sh /shared/metanetworkSynapse/testNetworkRegressionSubmission.sh

@@ -25,16 +25,19 @@ def push(filePath, parentId, annotationFile, provenanceFile, method, branch):
         reader = csv.DictReader(csvfile, delimiter=',')
         used = [r['provenance'] for r in reader if r['executed'] == 'FALSE']
         executed= [r['provenance'] for r in reader if r['executed'] == 'TRUE']
-	g = github.Github("philerooski", "Snydph7")
+        g = github.Github()
 	repo = g.get_repo("philerooski/metanetworkSynapse")
-	config = repo.get_contents("config.sh", ref=branch)
-	networkScriptName = get_ns_name(method)
-	networkScript = repo.get_contents("networkScripts/%s.sh" % networkScriptName, 
-	    ref=branch)
-	submissionScript = repo.get_contents("submission.sh", ref=branch)
-	pushScript = repo.get_contents("pushNetworks.sh", ref=branch)
-	thisScript = repo.get_contents("pushToSynapse.py", ref=branch)
-	executed += [config.html_url, networkScript.html_url, 
+        if method == "rankConsensus" or method == "bic":
+	    pass
+        else:
+	    config = repo.get_contents("config.sh", ref=branch)
+	    networkScriptName = get_ns_name(method)
+	    networkScript = repo.get_contents("networkScripts/%s.sh" % networkScriptName, 
+	        ref=branch)
+	    submissionScript = repo.get_contents("submission.sh", ref=branch)
+	    pushScript = repo.get_contents("pushNetworks.sh", ref=branch)
+	    thisScript = repo.get_contents("pushToSynapse.py", ref=branch)
+	    executed += [config.html_url, networkScript.html_url, 
 	    submissionScript.html_url, pushScript.html_url, thisScript.html_url]
     activity = synapseclient.Activity(name='Network Inference',
             description=method, used=used, executed=executed)

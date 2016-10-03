@@ -94,9 +94,9 @@ all.results = mapply(function(gld.std.id, gene.map.id, rank.cons.id, bic.id){
   return(data.frame(auc.raw = auc.raw, aupr.raw = aupr.raw, 
                     auc.bic = auc.bic, aupr.bic = aupr.bic, 
                     tp = sum(tmp.bic.adj[tmp.gs.adj == 1] == 1)/2,
-                    fp = sum(tmp.bic.adj[tmp.gs.adj == 1] == 0)/2,
+                    fp = sum(tmp.bic.adj[tmp.gs.adj == 0] == 1)/2,
                     tn = sum(tmp.bic.adj[tmp.gs.adj == 0] == 0)/2,
-                    fn = sum(tmp.bic.adj[tmp.gs.adj == 0] == 1)/2))
+                    fn = sum(tmp.bic.adj[tmp.gs.adj == 1] == 0)/2))
 }, GOLD.STD.IDs, GENE.MAP.IDs, RANK.CONS.IDs, BIC.IDs, SIMPLIFY = T)
 
 # Get github commit link
@@ -108,7 +108,7 @@ thisFile <- getPermlink(repository = thisRepo,
                         repositoryPath = 'DREAM5_Performance_Computation.R')
 
 # Store results in synapse
-write.table(all.results, file = 'DREAM5_Performance.tsv', row.names = f, sep = '\t', header = T)
+write.table(all.results, file = 'DREAM5_Performance.tsv', row.names = F, sep = '\t')
 obj = File('DREAM5_Performance.tsv', name = 'DREAM5 Performance', parentId = 'syn7248617')
 obj = synStore(obj, 
                used = as.character(c(BIC.IDs, GENE.MAP.IDs, GOLD.STD.IDs, RANK.CONS.IDs)), 

@@ -99,6 +99,16 @@ all.results = mapply(function(gld.std.id, gene.map.id, rank.cons.id, bic.id){
                     fn = sum(tmp.bic.adj[tmp.gs.adj == 1] == 0)/2))
 }, GOLD.STD.IDs, GENE.MAP.IDs, RANK.CONS.IDs, BIC.IDs, SIMPLIFY = T)
 
+all.results = apply(all.results, 2, function(x){
+  data.frame(mcc = (x$tp*x$tn - x$fp*x$fn)/(sqrt((x$tp+x$fn)*(x$tn+x$fp)*(x$tp+x$fp)*(x$tn+x$fn))),
+             odds = (x$tp+x$tn)/(x$fp + x$fn))
+}) %>% 
+  rbindlist(idcol = 'NetworkName') %>%
+  left_join(all.results %>% 
+              data.frame() %>% 
+              t %>% 
+              CovariateAnalysis::rownameToFirstColumn('NetworkName'))
+
 # Get github commit link
 thisRepo <- getRepo(repository = "th1vairam/metanetworkSynapse", 
                     ref="branch", 

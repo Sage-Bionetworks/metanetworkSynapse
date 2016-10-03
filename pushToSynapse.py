@@ -27,18 +27,27 @@ def push(filePath, parentId, annotationFile, provenanceFile, method, branch):
         executed= [r['provenance'] for r in reader if r['executed'] == 'TRUE']
         g = github.Github()
 	repo = g.get_repo("philerooski/metanetworkSynapse")
+	config = repo.get_contents("config.sh", ref=branch)
+	thisScript = repo.get_contents("pushToSynapse.py", ref=branch)
+	networkScriptName = get_ns_name(method)
+        networkScript = repo.get_contents("networkScripts/%s.sh" % networkScriptName, 
+	    ref=branch)
         if method == "rankConsensus" or method == "bic":
-	    pass
+	    q = syn.chunkedQuery("select id, name from entity \
+		where entity.parentId=='%s'" % parentId)
+            [used.append(i['entity.id']) for i in q]
+	    submissionScript = repo.get_contents("submissionConsensus.sh", ref=branch)
+            pushScript = repo.get_contents("pushConsensus.sh", ref=branch)
+            buildScript = repo.get_contents("buildConsensus.R", ref=branch)
         else:
-	    config = repo.get_contents("config.sh", ref=branch)
-	    networkScriptName = get_ns_name(method)
-	    networkScript = repo.get_contents("networkScripts/%s.sh" % networkScriptName, 
-	        ref=branch)
 	    submissionScript = repo.get_contents("submission.sh", ref=branch)
 	    pushScript = repo.get_contents("pushNetworks.sh", ref=branch)
-	    thisScript = repo.get_contents("pushToSynapse.py", ref=branch)
-	    executed += [config.html_url, networkScript.html_url, 
-	    submissionScript.html_url, pushScript.html_url, thisScript.html_url]
+	    if networkScriptName in ['c3net', 'wgcnaTOM', 'mrnet']:
+	        buildScript = repo.get_contents("buildOtherNet.R")
+	    else:
+		buildScript = repo.get_contents("buildMpiNet.R")
+    executed += [config.html_url, networkScript.html_url, buildScript.html_url, 
+	submissionScript.html_url, pushScript.html_url, thisScript.html_url]
     activity = synapseclient.Activity(name='Network Inference',
             description=method, used=used, executed=executed)
     synFile = synapseclient.File(filePath, parent=parentId)
@@ -50,6 +59,8 @@ def get_ns_name(method):
 	return "mrnet"
     elif method == "wgcnaTopologicalOverlapMatrix" or method == "wgcnaSoftThreshold":
 	return "wgcnaTOM"
+    elif method == "bic":
+	return "rankConsensus"
     else:
 	return method
 

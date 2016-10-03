@@ -118,6 +118,7 @@ thisFile <- getPermlink(repository = thisRepo,
                         repositoryPath = 'DREAM5_Performance_Computation.R')
 
 # Store results in synapse
+all.results[,-(1)] = sapply(all.results[,-(1)], as.numeric)
 write.table(all.results, file = 'DREAM5_Performance.tsv', row.names = F, sep = '\t')
 obj = File('DREAM5_Performance.tsv', name = 'DREAM5 Performance', parentId = 'syn7248617')
 obj = synStore(obj, 

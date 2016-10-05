@@ -5,7 +5,7 @@ module load openmpi-x86_64
 #location of metanetwork synapse scripts (i.e. the directory this script should be in)
 #pathv=`dirname $0`
 pathv=$( cd $(dirname $0) ; pwd -P )
-pathv=${pathv}!
+pathv="${pathv}/"
 
 . $pathv/config.sh
 

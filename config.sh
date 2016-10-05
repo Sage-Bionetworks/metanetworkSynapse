@@ -7,7 +7,7 @@ outputpath="/shared/network/"
 dataFile="$outputpath/Expression.csv"
 
 #id of folder on Synapse that network files will go to
-parentId="syn7320952"
+parentId="syn7342900"
 
 #path to error output
 errorOutput="$outputpath/errorLogs"

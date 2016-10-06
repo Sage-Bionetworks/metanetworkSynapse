@@ -21,10 +21,10 @@ thisRepo <- githubr::getRepo(repository = "th1vairam/metanetworkSynapse", ref="b
 thisFile <- githubr::getPermlink(repository = thisRepo, repositoryPath= 'getModules.CRANIO.R')
 
 # Get all bicNetworks.rda from the source project
-BIC_ID = 'syn5569099'
+BIC_ID = 'syn7342818'
 
 mod.methods = c('fast_greedy', 'infomap', 'label_prop', 'walktrap',
-                'louvain', 'leading_eigen', 'spinglass')
+                'louvain', 'leading_eigen')
 
 # Perform module identification
 all.objs <- lapply(mod.methods, function(method, bic.id){

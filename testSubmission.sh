@@ -5,7 +5,7 @@ module load openmpi-x86_64
 #location of metanetwork synapse scripts (i.e. the directory this script should be in)
 pathv=$( cd $(dirname $0) ; pwd -P )
 
-. $pathv/config.sh
+. $pathv/testConfig.sh
 
 #number of cores to reserve for MICor jobs
 nthreadsLight=1

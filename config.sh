@@ -3,11 +3,14 @@
 #output path for temporary result file prior to pushing to s3/synapse
 outputpath="/shared/network/"
 
-#location of data file
+# location of Expression data on Synapse
+dataSynId="syn1234567"
+
+#location of data file on master node
 dataFile="$outputpath/Expression.csv"
 
 #id of folder on Synapse that network files will go to
-parentId="syn7342900"
+parentId="syn7654321"
 
 #path to error output
 errorOutput="$outputpath/errorLogs"

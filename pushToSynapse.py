@@ -11,11 +11,14 @@ def read_args():
     parser.add_argument('provenanceFile', help="Corresponding provenance file")
     parser.add_argument('method', help="name of method used to generate file")
     parser.add_argument('branch', help="branch of metanetworkSynapse we are using")
+    parser.add_argument('gitUsername', help="Github username")
+    parser.add_argument('gitPassword', help="Github password")
     args = parser.parse_args()
     return (args.file, args.parentId, args.annotationFile,
-        args.provenanceFile, args.method, args.branch)
+        args.provenanceFile, args.method, args.branch,
+	args.gitUsername, args.gitPassword)
 
-def push(filePath, parentId, annotationFile, provenanceFile, method, branch):
+def push(filePath, parentId, annotationFile, provenanceFile, method, branch, gitUsername, gitPassword):
     syn = synapseclient.login()
     with open(annotationFile, 'r') as f:
         entries = f.read().strip().split('\n')
@@ -25,7 +28,7 @@ def push(filePath, parentId, annotationFile, provenanceFile, method, branch):
         reader = csv.DictReader(csvfile, delimiter=',')
         used = [r['provenance'] for r in reader if r['executed'] == 'FALSE']
         executed= [r['provenance'] for r in reader if r['executed'] == 'TRUE']
-        g = github.Github()
+        g = github.Github(gitUsername, gitPassword)
 	repo = g.get_repo("philerooski/metanetworkSynapse")
 	config = repo.get_contents("config.sh", ref=branch)
 	thisScript = repo.get_contents("pushToSynapse.py", ref=branch)
@@ -65,8 +68,10 @@ def get_ns_name(method):
 	return method
 
 def main():
-    filePath, parentId, annotationFile, provenanceFile, method, branch = read_args()
-    push(filePath, parentId, annotationFile, provenanceFile, method, branch)
+    filePath, parentId, annotationFile, provenanceFile, method, 
+	branch, gitUsername, gitPassword = read_args()
+    push(filePath, parentId, annotationFile, provenanceFile, method,
+	branch, gitUsername, gitPassword)
 
 if __name__ == "__main__":
     main()

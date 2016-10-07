@@ -1,27 +1,16 @@
 fileName <- as.character(commandArgs(TRUE)[[1]])
 outputpath <- as.character(commandArgs(TRUE)[[2]])
 networkFolderId <- as.character(commandArgs(TRUE)[[3]])
-provenanceFile <- as.character(commandArgs(TRUE)[[4]])
 
-buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
+buildConsensus = function(outputpath,networkFolderId, fileName){
   library(synapseClient)
   library(metanetwork)
   library(reader)
   synapseLogin()
 
-  provenance <- read.csv(provenanceFile,stringsAsFactors=F)
-  provenance <- as.matrix(provenance)
-
   #get all networks from Synapse
   foo <- synQuery(paste0('select name,id from file where parentId==\'',networkFolderId,'\''))
   bar <- lapply(foo$file.id,synGet,downloadLocation=outputpath)
-  #print(foo)
-
-  #update provenanceFile
-  provenance <- rbind(provenance,cbind(foo$file.id,rep(FALSE,nrow(foo))))
-  write.csv(provenance,paste0(outputpath,'rankConsensusProvenanceFile.txt'),quote=F,row.names=F)
-  #print(provenance)
-  #load networks into R session
 
   loadNetwork <- function(file){
     library(data.table)
@@ -51,10 +40,7 @@ buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
     cat('turning data into data matrix\n')
     dataSet <- data.matrix(dataSet)
     cat('build bicNetworks\n')
-    #bicNetworks <- lapply(networks,metanetwork::computeBICcurve,dataSet,maxEdges=1e5)
     bicNetworks <- metanetwork::computeBICcurve(networks$rankConsensus,dataSet,maxEdges=1e5)
-    #cat('make names of bicNetworks\n')
-    #names(bicNetworks) <- 'rankConsensus'
     cat('save bicNetworks\n')
     save(bicNetworks,file=paste0(outputpath,'bicNetworks.rda'))
   }

@@ -1,11 +1,12 @@
 #!/bin/bash
 
+. /shared/metanetworkSynapse/config.sh
+
 # general setup
-synId=$1
+cd ~
 sudo yum update -y
 echo "export PS1=\"\n\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;38m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]@\h[\[$(tput sgr0)\]\[\033[38;5;214m\]\W\[$(tput sgr0)\]\[\033[38;5;15m\]]: \[$(tput sgr0)\]\"" >> ~/.bashrc
-echo "export AWS_CONFIG_FILE=\"/shared/.aws/credentials\"" >> ~/.bashrc
-source ~/.bashrc
+. ~/.bashrc
 mkdir /shared/rlibs
 sudo chown centos /shared/rlibs
 module load openmpi-x86_64
@@ -30,25 +31,23 @@ wget https://bootstrap.pypa.io/get-pip.py
 sudo python2.7 get-pip.py
 pip2.7 install --user --upgrade synapseclient
 pip2.7 install --user --upgrade argparse
+pip2.7 install --user --upgrade pygithub
 cd ..
 sudo rm -r Python-2.7.10*
 
 # test network
 mkdir -p /shared/testNetwork/outLogs/; mkdir -p /shared/testNetwork/errorLogs/
 Rscript -e "library(metanetwork); foo = metanetwork::simulateNetworkData(100,100,2/100,adjustment=0.5); write.csv(foo$data,file='/shared/testNetwork/testData.csv',quote=F)"
-echo -e "provenance,executed\nhttps://github.com/philerooski/sage.gtex/blob/master/brain_expressions.py,TRUE" > /shared/testNetwork/provenanceFile.txt
-echo -e "provenance,executed\nhttps://github.com/philerooski/sage.gtex/blob/master/brain_expressions.py,TRUE" > /shared/testNetwork/buildConsensusProvenanceFile.txt
-echo "hello,goodbye" > /shared/testNetwork/annoFile.txt
-echo "hello,goodbye" > /shared/testNetwork/buildConsensusAnnoFile.txt
+echo -e "provenance,executed\nhttps://github.com/blogsdon/metanetwork/blob/master/R/simulateNetworkData.R,TRUE" > /shared/testNetwork/provenanceFile.txt
+echo "isATest,TRUE" > /shared/testNetwork/annoFile.txt
 
 # actual network
 mkdir -p /shared/network/errorLogs/; mkdir -p /shared/network/outLogs/
-cd /shared/network
+cd /shared/network/
 git clone https://github.com/philerooski/brainRegNetwork.git
 Rscript -e "library(devtools); install_github('blogsdon/utilityFunctions')"
-Rscript brainRegNetwork/getData.R $synId
-echo -e "provenance,executed\n${synId},FALSE" > /shared/network/provenanceFile.txt
+Rscript brainRegNetwork/getData.R $dataSynId
+echo -e "provenance,executed\n${dataSynId},FALSE" > /shared/network/provenanceFile.txt
 echo -e "https://github.com/philerooski/brainRegNetwork/blob/master/getData.R,TRUE" >> /shared/network/provenanceFile.txt
 echo -e "fileType,csv\ndataType,analysis\nanalysisType,statisticalNetworkReconstruction\nnormalizationStatus,TRUE" > /shared/network/annoFile.txt
-#sh /shared/metanetworkSynapse/testNetworkMICorSubmission.sh
-#sh /shared/metanetworkSynapse/testNetworkRegressionSubmission.sh
+sh submission.sh

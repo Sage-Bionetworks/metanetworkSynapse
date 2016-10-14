@@ -1,75 +1,44 @@
-THIS IS THE CRANIO BRANCH
 #metanetworkSynapse
-###Simulating Data
-To run the test scripts, first simulate some data, e.g. using the [metanetwork](https://github.com/blogsdon/metanetwork/tree/metanetworkReboot) r-package.
 
-`foo = metanetwork::simulateNetworkData(100,100,2/100,adjustment=0.5)`
+## Cluster Setup
 
-write this data to a file.
+`remote.sh` is written to be run on the master node of a cluster running a custom image of CentOS6 [here]("https://github.com/Sage-Bionetworks/CommonCompute").
 
-`write.csv(foo$data,file='~/testData.csv',quote=F)`
+After building the machine image and pushing to AWS, spin up a cluster using the AMI.
 
-###Building Correlation/Mutual Information networks
-The test script is organized as follow.  First spin up either the starcluster or cfncluster queue.  Next clone the current versions of the [metanetwork](https://github.com/blogsdon/metanetwork/tree/metanetworkReboot) and [metanetworkSynapse](https://github.com/blogsdon/metanetworkSynapse/tree/metanetworkSynapseReboot) repos onto the shared EBS volume for your cluster.  To submit a job to fit the correlation/mutual information method, you can run modify the [testNetworkMICorSubmission.sh](https://github.com/blogsdon/metanetworkSynapse/blob/metanetworkSynapseReboot/testNetworkMICorSubmission.sh) as follows.
+## Basic Usage
+To generate networks for dataset `abcd`, run the following commands on your localhost (this requires a `.synapseConfig` file in your home [~] directory for pushing the networks to Synapse from the master node):
 
-First, set the number of threads to reserve for the job
+```
+git clone -b abcd https://github.com/philerooski/metanetworkSynapse.git
+cd metanetworkSynapse
+sh localhost.sh /path/to/private/key.pem your.master.nodes.public.DNS
+```
 
-`nthreads=1`
+i.e., the call to localhost.sh might look like `sh localhost.sh ~/.aws/myKey.pem ec2-52-55-94-233.compute-1.amazonaws.com` if you have a cluster running in the AWS cloud.
 
-Next, define the path of the s3 buckets where the outputs will go
+This will install all dependencies in `/shared` on your cluster and submit the network jobs to the SGE queue. Networks built via the `submission.sh` call are high CPU intensive and medium memory intensive jobs. Be sure you have enough cores among your compute nodes to run the most demanding jobs (# compute nodes * # CPU per compute node >= `nthreadsHeavy` in `submission.sh`).
 
-`s3="s3://metanetworks/testNetwork/"`
+Once the jobs are finished running, if you wish to push the networks to Synapse you must: 
 
-Third, set the path of the file that contains the simulated data
+* Log into your master node. 
+* Edit `/shared/metanetworkSynapse/config.sh` so that `parentId` points to a Folder on Synapse that you have write permission for.
+* Call `sh pushNetworks.sh [gitUsername] [gitPassword]`. Passing in your username and password for Git isn't necessary, but allows `pushToSynapse.py` to authenticate its requests to GitHub when building the Provenance for each network. Very few unauthenticated requests are allowed per time period. If you don't wish to authenticate, you may need to run `pushNetworks.sh` twice to push all the networks to Synapse.
 
-`dataFile="/shared/testNetwork/testData.csv"`
+Once the regular networks have been pushed to Synapse, we can build the rank consensus network.
 
-Define the path of the metanetwork repo
+```
+sh submissionConsensus.sh
+```
 
-`pathv="/shared/metanetworkSynapse/"`
+Building the rank consensus network is a low CPU intensive and high memory intensive job. I recommend using an instance with at least 50 times as much RAM as the size of the largest network generated via `submission.sh`. 
 
-Define the path of where you want the temporary output of the networks to go
+Once the job submitted by `submissionConsensus.sh` finishes, we can push the rank consensus network to Synapse with `sh pushConsensus.sh`.
 
-`outputpath="/shared/testNetwork/"`
+## Advanced Usage
 
-Define the path in the metanetworks buckets
+### Troubleshooting
 
-`s3b="testNetwork"`
+When running jobs, error and output logs are kept in `/shared/network/errorLogs/` and `/shared/network/outLogs/`, respectively.
 
-Define the parentId of the folder in the metanetworks Synapse project where you want the network outputs to go
-
-`parentId="syn5706584"`
-
-Define the path to the file that contains the annotations you want to put on these files.  Here is an [example](https://github.com/blogsdon/CRANIO/blob/master/annoFile.txt)
-
-`annotationFile="/shared/testNetwork/annoFile.txt"`
-
-Define the path to the file that contains the provenance you want to put on these files.  Here is an [example](https://github.com/blogsdon/CRANIO/blob/master/provenanceFile.txt)
-
-`provenanceFile="/shared/testNetwork/provenanceFile.txt"`
-
-Define a path to where you want the STDERR to go
-
-`errorOutput="/shared/testNetwork/marginalerror.txt"`
-
-Define a path to where you want the STDOUT to go
-
-`outOutput="/shared/testNetwork/marginalout.txt"`
-
-Define a job name
-
-`jobname="testNetworkMarginal"`
-
-Submit the job
-
-`qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,c3net=1,mrnet=1,wgcnaTOM=1,sparrowZ=0,lassoCV1se=0,ridgeCV1se=0,genie3=0,tigress=0,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile -pe orte $nthreads -S /bin/bash -V -cwd -N $jobname -e $errorOutput -o $outOutput $pathv/buildNet.sh`
-
-#Building Regression networks
-
-You can run modify the [testNetworkRegressionSubmission.sh](https://github.com/blogsdon/metanetworkSynapse/blob/metanetworkSynapseReboot/testNetworkRegressionSubmission.sh) as above.  Importantly, the regression methods are all embarrasingly parallelized. To take advantage of this set the number of threads to reserve for the job to the number of cores in the cluster.  E.g. if you spun up a cluster with 320 cores
-
-`nthreads=319`
-
-finally, when you submit the job set the regression flags to 1
-
-`qsub -v s3=$s3,dataFile=$dataFile,pathv=$pathv,c3net=0,mrnet=0,wgcnaTOM=0,sparrowZ=1,lassoCV1se=1,ridgeCV1se=1,genie3=1,tigress=1,numberCore=$nthreads,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile -pe orte $nthreads -S /bin/bash -V -cwd -N $jobname -e $errorOutput -o $outOutput $pathv/buildNet.sh`
+If there are other problems submitting jobs to the SGE queue, building the networks, or pushing to Synapse, we provide a small test network for debugging. The process for running the test network is the same as above, except the main configuration file is kept in `testConfig.sh`, jobs are submitted with `sh testSubmission.sh`, completed networks are pushed to Synapse with `sh pushTest.sh`, and the rank consensus network is built with `sh testSubmissionConsensus.sh`. Error and output logs for the test network are in `/shared/testNetwork/errorLogs/` and `/shared/testNetwork/outLogs/`, respectively.

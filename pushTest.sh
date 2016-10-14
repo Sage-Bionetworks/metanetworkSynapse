@@ -8,7 +8,7 @@ pathv=$( cd $(dirname $0) ; pwd -P )
 nets=( "aracne" "c3net" "genie3" "lassoAIC" "lassoBIC" "lassoCV1se" "lassoCVmin" "mrnet" "ridgeAIC" "ridgeBIC" "ridgeCV1se" "ridgeCVmin" "sparrowZ" "sparrow2Z" "tigress" "wgcnaSoftThreshold" "wgcnaTopologicalOverlapMatrix" )
 branch=$( git rev-parse --abbrev-ref HEAD )
 
-. $pathv/config.sh
+. $pathv/testConfig.sh
 
 for net in ${nets[@]}; do
     if [ -e $outputpath/${net}Network.csv ]; then

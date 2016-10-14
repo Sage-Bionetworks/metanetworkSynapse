@@ -47,7 +47,8 @@ cd /shared/network/
 git clone https://github.com/philerooski/brainRegNetwork.git
 Rscript -e "library(devtools); install_github('blogsdon/utilityFunctions')"
 Rscript brainRegNetwork/getData.R $dataSynId
-echo -e "provenance,executed\n${dataSynId},FALSE" > /shared/network/provenanceFile.txt
-echo -e "https://github.com/philerooski/brainRegNetwork/blob/master/getData.R,TRUE" >> /shared/network/provenanceFile.txt
+echo "provenance,executed" > /shared/network/provenanceFile.txt
+echo "${dataSynId},FALSE" >> /shared/network/provenanceFile.txt
+echo "https://github.com/philerooski/brainRegNetwork/blob/master/getData.R,TRUE" >> /shared/network/provenanceFile.txt
 echo -e "fileType,csv\ndataType,analysis\nanalysisType,statisticalNetworkReconstruction\nnormalizationStatus,TRUE" > /shared/network/annoFile.txt
 sh submission.sh

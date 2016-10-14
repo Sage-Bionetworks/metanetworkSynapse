@@ -8,13 +8,13 @@ pathv=$( cd $(dirname $0) ; pwd -P )/
 . $pathv/config.sh
 
 #number of cores to reserve for MICor jobs
-nthreadsLight=80
+nthreadsLight=16
 
 #number of cores to reserve for regression jobs
-nthreadsMedium=120
+nthreadsMedium=32
 
 #number of cores to reserve for computationally intensive jobs
-nthreadsHeavy=240
+nthreadsHeavy=64
 
 ### build nets ###
 

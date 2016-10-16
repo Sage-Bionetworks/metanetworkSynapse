@@ -65,6 +65,7 @@ all.results = mapply(function(gld.std.id, gene.map.id, rank.cons.id, bic.id){
   
   pred = prediction(tmp.adj, tmp.gs.adj)
   
+  roc.raw = performance(pred, measure = 'tpr', x.measure = 'fpr')
   auc.raw = performance(pred, measure = 'auc')@y.values[[1]]
   pr = performance(pred, measure = 'prec')@y.values[[1]]
   rc = performance(pred, measure = 'rec')@y.values[[1]]
@@ -84,6 +85,7 @@ all.results = mapply(function(gld.std.id, gene.map.id, rank.cons.id, bic.id){
   
   pred = prediction(tmp.bic.adj, tmp.gs.adj)
   
+  roc.bic = performance(pred, measure = 'tpr', x.measure = 'fpr')
   auc.bic = performance(pred, measure = 'auc')@y.values[[1]]
   pr = performance(pred, measure = 'prec')@y.values[[1]]
   rc = performance(pred, measure = 'rec')@y.values[[1]]
@@ -91,23 +93,32 @@ all.results = mapply(function(gld.std.id, gene.map.id, rank.cons.id, bic.id){
   
   tmp.bic.adj[tmp.bic.adj != 0] = 1
 
-  return(data.frame(auc.raw = auc.raw, aupr.raw = aupr.raw, 
-                    auc.bic = auc.bic, aupr.bic = aupr.bic, 
-                    tp = sum(tmp.bic.adj[tmp.gs.adj == 1] == 1)/2,
-                    fp = sum(tmp.bic.adj[tmp.gs.adj == 0] == 1)/2,
-                    tn = sum(tmp.bic.adj[tmp.gs.adj == 0] == 0)/2,
-                    fn = sum(tmp.bic.adj[tmp.gs.adj == 1] == 0)/2))
-}, GOLD.STD.IDs, GENE.MAP.IDs, RANK.CONS.IDs, BIC.IDs, SIMPLIFY = T)
+  return(list(performance = data.frame(auc.raw = auc.raw, aupr.raw = aupr.raw, 
+                                       auc.bic = auc.bic, aupr.bic = aupr.bic, 
+                                       tp = sum(tmp.bic.adj[tmp.gs.adj == 1] == 1)/2,
+                                       fp = sum(tmp.bic.adj[tmp.gs.adj == 0] == 1)/2,
+                                       tn = sum(tmp.bic.adj[tmp.gs.adj == 0] == 0)/2,
+                                       fn = sum(tmp.bic.adj[tmp.gs.adj == 1] == 0)/2),
+              roc.raw = roc.raw,
+              roc.bic = roc.bic))
+}, GOLD.STD.IDs, GENE.MAP.IDs, RANK.CONS.IDs, BIC.IDs, SIMPLIFY = F)
 
-all.results = apply(all.results, 2, function(x){
-  data.frame(mcc = (x$tp*x$tn - x$fp*x$fn)/(sqrt((x$tp+x$fn)*(x$tn+x$fp)*(x$tp+x$fp)*(x$tn+x$fn))),
-             odds = (x$tp+x$tn)/(x$fp + x$fn))
+pdf(file = 'ROCPlots.pdf', width = 10, height = 10)
+for (i in 1:4){
+  plot(all.results[[i]]$roc.raw); 
+  par(new=TRUE);
+  plot(all.results[[i]]$roc.bic, main = paste('DREAM5', names(all.results)[i]))
+}
+dev.off()
+
+all.performance = lapply(all.results, function(x){
+  x = x$performance
+  x$mcc = (x$tp*x$tn - x$fp*x$fn)/(sqrt((x$tp+x$fn)*(x$tn+x$fp)*(x$tp+x$fp)*(x$tn+x$fn)))
+  x$odds = (x$tp+x$tn)/(x$fp + x$fn)
+  return(x)
 }) %>% 
   rbindlist(idcol = 'NetworkName') %>%
-  left_join(all.results %>% 
-              data.frame() %>% 
-              t %>% 
-              CovariateAnalysis::rownameToFirstColumn('NetworkName'))
+  data.frame()
 
 # Get github commit link
 thisRepo <- getRepo(repository = "th1vairam/metanetworkSynapse", 
@@ -118,9 +129,15 @@ thisFile <- getPermlink(repository = thisRepo,
                         repositoryPath = 'DREAM5_Performance_Computation.R')
 
 # Store results in synapse
-all.results[,-(1)] = sapply(all.results[,-(1)], as.numeric)
-write.table(all.results, file = 'DREAM5_Performance.tsv', row.names = F, sep = '\t')
+all.performance[,-(1)] = sapply(all.performance[,-(1)], as.numeric)
+write.table(all.performance, file = 'DREAM5_Performance.tsv', row.names = F, sep = '\t')
 obj = File('DREAM5_Performance.tsv', name = 'DREAM5 Performance', parentId = 'syn7248617')
+obj = synStore(obj, 
+               used = as.character(c(BIC.IDs, GENE.MAP.IDs, GOLD.STD.IDs, RANK.CONS.IDs)), 
+               executed = thisFile, 
+               activityName = 'Estimate performance for DREAM5 networks')
+
+obj = File('ROCPlots.pdf', name = 'DREAM5 ROC', parentId = 'syn7248617')
 obj = synStore(obj, 
                used = as.character(c(BIC.IDs, GENE.MAP.IDs, GOLD.STD.IDs, RANK.CONS.IDs)), 
                executed = thisFile, 

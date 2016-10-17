@@ -51,4 +51,4 @@ echo "provenance,executed" > /shared/network/provenanceFile.txt
 echo "${dataSynId},FALSE" >> /shared/network/provenanceFile.txt
 echo "https://github.com/philerooski/brainRegNetwork/blob/master/getData.R,TRUE" >> /shared/network/provenanceFile.txt
 echo -e "fileType,csv\ndataType,analysis\nanalysisType,statisticalNetworkReconstruction\nnormalizationStatus,TRUE" > /shared/network/annoFile.txt
-sh submission.sh
+sh /shared/metanetworkSynapse/submission.sh

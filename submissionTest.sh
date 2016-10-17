@@ -3,18 +3,18 @@
 module load openmpi-x86_64
 
 #location of metanetwork synapse scripts (i.e. the directory this script should be in)
-pathv=$( cd $(dirname $0) ; pwd -P )
+pathv=$( cd $(dirname $0) ; pwd -P )/
 
-. $pathv/testConfig.sh
+. $pathv/configTest.sh
 
 #number of cores to reserve for MICor jobs
 nthreadsLight=1
 
 #number of cores to reserve for regression jobs
-nthreads=1
+nthreads=2
 
 #number of cores to reserve for computationally intensive jobs
-nthreadsHeavy=1
+nthreadsHeavy=2
 
 #path to csv file with annotations to add to file on Synapse
 annotationFile="$outputpath/annoFile.txt"

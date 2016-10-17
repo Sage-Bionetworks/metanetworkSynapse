@@ -47,4 +47,4 @@ buildConsensus = function(outputpath,networkFolderId, fileName){
   cat('write rank consensus\n')
   write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
 }
-buildConsensus(outputpath,networkFolderId,provenanceFile,fileName)
+buildConsensus(outputpath,networkFolderId,fileName)

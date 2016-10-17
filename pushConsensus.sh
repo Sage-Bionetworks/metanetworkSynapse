@@ -4,7 +4,7 @@ gitUsername=$1
 gitPassword=$2
 
 #location of metanetwork synapse scripts
-pathv=$( cd $(dirname $0) ; pwd -P )
+pathv=$( cd $(dirname $0) ; pwd -P )/
 branch=$( git rev-parse --abbrev-ref HEAD )
 
 . $pathv/config.sh

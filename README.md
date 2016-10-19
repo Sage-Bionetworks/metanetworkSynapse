@@ -7,17 +7,17 @@
 After building the machine image and pushing to AWS, spin up a cluster using the AMI.
 
 ## Basic Usage
-To generate networks for dataset `abcd`, run the following commands on your localhost (this requires a `.synapseConfig` file in your home [~] directory for pushing the networks to Synapse from the master node):
+To generate networks using the expression matrix located at syn1234567, first edit `config.sh` so that `dataSynId = syn1234567`, then run the localhost script (this suggests, but does not require, a `.synapseConfig` file in your home [`~`] directory for pushing the networks to Synapse from the master node):
 
 ```
-git clone -b abcd https://github.com/philerooski/metanetworkSynapse.git
-cd metanetworkSynapse
-sh localhost.sh /path/to/private/key.pem your.master.nodes.public.DNS
+sh metanetworkSynapse/localhost.sh /path/to/private/key.pem your.master.nodes.public.DNS https://github.com/a/version/of/metanetworkSynapse.git
 ```
 
-i.e., the call to localhost.sh might look like `sh localhost.sh ~/.aws/myKey.pem ec2-52-55-94-233.compute-1.amazonaws.com` if you have a cluster running in the AWS cloud.
+i.e., the call to localhost.sh might look like `sh localhost.sh ~/.aws/myKey.pem ec2-52-55-94-233.compute-1.amazonaws.com https://github.com/blogsdon/metanetworkSynapse.git` if you have a cluster running in the AWS cloud and want to use the original metanetworkSynapse repository.
 
-This will install all dependencies in `/shared` on your cluster and submit the network jobs to the SGE queue. Networks built via the `submission.sh` call are high CPU intensive and medium memory intensive jobs. Be sure you have enough cores among your compute nodes to run the most demanding jobs (# compute nodes * # CPU per compute node >= `nthreadsHeavy` in `submission.sh`).
+`https://github.com/a/version/of/metanetworkSynapse.git` is the fork, branch, etc. of metanetworkSynapse you would like to run on the cluster. Your local copy of `config.sh` will be copied over the preexisting `config.sh` in that repository on the master node.
+
+This will install all dependencies in `/shared/` on your cluster and submit the network jobs to the SGE queue. Networks built via the `submission.sh` call are high CPU intensive and medium memory intensive jobs. Be sure you have enough cores among your compute nodes to run the most demanding jobs (# compute nodes * # CPU per compute node >= `nthreadsHeavy` in `submission.sh`).
 
 Once the jobs are finished running, if you wish to push the networks to Synapse you must: 
 

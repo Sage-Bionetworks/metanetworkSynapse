@@ -1,7 +1,6 @@
 #!/bin/bash
 
-gitUsername=$1 
-gitPassword=$2
+token=$1
 
 pathv=$( cd $(dirname $0) ; pwd -P )/
 
@@ -12,7 +11,7 @@ branch=$( git rev-parse --abbrev-ref HEAD )
 
 for net in ${nets[@]}; do
     if [ -e $outputpath/${net}Network.csv ]; then
-        python2.7 $pathv/pushToSynapse.py "$outputpath/${net}Network.csv" "$parentId" "$outputpath/annoFile.txt" "$outputpath/provenanceFile.txt" $net $branch ${gitUsername:-""} ${gitPassword:-""}
+        python2.7 $pathv/pushToSynapse.py "$outputpath/${net}Network.csv" "$parentId" "$outputpath/annoFile.txt" "$outputpath/provenanceFile.txt" $net $branch $token
     else
         echo "$outputpath/${net}Network.csv not found"
     fi

@@ -6,6 +6,8 @@
 
 After building the machine image and pushing to AWS, spin up a cluster using the AMI.
 
+metanetworkSynapse requires the `openmpi-x86_64` module on the cluster.
+
 ## Basic Usage
 To generate networks using the expression matrix located at syn1234567, first edit `config.sh` so that `dataSynId = syn1234567`, then run the localhost script (this suggests, but does not require, a `.synapseConfig` file in your home [`~`] directory for pushing the networks to Synapse from the master node):
 

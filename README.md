@@ -23,7 +23,7 @@ Once the jobs are finished running, if you wish to push the networks to Synapse 
 
 * Log into your master node. 
 * Edit `/shared/metanetworkSynapse/config.sh` so that `parentId` points to a Folder on Synapse that you have write permission for.
-* Call `sh pushNetworks.sh [gitUsername] [gitPassword]`. Passing in your username and password for Git isn't necessary, but allows `pushToSynapse.py` to authenticate its requests to GitHub when building the Provenance for each network. Very few unauthenticated requests are allowed per time period. If you don't wish to authenticate, you may need to run `pushNetworks.sh` twice to push all the networks to Synapse.
+* Call `sh pushNetworks.sh [githubAPIToken]`. The token needs the `public_repo` scope, which gives you the ability to access public repositories.
 
 Once the regular networks have been pushed to Synapse, we can build the rank consensus network.
 

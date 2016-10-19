@@ -7,6 +7,8 @@ pathv=$( cd $(dirname $0) ; pwd -P )/
 
 . $pathv/configTest.sh
 
+dataFile="$outputpath/testData.csv"
+
 #number of cores to reserve for MICor jobs
 nthreadsLight=1
 
@@ -31,7 +33,7 @@ nets=( "lassoAIC" "lassoBIC" "lassoCV1se" "lassoCVmin" "ridgeAIC" "ridgeBIC" "ri
 heavyNets=( "genie3" "tigress" )
 
 for net in ${lightNets[@]}; do
-	qsub -r yes -v s3=$s3,dataFile=$dataFile,pathv=$pathv,numberCore=$nthreadsLight,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile -pe mpi $nthreadsLight -S /bin/bash -V -cwd -N "$net" -e "$errorOutput/${net}error.txt" -o "$outOutput/${net}out.txt" $pathv/networkScripts/${net}.sh
+	qsub -r yes -v s3=$s3,dataFile="$outputpath/testData.csv",pathv=$pathv,numberCore=$nthreadsLight,outputpath=$outputpath,s3b=$s3b,parentId=$parentId,annotationFile=$annotationFile,provenanceFile=$provenanceFile -pe mpi $nthreadsLight -S /bin/bash -V -cwd -N "$net" -e "$errorOutput/${net}error.txt" -o "$outOutput/${net}out.txt" $pathv/networkScripts/${net}.sh
 done
 
 for net in ${nets[@]}; do

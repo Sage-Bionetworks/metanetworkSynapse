@@ -7,6 +7,9 @@ pathv=$( cd $(dirname $0) ; pwd -P )/
 
 . $pathv/config.sh
 
+# location of expression matrix
+dataFile="$outputpath/Expression.csv"
+
 #number of cores to reserve for MICor jobs
 nthreadsLight=16
 

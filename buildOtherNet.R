@@ -1,4 +1,6 @@
 require(metanetwork)
+library(reader)
+library(methods)
 
 fileName <- as.character(commandArgs(TRUE)[[1]])
 pathv <- as.character(commandArgs(TRUE)[[2]])
@@ -10,9 +12,10 @@ if(pval=='NULL'){
 }else{
   pval <- as.numeric(pval)
 }
-data <- data.matrix(read.csv(fileName,row.names=1))
+cat(fileName)
+data <- data.matrix(reader(fileName,row.names=1))
 argList <- list(data=data,path=pathv,outputpath=outputpath)
-if(functionName=='aracne'){
+if(functionName=='aracne' | functionName=='mrnetWrapper'){
   installAracne(path=pathv)
   argList$pval <- pval
 }

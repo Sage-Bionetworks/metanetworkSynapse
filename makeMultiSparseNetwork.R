@@ -2,6 +2,7 @@ makeMultiSparseNetwork <- function(sparsitySyn,networkSyn,geneSyn,uploadFolder,e
   require(synapseClient)
   synapseLogin()
   library(Matrix)
+  library(reader)
   #set remote cache
   synapseCacheDir("/shared/.synapseCache/")
   
@@ -9,9 +10,9 @@ makeMultiSparseNetwork <- function(sparsitySyn,networkSyn,geneSyn,uploadFolder,e
   networkSyn <- synGet(networkSyn)
   geneSyn <- synGet(geneSyn)
   
-  spar <- read.csv(sparObj@filePath,stringsAsFactors=F,row.names=1)
-  network <- read.csv(networkSyn@filePath,stringsAsFactors=F,row.names=1)
-  gene <- read.csv(geneSyn@filePath,stringsAsFactors=F,row.names=1)
+  spar <- reader(sparObj@filePath,stringsAsFactors=F,row.names=1)
+  network <- reader(networkSyn@filePath,stringsAsFactors=F,row.names=1)
+  gene <- reader(geneSyn@filePath,stringsAsFactors=F,row.names=1)
   
   edgeListToMatrix <- function(spar,edgeList,geneName,nNodes){
     network2 <- matrix(0,nNodes,nNodes)

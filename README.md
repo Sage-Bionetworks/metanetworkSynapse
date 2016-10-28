@@ -2,7 +2,7 @@
 
 ## Cluster Setup
 
-`remote.sh` is written to be run on the master node of a cluster running a custom image of CentOS6 [here](https://github.com/Sage-Bionetworks/CommonCompute).
+`remote.sh` is written to be run on the master node of a cluster running a custom image of CentOS6 [here](https://github.com/th1vairam/CommonCompute/tree/forMetaNetCluster).
 
 After building the machine image and pushing to AWS, spin up a cluster using the AMI.
 

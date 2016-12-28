@@ -35,7 +35,7 @@ sh submissionConsensus.sh
 
 Building the rank consensus network is a low CPU intensive and high memory intensive job. I recommend using an instance with at least 50 times as much RAM as the size of the largest network generated via `submission.sh`. 
 
-Once the job submitted by `submissionConsensus.sh` finishes, we can push the rank consensus network to Synapse with `sh pushConsensus.sh`.
+Once the job submitted by `submissionConsensus.sh` finishes, we can push the rank consensus network to Synapse with `sh pushConsensus.sh [githubAPIToken]`.
 
 ## Advanced Usage
 

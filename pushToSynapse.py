@@ -12,11 +12,12 @@ def read_args():
     parser.add_argument('method', help="name of method used to generate file")
     parser.add_argument('branch', help="branch of metanetworkSynapse we are using")
     parser.add_argument('token', help="GitHub API token")
+    parser.add_argument('commitMessage',help="commit message to synapse")
     args = parser.parse_args()
     return (args.file, args.parentId, args.annotationFile,
-        args.provenanceFile, args.method, args.branch, args.token)
+        args.provenanceFile, args.method, args.branch, args.token, args.commitMessage)
 
-def push(filePath, parentId, annotationFile, provenanceFile, method, branch, token):
+def push(filePath, parentId, annotationFile, provenanceFile, method, branch, token, commitMessage):
     syn = synapseclient.login()
     with open(annotationFile, 'r') as f:
         entries = f.read().strip().split('\n')
@@ -31,7 +32,7 @@ def push(filePath, parentId, annotationFile, provenanceFile, method, branch, tok
 	config = repo.get_contents("config.sh", ref=branch)
 	thisScript = repo.get_contents("pushToSynapse.py", ref=branch)
 	networkScriptName = get_ns_name(method)
-        networkScript = repo.get_contents("networkScripts/%s.sh" % networkScriptName, 
+        networkScript = repo.get_contents("networkScripts/%s.sh" % networkScriptName,
 	    ref=branch)
         if method == "rankConsensus" or method == "bic":
 	    q = syn.chunkedQuery("select id, name from entity \
@@ -47,12 +48,12 @@ def push(filePath, parentId, annotationFile, provenanceFile, method, branch, tok
 	        buildScript = repo.get_contents("buildOtherNet.R")
 	    else:
 		buildScript = repo.get_contents("buildMpiNet.R")
-    executed += [config.html_url, networkScript.html_url, buildScript.html_url, 
+    executed += [config.html_url, networkScript.html_url, buildScript.html_url,
 	submissionScript.html_url, pushScript.html_url, thisScript.html_url]
     activity = synapseclient.Activity(name='Network Inference',
             description=method, used=used, executed=executed)
     synFile = synapseclient.File(filePath, parent=parentId)
-    synEntity = syn.store(obj=synFile, activity=activity)
+    synEntity = syn.store(obj=synFile, activity=activity, versionComment=commitMessage)
     syn.setAnnotations(synEntity, annotations)
 
 def get_ns_name(method):
@@ -66,8 +67,8 @@ def get_ns_name(method):
 	return method
 
 def main():
-    filePath, parentId, annotationFile, provenanceFile, method, branch, token = read_args()
-    push(filePath, parentId, annotationFile, provenanceFile, method, branch, token)
+    filePath, parentId, annotationFile, provenanceFile, method, branch, token, commitMessage = read_args()
+    push(filePath, parentId, annotationFile, provenanceFile, method, branch, token, commitMessage)
 
 if __name__ == "__main__":
     main()

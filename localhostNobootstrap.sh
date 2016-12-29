@@ -10,7 +10,6 @@ if [ -e ~/.synapseConfig ]; then
 else
     echo "~/.synapseConfig not found, skipping file transfer."
 fi
-ssh -i $key centos@$address "git clone $3 /shared/metanetworkSynapse/"
 scp -i $key $cwd/config.sh centos@$address:/shared/metanetworkSynapse/
 
 # run setup script on remote

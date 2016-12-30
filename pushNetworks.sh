@@ -11,7 +11,7 @@ branch=$( git rev-parse --abbrev-ref HEAD )
 
 for net in ${nets[@]}; do
     if [ -e $outputpath/${net}Network.csv ]; then
-        python2.7 $pathv/pushToSynapse.py "$outputpath/${net}Network.csv" "$parentId" "$outputpath/annoFile.txt" "$outputpath/provenanceFile.txt" $net $branch $token $versionCommitMessage
+        python2.7 $pathv/pushToSynapse.py "$outputpath/${net}Network.csv" "$parentId" "$outputpath/annoFile.txt" "$outputpath/provenanceFile.txt" $net $branch $token "$versionCommitMessage"
     else
         echo "$outputpath/${net}Network.csv not found"
     fi

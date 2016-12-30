@@ -53,8 +53,10 @@ def push(filePath, parentId, annotationFile, provenanceFile, method, branch, tok
     activity = synapseclient.Activity(name='Network Inference',
             description=method, used=used, executed=executed)
     synFile = synapseclient.File(filePath, parent=parentId)
-    synEntity = syn.store(obj=synFile, activity=activity, versionComment=commitMessage)
+    synFile.properties['versionComment'] = commitMessage
+    synEntity = syn.store(obj=synFile, activity=activity)
     syn.setAnnotations(synEntity, annotations)
+
 
 def get_ns_name(method):
     if method == "aracne":

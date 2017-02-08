@@ -28,7 +28,7 @@ def push(filePath, parentId, annotationFile, provenanceFile, method, branch, tok
         used = [r['provenance'] for r in reader if r['executed'] == 'FALSE']
         executed= [r['provenance'] for r in reader if r['executed'] == 'TRUE']
         g = github.Github(token)
-	repo = g.get_repo("philerooski/metanetworkSynapse")
+	repo = g.get_repo("Sage-Bionetworks/metanetworkSynapse")
 	config = repo.get_contents("config.sh", ref=branch)
 	thisScript = repo.get_contents("pushToSynapse.py", ref=branch)
 	networkScriptName = get_ns_name(method)

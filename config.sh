@@ -4,13 +4,16 @@
 outputpath="/shared/network/"
 
 # location of Expression data on Synapse
-dataSynId="syn7342897"
+dataSynId="syn7253793"
 
 # id of folder on Synapse that network files will go to
-parentId="syn7342900"
+parentId="syn7506046"
 
 # path to error output
 errorOutput="$outputpath/errorLogs"
 
 # path to out output
 outOutput="$outputpath/outLogs"
+
+# commit message
+versionCommitMessage="test network"

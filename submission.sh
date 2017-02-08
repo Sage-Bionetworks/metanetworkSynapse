@@ -14,10 +14,10 @@ dataFile="$outputpath/Expression.csv"
 nthreadsLight=16
 
 #number of cores to reserve for regression jobs
-nthreadsMedium=32
+nthreadsMedium=128
 
 #number of cores to reserve for computationally intensive jobs
-nthreadsHeavy=64
+nthreadsHeavy=256
 
 ### build nets ###
 

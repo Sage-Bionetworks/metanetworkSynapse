@@ -4,10 +4,10 @@
 outputpath="/shared/network/"
 
 # location of Expression data on Synapse
-dataSynId="syn7253793"
+dataSynId="syn7984097"
 
 # id of folder on Synapse that network files will go to
-parentId="syn7506046"
+parentId="syn7984378"
 
 # path to error output
 errorOutput="$outputpath/errorLogs"
@@ -16,4 +16,4 @@ errorOutput="$outputpath/errorLogs"
 outOutput="$outputpath/outLogs"
 
 # commit message
-versionCommitMessage="test network"
+versionCommitMessage="ROSMAP reprocessed first try"

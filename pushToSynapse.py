@@ -112,11 +112,10 @@ def push(filePath, parentId, annotationFile, provenanceFile, method, branch, tok
             submissionScript = getPermalink(gh=g, repo="Sage-Bionetworks/metanetworkSynapse", ref="master", path="submission.sh",raw=False)
 	        #pushScript = repo.get_contents("pushNetworks.sh", ref=branch)
             pushScript = getPermalink(gh=g, repo="Sage-Bionetworks/metanetworkSynapse", ref="master", path="pushNetworks.sh",raw=False)
-	    if networkScriptName in ['c3net', 'wgcnaTOM', 'mrnet']:
-            #buildScript = repo.get_contents("buildOtherNet.R")
+
+        if networkScriptName in ['c3net', 'wgcnaTOM', 'mrnet']:
             buildScript = getPermalink(gh=g, repo="Sage-Bionetworks/metanetworkSynapse", ref="master", path="buildOtherNet.R",raw=False)
-	    else:
-            #buildScript = repo.get_contents("buildMpiNet.R")
+        else:
             buildScript = getPermalink(gh=g, repo="Sage-Bionetworks/metanetworkSynapse", ref="master", path="buildMpiNet.R",raw=False)
     executed += [config, networkScript, buildScript, submissionScript, pushScript, thisScript]
     activity = synapseclient.Activity(name='Network Inference', description=method, used=used, executed=executed)

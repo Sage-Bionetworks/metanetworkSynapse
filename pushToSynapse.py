@@ -99,9 +99,8 @@ def push(filePath, parentId, annotationFile, provenanceFile, method, branch, tok
 	    #ref=branch)
         networkScript = getPermalink(gh=g,repo="Sage-Bionetworks/metanetworkSynapse", ref="master", path="networkScripts/%s.sh" % networkScriptName, raw=False)
         if method == "rankConsensus" or method == "bic":
-	        q = syn.chunkedQuery("select id, name from entity where entity.parentId=='%s'" % parentId)
-            [used.append(i['entity.id']) for i in q]
-	    #submissionScript = repo.get_contents("submissionConsensus.sh", ref=branch)
+            q = syn.chunkedQuery("select id, name from entity where entity.parentId=='%s'" % parentId)[used.append(i['entity.id']) for i in q]
+            #submissionScript = repo.get_contents("submissionConsensus.sh", ref=branch)
             submissionScript = getPermalink(gh=g, repo="Sage-Bionetworks/metanetworkSynapse", ref="master", path="submissionConsensus.sh",raw=False)
             #pushScript = repo.get_contents("pushConsensus.sh", ref=branch)
             pushScript = getPermalink(gh=g, repo="Sage-Bionetworks/metanetworkSynapse", ref="master", path="pushConsensus.sh",raw=False)

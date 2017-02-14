@@ -16,4 +16,4 @@ errorOutput="$outputpath/errorLogs"
 outOutput="$outputpath/outLogs"
 
 # commit message
-versionCommitMessage="ROSMAP reprocessed first try"
+versionCommitMessage="ROSMAP fix provenance"

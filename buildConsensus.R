@@ -27,6 +27,8 @@ buildConsensus = function(outputpath,networkFolderId, fileName){
 
   networks$rankConsensus <- metanetwork::rankConsensus(networks)
   cat('built rank consensus\n')
+  cat('write rank consensus\n')
+  write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
   if(!is.null(fileName)){
     library(Matrix)
     networkMethods <- sapply(bar,synGetAnnotation,which='method')
@@ -47,7 +49,6 @@ buildConsensus = function(outputpath,networkFolderId, fileName){
     cat('save bicNetworks\n')
     save(bicNetworks,file=paste0(outputpath,'bicNetworks.rda'))
   }
-  cat('write rank consensus\n')
-  write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
+
 }
 buildConsensus(outputpath,networkFolderId,fileName)

@@ -6,10 +6,12 @@ buildConsensus = function(outputpath,networkFolderId, fileName){
   library(synapseClient)
   library(metanetwork)
   library(reader)
+  library(dplyr)
   synapseLogin()
 
   #get all networks from Synapse
   foo <- synQuery(paste0('select name,id from file where parentId==\'',networkFolderId,'\''))
+  foo <- dplyr::filter(foo,file.name!='bicNetworks.rda' & file.name!='rankConsensusNetwork.csv')
   bar <- lapply(foo$file.id,synGet,downloadLocation=outputpath)
 
   loadNetwork <- function(file){

@@ -43,7 +43,7 @@ buildConsensus = function(outputpath,networkFolderId, fileName){
     dataSet <- data.matrix(dataSet)
     cat('build bicNetworks\n')
     #bicNetworks <- lapply(networks,metanetwork::computeBICcurve,dataSet,maxEdges=1e5)
-    bicNetworks <- metanetwork::computeBICcurve(networks$rankConsensus,dataSet,maxEdges=1.5e5)
+    bicNetworks <- metanetwork::computeBICcurve(networks$rankConsensus,dataSet,maxEdges=2e5)
     #cat('make names of bicNetworks\n')
     #names(bicNetworks) <- 'rankConsensus'
     cat('save bicNetworks\n')

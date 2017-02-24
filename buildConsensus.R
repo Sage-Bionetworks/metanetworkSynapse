@@ -1,27 +1,18 @@
 fileName <- as.character(commandArgs(TRUE)[[1]])
 outputpath <- as.character(commandArgs(TRUE)[[2]])
 networkFolderId <- as.character(commandArgs(TRUE)[[3]])
-provenanceFile <- as.character(commandArgs(TRUE)[[4]])
 
-buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
+buildConsensus = function(outputpath,networkFolderId, fileName){
   library(synapseClient)
   library(metanetwork)
   library(reader)
+  library(dplyr)
   synapseLogin()
-
-  provenance <- read.csv(provenanceFile,stringsAsFactors=F)
-  provenance <- as.matrix(provenance)
 
   #get all networks from Synapse
   foo <- synQuery(paste0('select name,id from file where parentId==\'',networkFolderId,'\''))
+  foo <- dplyr::filter(foo,file.name!='bicNetworks.rda' & file.name!='rankConsensusNetwork.csv')
   bar <- lapply(foo$file.id,synGet,downloadLocation=outputpath)
-  #print(foo)
-
-  #update provenanceFile
-  provenance <- rbind(provenance,cbind(foo$file.id,rep(FALSE,nrow(foo))))
-  write.csv(provenance,paste0(outputpath,'rankConsensusProvenanceFile.txt'),quote=F,row.names=F)
-  #print(provenance)
-  #load networks into R session
 
   loadNetwork <- function(file){
     library(data.table)
@@ -38,6 +29,8 @@ buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
 
   networks$rankConsensus <- metanetwork::rankConsensus(networks)
   cat('built rank consensus\n')
+  cat('write rank consensus\n')
+  write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
   if(!is.null(fileName)){
     library(Matrix)
     networkMethods <- sapply(bar,synGetAnnotation,which='method')
@@ -52,13 +45,12 @@ buildConsensus = function(outputpath,networkFolderId,provenanceFile,fileName){
     dataSet <- data.matrix(dataSet)
     cat('build bicNetworks\n')
     #bicNetworks <- lapply(networks,metanetwork::computeBICcurve,dataSet,maxEdges=1e5)
-    bicNetworks <- metanetwork::computeBICcurve(networks$rankConsensus,dataSet,maxEdges=1e5)
+    bicNetworks <- metanetwork::computeBICcurve(networks$rankConsensus,dataSet,maxEdges=2e5)
     #cat('make names of bicNetworks\n')
     #names(bicNetworks) <- 'rankConsensus'
     cat('save bicNetworks\n')
     save(bicNetworks,file=paste0(outputpath,'bicNetworks.rda'))
   }
-  cat('write rank consensus\n')
-  write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
+
 }
-buildConsensus(outputpath,networkFolderId,provenanceFile,fileName)
+buildConsensus(outputpath,networkFolderId,fileName)

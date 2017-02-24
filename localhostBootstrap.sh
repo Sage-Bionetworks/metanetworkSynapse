@@ -14,4 +14,4 @@ ssh -i $key centos@$address "git clone $3 /shared/metanetworkSynapse/"
 scp -i $key $cwd/config.sh centos@$address:/shared/metanetworkSynapse/
 
 # run setup script on remote
-ssh -n -f -i $key centos@$address "sh -c 'nohup sh /shared/metanetworkSynapse/remote.sh > /dev/null 2>&1 &'"
+ssh -n -f -i $key centos@$address "sh -c 'nohup sh /shared/metanetworkSynapse/remoteBootstrap.sh > /dev/null 2>&1 &'"

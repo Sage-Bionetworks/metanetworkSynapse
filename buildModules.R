@@ -27,14 +27,21 @@ thisFile <- githubr::getPermlink(repository = thisRepo, repositoryPath= 'buildMo
 
 # Synapse parameters
 tmp = synQuery('select name,id from file where projectId == "syn5569099"')
-net.ids = data.frame(rc.net.ids = tmp$file.id[tmp$file.name == 'rankConsensusNetwork2.csv'],
-                     bic.net.ids = tmp$file.id[tmp$file.name == 'bicNetworks2.rda'])
+rc.net.ids = data.frame(rc.id = tmp$file.id[tmp$file.name == 'rankConsensusNetwork2.csv'])
+rc.net.ids$parentId = sapply(rc.net.ids$rc.id, function(id) synGet(as.character(id))@properties$parentId)
+
+bic.net.ids = data.frame(bic.id = tmp$file.id[tmp$file.name == 'bicNetworks2.rda'])
+bic.net.ids$parentId = sapply(bic.net.ids$bic.id, function(id) synGet(as.character(id))@properties$parentId)
+
+net.ids = left_join(rc.net.ids, bic.net.ids) %>%
+  dplyr::rename(rc.net.ids = rc.id, bic.net.ids = bic.id)
 net.ids$NetName = paste0('Net',1:dim(net.ids)[1])
+
 mod.methods = c('CFinder', 'fast_greedy', 'GANXiS', 'hclust', 'infomap', 'label_prop', 
-                'leading_eigen', 'linkcommunities', 'louvain', 'spinglass', 'walktrap')
+                'linkcommunities', 'louvain', 'spinglass', 'walktrap')
 
 # Run module identification for each network with each method
-all.objs = ddply(net.ids, .(NetName), .fun = function(x, mod.methods){
+all.objs = ddply(net.ids[3:4,], .(NetName), .fun = function(x, mod.methods){
   # Get bic network from synapse
   net.obj = synapseClient::synGet(as.character(x$bic.net.ids))
   load(net.obj@filePath)
@@ -46,7 +53,7 @@ all.objs = ddply(net.ids, .(NetName), .fun = function(x, mod.methods){
   # Get the adjacency matrix
   adj <- data.matrix(rc)
   
-  objs = foreach::foreach(method=mod.methods, .packages = c('metanetwork', 'synapseClient'), .combine = c) %dopar% {
+  objs = sapply(mod.methods, function(method, x) {
     find.modules <- switch(method,
                            CFinder = metanetwork::findModules.CFinder,
                            fast_greedy = metanetwork::findModules.fast_greedy,
@@ -60,13 +67,15 @@ all.objs = ddply(net.ids, .(NetName), .fun = function(x, mod.methods){
                            spinglass = metanetwork::findModules.spinglass,
                            walktrap = metanetwork::findModules.walktrap)
     
-    if (method == 'CFinder'){
+    tryCatch(if (method == 'CFinder'){
       mod = find.modules(adj, path = '/mnt/Github/metanetwork/CFinder-2.0.6--1448/')
-    } else if (method == 'GANXiS'){
-      mod = find.modules(adj, '/mnt/Github/metanetwork/GANXiS_v3.0.2/')
-    } else{
-      mod = find.modules(adj)
-    }
+      } else if (method == 'GANXiS'){
+        mod = find.modules(adj, '/mnt/Github/metanetwork/GANXiS_v3.0.2/')
+      } else{
+          mod = find.modules(adj)
+      }, error = function(e){
+        return(NULL)
+      })
     
     NQ = metanetwork::compute.LocalModularity(adj, mod)
     Q = metanetwork::compute.Modularity(adj, mod, method = 'Newman1')
@@ -89,6 +98,7 @@ all.objs = ddply(net.ids, .(NetName), .fun = function(x, mod.methods){
     
     print(paste('Completed', method))
     return(obj$properties$id)
-  }
-}, mod.methods, .parallel = T)
+  }, x)
+  return(data.frame(objs))
+}, mod.methods, .parallel = F, .progress = 'text')
 stopCluster(cl)

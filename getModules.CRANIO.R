@@ -26,6 +26,9 @@ BIC_ID = 'syn7342818'
 mod.methods = c('fast_greedy', 'infomap', 'label_prop', 'walktrap',
                 'louvain', 'leading_eigen')
 
+method = mod.methods[1]
+bic.id = BIC_ID
+
 # Perform module identification
 all.objs <- lapply(mod.methods, function(method, bic.id){
   findModules.algo = switch (method,
@@ -48,8 +51,7 @@ all.objs <- lapply(mod.methods, function(method, bic.id){
   mod <- findModules.algo(adj)
     
   # Find modularity (Q) of the network
-  g <- igraph::graph.adjacency(adj, weighted = NULL, mode = 'upper', diag = FALSE)
-  Q <- igraph::modularity(g, mod[igraph::V(g)$name, 'moduleNumber']+1)
+  Q <- metanetwork::compute.Modularity(adj, mod, method = 'Newman1')
     
   # Write results to synapse
   algo = paste('igraph',method,sep='.')

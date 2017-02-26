@@ -34,7 +34,12 @@ library(parallel)
 library(doParallel)
 library(foreach)
 
-cl = makeCluster(detectCores() - 2)
+nc = detectCores()
+if (nc > 2){
+  cl = makeCluster(nc - 2)
+} else {
+  cl = makeCluster(1)
+}
 registerDoParallel(cl)
 
 #### Login to synapse ####

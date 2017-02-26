@@ -12,7 +12,8 @@ repository = commandArgs(TRUE)[[5]];#'th1vairam/metanetworkSynapse'
 branchName = commandArgs(TRUE)[[6]];#'modules_dev'
 fileName = commandArgs(TRUE)[[7]];#'getModules.R'  
 
-apiKey.file = commandArgs(TRUE)[[8]];#'/shared/apikey.txt' 
+# apiKey.file = commandArgs(TRUE)[[8]];#'/shared/apikey.txt' 
+configPath = commandArgs(TRUE)[[8]];#'/shared/synapseConfig'
 library.path = commandArgs(TRUE)[[9]];#'/shared/mylibs'
 
 #### Set library paths ####
@@ -43,8 +44,7 @@ if (nc > 2){
 registerDoParallel(cl)
 
 #### Login to synapse ####
-apiKey = read.table(apiKey.file)
-synapseLogin(apiKey = apiKey$V1)
+synapseLogin(configPath = configPath)
 
 #### Get the latest commit of used files from github ####
 thisRepo <- githubr::getRepo(repository = repository, ref = "branch", refName = branchName)

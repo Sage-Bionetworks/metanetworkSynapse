@@ -67,6 +67,9 @@ adj = rank.cons
 adj[!as.matrix(bicNetworks$rankConsensus$network)] = 0
 adj = data.matrix(adj)
 
+rm(list = c('bicNetworks', 'rank.cons'))
+gc()
+
 #### Compute modules using specified algorithm ####
 # Get a specific algorithm
 findModules.algo = switch (module.method,

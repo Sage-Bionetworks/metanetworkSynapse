@@ -1,22 +1,22 @@
 # Function to make submission scripts for module generation with sge
 
 #### Get inputs ####
-# Saple query to get all bic network ids
+# Sample query to get all bic network ids
 # tmp = synQuery('select name,id from file where projectId == "syn5584871" and fileType == "csv" and 
 #                dataType == "analysis" and normalizationStatus	== "TRUE" and analysisType	== "statisticalNetworkReconstruction" and
 #                method	== "bic"')
 bic.net.ids = c(rosmap.ad = 'syn6188448', rosmap.nci = 'syn6188212')
 rankCons.net.ids = c(rosmap.ad = 'syn6188446', rosmap.nci = 'syn6188210')
 
-module.methods = c('CFinder', 'GANXiS', 'fast_greedy', 'hclust', 'infomap', 'label_prop', 'leading_eigen',
+module.methods = c('CFinder', 'GANXiS', 'fast_greedy', 'hclust', 'infomap', 'label_prop', 
                    'linkcommunities', 'louvain', 'spinglass', 'walktrap');
 module.exec.paths = c('/shared/Github/metanetworkSynapse/CFinder-2.0.6--1448/',
-                      '/shared/Github/metanetworkSynapse/GANXiS_v3.0.2',
+                      '/shared/Github/metanetworkSynapse/GANXiS_v3.0.2/',
                       rep('./', length(module.methods)-2))
 
 repository.name = 'th1vairam/metanetworkSynapse'
 branch.name = 'modules_dev'
-file.name = 'getModules.R'  
+file.name = 'buildModules.R'  
 
 synapse.config.path = '/shared/synapseConfig'
 r.library.path = '/shared/rlibs'
@@ -25,7 +25,7 @@ r.library.path = '/shared/rlibs'
 system('mkdir ./submission.scripts')
 
 # Open a master template file to store submission commands to sge
-fp = file('./submission.scripts/all.shell.scripts.sh', open = 'w+')
+fp = file('./submission.modules.sh', open = 'w+')
 writeLines('#!/bin/bash', con = fp, sep = '\n')
 
 # Create submission scripts for each network each method
@@ -39,7 +39,11 @@ objs = mapply(function(bicId, rankId, con, modMethods, moduleExecPaths, reposito
                      branchName, fileName, synapseConfigPath, rLibPath), con = fp1, sep = '\n')
     close(fp1)
     
-    writeLines(paste('qsub -cwd', paste0('./', bicId, '.', rankId, '.', modMethod, '.sh')), con = con, sep = '\n')
+    writeLines(paste('qsub -cwd', 
+                     paste0('./submission.scripts/', bicId, '.', rankId, '.', modMethod, '.sh'),
+                     '-o ./submission.scripts/',
+                     '-e ./submission.scripts/'), 
+               con = con, sep = '\n')
   }, modMethods, moduleExecPaths,
                MoreArgs = list(bicId, rankId, con, repositoryName, branchName, fileName, 
                                synapseConfigPath, rLibPath), SIMPLIFY = FALSE)

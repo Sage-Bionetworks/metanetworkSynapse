@@ -53,3 +53,4 @@ objs = mapply(function(bicId, rankId, con, modMethods, moduleExecPaths, reposito
                        synapseConfigPath = synapse.config.path, rLibPath = r.library.path), SIMPLIFY = FALSE)
 
 close(fp)
+

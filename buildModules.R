@@ -107,8 +107,9 @@ fold = Folder(name = 'Modules', parentId = synGet(bic.obj@properties$parentId, d
 fold = synStore(fold)
 
 # Write results to synapse
-write.table(mod, file = paste0(module.method,'.modules.tsv'), row.names=F, quote=F, sep = '\t')
-obj = synapseClient::File(paste0(module.method,'.modules.tsv'), parentId = fold$properties$id)
+system(paste('mkdir',bicNet.id))
+write.table(mod, file = paste0(bicNet.id,'/',module.method,'.modules.tsv'), row.names=F, quote=F, sep = '\t')
+obj = synapseClient::File(paste0(bicNet.id,'/',module.method,'.modules.tsv'), parentId = fold$properties$id)
 synapseClient::annotations(obj) = synapseClient::annotations(bic.obj)
 obj$annotations$fileType = "tsv"
 obj$annotations$analysisType = "moduleIdentification"
@@ -118,8 +119,8 @@ obj$annotations$NQ = NQ
 obj$annotations$Qds = Qds
 obj = synapseClient::synStore(obj, used = all.used.ids, executed = thisFile, activityName = 'Module Identification')
 
-write.table(module.qc.metrics, file = paste0(module.method,'.moduleQCMetrics.tsv'), row.names=F, quote=F, sep = '\t')
-obj.qc = synapseClient::File(paste0(module.method,'.moduleQCMetrics.tsv'), parentId = fold$properties$id)
+write.table(module.qc.metrics, file = paste0(bicNet.id,'/',module.method,'.moduleQCMetrics.tsv'), row.names=F, quote=F, sep = '\t')
+obj.qc = synapseClient::File(paste0(bicNet.id,'/',module.method,'.moduleQCMetrics.tsv'), parentId = fold$properties$id)
 synapseClient::annotations(obj.qc) = synapseClient::annotations(obj)
 obj.qc$annotations$analysisType = "moduleQC"
 obj.qc = synapseClient::synStore(obj.qc, activity = synGetActivity(obj))

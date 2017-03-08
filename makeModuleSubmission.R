@@ -39,7 +39,7 @@ objs = mapply(function(bicId, rankId, con, modMethods, moduleExecPaths, reposito
                      branchName, fileName, synapseConfigPath, rLibPath), con = fp1, sep = '\n')
     close(fp1)
     
-    writeLines(paste('qsub -cwd -V', 
+    writeLines(paste('qsub -cwd -V -pe mpi 4', 
                      '-o', paste0('./submission.scripts/', bicId, '.', rankId, '.', modMethod, '.out'),
                      '-e', paste0('./submission.scripts/', bicId, '.', rankId, '.', modMethod, '.err'), 
                      paste0('./submission.scripts/', bicId, '.', rankId, '.', modMethod, '.sh')),

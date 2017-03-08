@@ -64,7 +64,7 @@ all.used.ids = c(all.used.ids, rankConsNet.id)
 
 # Formulate adjacency matrix
 adj = rank.cons
-adj[!as.matrix(bicNetworks$rankConsensus$network)] = 0
+adj[!as.matrix(bicNetworks$network)] = 0
 adj = data.matrix(adj)
 
 rm(list = c('bicNetworks', 'rank.cons'))

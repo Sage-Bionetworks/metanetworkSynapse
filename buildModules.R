@@ -75,24 +75,22 @@ gc()
 findModules.algo = switch (module.method,
                            CFinder = metanetwork::findModules.CFinder,
                            GANXiS = metanetwork::findModules.GANXiS,
-                           edge_betweenness = metanetwork::findModules.edge_betweenness,
                            fast_greedy = metanetwork::findModules.fast_greedy,
-                           hclust = metanetwork::findModules.hclust,
-                           infomap = metanetwork::findModules.infomap, 
                            label_prop = metanetwork::findModules.label_prop, 
-                           leading_eigen = metanetwork::findModules.leading_eigen,
-                           linkcommunities = metanetwork::findModules.linkcommunities,
                            louvain = metanetwork::findModules.louvain,
                            spinglass = metanetwork::findModules.spinglass,
-                           walktrap = metanetwork::findModules.walktrap)
+                           walktrap = metanetwork::findModules.walktrap,
+                           hclust = metanetwork::findModules.hclust,
+                           infomap = metanetwork::findModules.infomap, 
+                           linkcommunities = metanetwork::findModules.linkcommunities)
 
 # Compute modules
 if (module.method == 'CFinder'){
-  mod = findModules.algo(adj, path = path)
+  mod = findModules.algo(adj, path = path, min.module.size = 20)
 } else if (module.method == 'GANXiS'){
-  mod = findModules.algo(adj, path = path)
+  mod = findModules.algo(adj, path = path, min.module.size = 20)
 } else{
-  mod <- findModules.algo(adj)
+  mod <- findModules.algo(adj, min.module.size = 20)
 }
 
 # Find modularity quality metrics

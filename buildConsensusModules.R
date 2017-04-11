@@ -3,19 +3,19 @@
 
 #### Get command line arguments as inputs ####
 args = commandArgs(TRUE)
-cons.method = args[[1]];#'kmeans'
+cons.method = args[1];#'kmeans'
 
-repository = args[[2]];#'th1vairam/metanetworkSynapse'
-branchName = args[[3]];#'modules_dev'
-fileName = args[[4]];#'buildConsensusModules.R'  
+repository = args[2];#'th1vairam/metanetworkSynapse'
+branchName = args[3];#'modules_dev'
+fileName = args[4];#'buildConsensusModules.R'  
 
-configPath = args[[5]];#'/shared/synapseConfig'
-library.path = args[[6]];#'/shared/mylibs'
+configPath = args[5];#'/shared/synapseConfig'
+library.path = args[6];#'/shared/mylibs'
 
-bicNet.id = args[[7]];#'syn6188448'
+bicNet.id = args[7];#'syn6188448'
 rankConsNet.id = args[[8]];#'syn6188446'
 
-modules.id = args[[9:length(args)]];#'syn8399110'
+modules.id = args[9:length(args)];#'syn8399110'
 
 #### Set library paths ####
 .libPaths(library.path)

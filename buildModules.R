@@ -48,7 +48,7 @@ synapseLogin(configPath = configPath)
 
 #### Get the latest commit of used files from github ####
 thisRepo <- githubr::getRepo(repository = repository, ref = "branch", refName = branchName)
-thisFile <- githubr::getPermlink(repository = thisRepo, repositoryPath= paste0('R/', fileName))
+thisFile <- githubr::getPermlink(repository = thisRepo, repositoryPath= fileName)
 
 #### Get input data from synapse and formulate adjacency matrix ####
 # Get bicNetworks.rda

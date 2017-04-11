@@ -94,6 +94,7 @@ if (module.method == 'CFinder'){
 }
 
 # Find modularity quality metrics
+rownames(mod) = mod$Gene.ID
 mod = mod[rownames(adj),]
 NQ = metanetwork::compute.LocalModularity(adj, mod)
 Q = metanetwork::compute.Modularity(adj, mod, method = 'Newman1')

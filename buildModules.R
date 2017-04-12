@@ -55,6 +55,7 @@ thisFile <- githubr::getPermlink(repository = thisRepo, repositoryPath= fileName
 bic.obj = synGet(bicNet.id)
 load(bic.obj@filePath) # this will load an R object nameds bicNetworks
 all.used.ids = bicNet.id # for provenance
+writeLines(paste('Total number of edges', sum(as.matrix(bicNetworks$network))))
 
 # Get rankconsensus network for weights
 rank.cons = data.table::fread(synGet(rankConsNet.id)@filePath, data.table = F, header = T)
@@ -94,6 +95,7 @@ if (module.method == 'CFinder'){
 }
 
 # Find modularity quality metrics
+mod = as.data.frame(mod)
 rownames(mod) = mod$Gene.ID
 mod = mod[rownames(adj),]
 NQ = metanetwork::compute.LocalModularity(adj, mod)

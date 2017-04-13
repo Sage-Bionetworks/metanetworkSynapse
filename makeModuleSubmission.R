@@ -1,18 +1,20 @@
 # Function to make submission scripts for module generation with sge
 
 #### Get inputs ####
-# Sample query to get all bic network ids
-# tmp = synQuery('select name,id from file where projectId == "syn5584871" and fileType == "csv" and 
-#                dataType == "analysis" and normalizationStatus	== "TRUE" and analysisType	== "statisticalNetworkReconstruction" and
-#                method	== "bic"')
-bic.net.ids = c(rosmap.ad = 'syn6188448', rosmap.nci = 'syn6188212')
-rankCons.net.ids = c(rosmap.ad = 'syn6188446', rosmap.nci = 'syn6188210')
+bic.net.ids = c(MayoRNAseq.TCX = 'syn8276546', MayoRNAseq.CBE = 'syn8281722', MSBB.IFG = 'syn8349785', 
+                MSBB.PHG = 'syn8345109', MSBB.STG = 'syn8343704', MSBB.FP = 'syn8340017', MayoEGWAS.TCX = 'syn8419174',
+                MayoEGWAS.CBE = 'syn8421913')
 
-module.methods = c('CFinder', 'GANXiS', 'fast_greedy', 'hclust', 'infomap', 'label_prop', 
-                   'linkcommunities', 'louvain', 'spinglass', 'walktrap');
-module.exec.paths = c('/shared/Github/metanetworkSynapse/CFinder-2.0.6--1448/',
-                      '/shared/Github/metanetworkSynapse/GANXiS_v3.0.2/',
-                      rep('./', length(module.methods)-2))
+rankCons.net.ids = c(MayoRNAseq.TCX = 'syn8276556', MayoRNAseq.CBE = 'syn8281727',  MSBB.IFG = 'syn8349787',
+                     MSBB.PHG = 'syn8345270', MSBB.STG = 'syn8343716', MSBB.FP = 'syn8340019', MayoEGWAS.TCX = 'syn8419231',
+                     MayoEGWAS.CBE = 'syn8421921')
+
+module.methods = c('CFinder', 'GANXiS', 'fast_greedy', 
+                   'label_prop', 'louvain', 'spinglass',
+                   'walktrap', 'infomap', 'linkcommunities');
+module.exec.paths = c('/shared/CFinder-2.0.6--1448/',
+                      '/shared/GANXiS_v3.0.2/',
+                      replicate(6, './'))
 
 repository.name = 'th1vairam/metanetworkSynapse'
 branch.name = 'modules_dev'
@@ -22,6 +24,7 @@ synapse.config.path = '/shared/synapseConfig'
 r.library.path = '/shared/rlibs'
 
 # Make submission directory
+system('rm -rf ./submission.scripts')
 system('mkdir ./submission.scripts')
 
 # Open a master template file to store submission commands to sge
@@ -39,7 +42,8 @@ objs = mapply(function(bicId, rankId, con, modMethods, moduleExecPaths, reposito
                      branchName, fileName, synapseConfigPath, rLibPath), con = fp1, sep = '\n')
     close(fp1)
     
-    writeLines(paste('qsub -cwd -V -pe mpi 4', 
+    writeLines(paste('qsub -cwd -V',
+                     '-pe mpi 4',
                      '-o', paste0('./submission.scripts/', bicId, '.', rankId, '.', modMethod, '.out'),
                      '-e', paste0('./submission.scripts/', bicId, '.', rankId, '.', modMethod, '.err'), 
                      paste0('./submission.scripts/', bicId, '.', rankId, '.', modMethod, '.sh')),

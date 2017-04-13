@@ -2,15 +2,15 @@
 #### Function to compute modules of weighted bicNetworks from synapse and push results back to synapse ####
 
 #### Get command line arguments as inputs ####
-bicNet.id = commandArgs(TRUE)[[1]];#'syn6188448'
-rankConsNet.id = commandArgs(TRUE)[[2]];#'syn6188446'
+bicNet.id = commandArgs(TRUE)[[1]];#'syn8268669'
+rankConsNet.id = commandArgs(TRUE)[[2]];#'syn8268680'
 
 module.method = commandArgs(TRUE)[[3]];#'fast_greedy'
 path = commandArgs(TRUE)[[4]];# '/shared/Github/metanetwork/CFinder-2.0.6--1448/' or '/shared/Github/metanetwork/GANXiS_v3.0.2/'
 
 repository = commandArgs(TRUE)[[5]];#'th1vairam/metanetworkSynapse'
 branchName = commandArgs(TRUE)[[6]];#'modules_dev'
-fileName = commandArgs(TRUE)[[7]];#'getModules.R'  
+fileName = commandArgs(TRUE)[[7]];#'buildModules.R'  
 
 # apiKey.file = commandArgs(TRUE)[[8]];#'/shared/apikey.txt' 
 configPath = commandArgs(TRUE)[[8]];#'/shared/synapseConfig'
@@ -48,13 +48,14 @@ synapseLogin(configPath = configPath)
 
 #### Get the latest commit of used files from github ####
 thisRepo <- githubr::getRepo(repository = repository, ref = "branch", refName = branchName)
-thisFile <- githubr::getPermlink(repository = thisRepo, repositoryPath= 'buildModules.R')
+thisFile <- githubr::getPermlink(repository = thisRepo, repositoryPath= fileName)
 
-#### Get input data from synapse and formulate and adjacency matrix ####
+#### Get input data from synapse and formulate adjacency matrix ####
 # Get bicNetworks.rda
 bic.obj = synGet(bicNet.id)
 load(bic.obj@filePath) # this will load an R object nameds bicNetworks
 all.used.ids = bicNet.id # for provenance
+writeLines(paste('Total number of edges', sum(as.matrix(bicNetworks$network))))
 
 # Get rankconsensus network for weights
 rank.cons = data.table::fread(synGet(rankConsNet.id)@filePath, data.table = F, header = T)
@@ -75,27 +76,28 @@ gc()
 findModules.algo = switch (module.method,
                            CFinder = metanetwork::findModules.CFinder,
                            GANXiS = metanetwork::findModules.GANXiS,
-                           edge_betweenness = metanetwork::findModules.edge_betweenness,
                            fast_greedy = metanetwork::findModules.fast_greedy,
-                           hclust = metanetwork::findModules.hclust,
-                           infomap = metanetwork::findModules.infomap, 
                            label_prop = metanetwork::findModules.label_prop, 
-                           leading_eigen = metanetwork::findModules.leading_eigen,
-                           linkcommunities = metanetwork::findModules.linkcommunities,
                            louvain = metanetwork::findModules.louvain,
                            spinglass = metanetwork::findModules.spinglass,
-                           walktrap = metanetwork::findModules.walktrap)
+                           walktrap = metanetwork::findModules.walktrap,
+                           hclust = metanetwork::findModules.hclust,
+                           infomap = metanetwork::findModules.infomap, 
+                           linkcommunities = metanetwork::findModules.linkcommunities)
 
 # Compute modules
 if (module.method == 'CFinder'){
-  mod = findModules.algo(adj, path = path)
+  mod = findModules.algo(adj, path = path, min.module.size = 20)
 } else if (module.method == 'GANXiS'){
-  mod = findModules.algo(adj, path = path)
+  mod = findModules.algo(adj, path = path, min.module.size = 20)
 } else{
-  mod <- findModules.algo(adj)
+  mod <- findModules.algo(adj, min.module.size = 20)
 }
 
 # Find modularity quality metrics
+mod = as.data.frame(mod)
+rownames(mod) = mod$Gene.ID
+mod = mod[rownames(adj),]
 NQ = metanetwork::compute.LocalModularity(adj, mod)
 Q = metanetwork::compute.Modularity(adj, mod, method = 'Newman1')
 Qds = metanetwork::compute.ModularityDensity(adj, mod)

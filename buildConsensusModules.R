@@ -45,7 +45,7 @@ if (nc > 2){
 registerDoParallel(cl)
 
 #### Login to synapse ####
-synapseLogin(configPath = configPath)
+synapseLogin()
 
 #### Get the latest commit of used files from github ####
 thisRepo <- githubr::getRepo(repository = repository, ref = "branch", refName = branchName)

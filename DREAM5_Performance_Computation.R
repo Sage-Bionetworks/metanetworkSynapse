@@ -69,6 +69,7 @@ all.results = mapply(function(gld.std.id, gene.map.id, rank.cons.id, bic.id){
   auc.raw = performance(pred, measure = 'auc')@y.values[[1]]
   pr = performance(pred, measure = 'prec')@y.values[[1]]
   rc = performance(pred, measure = 'rec')@y.values[[1]]
+  prcurve.raw = performance(pred,measure='prec',x.measure='rec')
   aupr.raw = pracma::trapz(rc[!is.na(rc) & !is.na(pr)], pr[!is.na(rc) & !is.na(pr)])
     
   # Get bic network
@@ -89,6 +90,7 @@ all.results = mapply(function(gld.std.id, gene.map.id, rank.cons.id, bic.id){
   auc.bic = performance(pred, measure = 'auc')@y.values[[1]]
   pr = performance(pred, measure = 'prec')@y.values[[1]]
   rc = performance(pred, measure = 'rec')@y.values[[1]]
+  prcurve.bic = performance(pred,measure='prec',x.measure='rec')
   aupr.bic = pracma::trapz(rc[!is.na(rc) & !is.na(pr)], pr[!is.na(rc) & !is.na(pr)])
   
   tmp.bic.adj[tmp.bic.adj != 0] = 1
@@ -100,8 +102,84 @@ all.results = mapply(function(gld.std.id, gene.map.id, rank.cons.id, bic.id){
                                        tn = sum(tmp.bic.adj[tmp.gs.adj == 0] == 0)/2,
                                        fn = sum(tmp.bic.adj[tmp.gs.adj == 1] == 0)/2),
               roc.raw = roc.raw,
-              roc.bic = roc.bic))
+              roc.bic = roc.bic,
+              prcurve.raw=prcurve.raw,
+              prcurve.bic=prcurve.bic))
 }, GOLD.STD.IDs, GENE.MAP.IDs, RANK.CONS.IDs, BIC.IDs, SIMPLIFY = F)
+
+####ROC curves
+
+getRocForD5 <- function(communityId,gsId,mapId){
+  #communityId <- 'syn8669334'
+  #gsId <- 'syn2787240'
+  #mapId <- 'syn2787224'
+  
+  communityId <- 'syn8669699'
+  gsId <- 'syn2787243'
+  mapId <- 'syn2787232'
+  communityIdObj <- synapseClient::synGet(communityId)
+  communityNetwork <- data.table::fread(synapseClient::getFileLocation(communityIdObj),
+                                        data.table=F)
+
+  colnames(communityNetwork)[1:3] <- c('from','to','weight')
+  communityNetwork <- dplyr::select(communityNetwork,from,to,weight)
+    
+  gsIdObj <- synapseClient::synGet(gsId)
+  gsNetwork <- data.table::fread(synapseClient::getFileLocation(gsIdObj),
+                                 data.table=F)
+
+  
+  mapIdObj <- synapseClient::synGet(mapId)
+  mapTable <- data.table::fread(synapseClient::getFileLocation(mapIdObj),
+                                data.table=F)
+  gsNetwork <- dplyr::filter(gsNetwork,V3 == 1)
+  colnames(gsNetwork) = c('from','to','weight')
+  
+  
+  colnames(mapTable) = c('name','Gene.ID')
+  
+  g = igraph::graph_from_data_frame(gsNetwork, vertices = mapTable)
+  g.community = igraph::graph_from_data_frame(communityNetwork)
+  g.community.adj = igraph::as_adjacency_matrix(g.community,attr='weight',type='both')
+  rownames(g.community.adj) <- names(V(g.community))
+  colnames(g.community.adj) <- names(V(g.community))
+  
+  gs.adj = igraph::as_adjacency_matrix(g, type = 'both') 
+  rownames(gs.adj) = V(g)$Gene.ID
+  colnames(gs.adj) = V(g)$Gene.ID
+  
+  keepGene <- intersect(colnames(g.community.adj),colnames(gs.adj))
+  g.community.adj <- g.community.adj[keepGene,keepGene]
+  gs.adj <- gs.adj[keepGene,keepGene]
+  
+  g.community.adj = g.community.adj/2 + t(g.community.adj)/2
+  gs.adj = gs.adj + t(gs.adj)
+  gs.adj[gs.adj > 1] = 1
+  
+  tmp.adj = as.vector(as.matrix(g.community.adj))
+  tmp.gs.adj = as.vector(as.matrix(gs.adj))
+  pred = ROCR::prediction(tmp.adj, tmp.gs.adj)
+  res <- list()
+  res$roc.raw = performance(pred, measure = 'tpr', x.measure = 'fpr')
+  res$pr.raw = performance(pred,measure='prec',x.measure='rec')
+  return(res)
+}
+
+plot(all.results[[3]]$prcurve.raw,col='red',main='E. Coli',ylim=c(0,1),xlim=c(0,1))
+par(new=T)
+plot(res$pr.raw,col='blue',ylim=c(0,1),xlim=c(0,1))
+
+
+####PR curves
+
+
+#####AUC
+
+
+#####AUPR
+
+
+
 
 pdf(file = 'ROCPlots.pdf', width = 10, height = 10)
 for (i in 1:4){

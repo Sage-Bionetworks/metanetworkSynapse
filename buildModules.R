@@ -10,7 +10,7 @@ path = commandArgs(TRUE)[[4]];#'/shared/Github/metanetwork/CFinder-2.0.6--1448/'
 
 repository = commandArgs(TRUE)[[5]];#'th1vairam/metanetworkSynapse'
 branchName = commandArgs(TRUE)[[6]];#'modules_dev'
-fileName = commandArgs(TRUE)[[7]];#'getModules.R'  
+fileName = commandArgs(TRUE)[[7]];#'buildModules.R'  
 
 # apiKey.file = commandArgs(TRUE)[[8]];#'/shared/apikey.txt' 
 configPath = commandArgs(TRUE)[[8]];#'/home/rstudio/synapseConfig'
@@ -48,13 +48,14 @@ synapseLogin(configPath = configPath)
 
 #### Get the latest commit of used files from github ####
 thisRepo <- githubr::getRepo(repository = repository, ref = "branch", refName = branchName)
-thisFile <- githubr::getPermlink(repository = thisRepo, repositoryPath= 'buildModules.R')
+thisFile <- githubr::getPermlink(repository = thisRepo, repositoryPath= fileName)
 
-#### Get input data from synapse and formulate and adjacency matrix ####
+#### Get input data from synapse and formulate adjacency matrix ####
 # Get bicNetworks.rda
 bic.obj = synGet(bicNet.id)
 load(bic.obj@filePath) # this will load an R object nameds bicNetworks
 all.used.ids = bicNet.id # for provenance
+writeLines(paste('Total number of edges', sum(as.matrix(bicNetworks$network))))
 
 # Get rankconsensus network for weights
 rank.cons = data.table::fread(synGet(rankConsNet.id)@filePath, data.table = F, header = T)
@@ -93,6 +94,9 @@ if (module.method == 'CFinder'){
 }
 
 # Find modularity quality metrics
+mod = as.data.frame(mod)
+rownames(mod) = mod$Gene.ID
+mod = mod[rownames(adj),]
 NQ = metanetwork::compute.LocalModularity(adj, mod)
 Q = metanetwork::compute.Modularity(adj, mod, method = 'Newman1')
 Qds = metanetwork::compute.ModularityDensity(adj, mod)

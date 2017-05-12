@@ -2,19 +2,19 @@
 #### Function to compute modules of weighted bicNetworks from synapse and push results back to synapse ####
 
 #### Get command line arguments as inputs ####
-bicNet.id = commandArgs(TRUE)[[1]];#'syn6188448'
-rankConsNet.id = commandArgs(TRUE)[[2]];#'syn6188446'
+bicNet.id = commandArgs(TRUE)[[1]];#'syn8268669'
+rankConsNet.id = commandArgs(TRUE)[[2]];#'syn8268680'
 
 module.method = commandArgs(TRUE)[[3]];#'fast_greedy'
-path = commandArgs(TRUE)[[4]];# '/shared/Github/metanetwork/CFinder-2.0.6--1448/' or '/shared/Github/metanetwork/GANXiS_v3.0.2/'
+path = commandArgs(TRUE)[[4]];#'/shared/Github/metanetwork/CFinder-2.0.6--1448/' or '/shared/Github/metanetwork/GANXiS_v3.0.2/'
 
 repository = commandArgs(TRUE)[[5]];#'th1vairam/metanetworkSynapse'
 branchName = commandArgs(TRUE)[[6]];#'modules_dev'
 fileName = commandArgs(TRUE)[[7]];#'getModules.R'  
 
 # apiKey.file = commandArgs(TRUE)[[8]];#'/shared/apikey.txt' 
-configPath = commandArgs(TRUE)[[8]];#'/shared/synapseConfig'
-library.path = commandArgs(TRUE)[[9]];#'/shared/mylibs'
+configPath = commandArgs(TRUE)[[8]];#'/home/rstudio/synapseConfig'
+library.path = commandArgs(TRUE)[[9]];#'/mnt/mylibs'
 
 #### Set library paths ####
 .libPaths(library.path)
@@ -80,17 +80,16 @@ findModules.algo = switch (module.method,
                            louvain = metanetwork::findModules.louvain,
                            spinglass = metanetwork::findModules.spinglass,
                            walktrap = metanetwork::findModules.walktrap,
-                           hclust = metanetwork::findModules.hclust,
                            infomap = metanetwork::findModules.infomap, 
                            linkcommunities = metanetwork::findModules.linkcommunities)
 
 # Compute modules
 if (module.method == 'CFinder'){
-  mod = findModules.algo(adj, path = path, min.module.size = 20)
+  mod = findModules.algo(adj, path = path, nperm = 100, min.module.size = 30)
 } else if (module.method == 'GANXiS'){
-  mod = findModules.algo(adj, path = path, min.module.size = 20)
+  mod = findModules.algo(adj, path = path, nperm = 100, min.module.size = 30)
 } else{
-  mod <- findModules.algo(adj, min.module.size = 20)
+  mod <- findModules.algo(adj, nperm = 100, min.module.size = 30)
 }
 
 # Find modularity quality metrics

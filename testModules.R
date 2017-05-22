@@ -1,57 +1,84 @@
-## Module test with 100 gene network
-# Function to get bicNetworks from synapse and find modules and push results back to synapse
+#!/bin/bash
+#### Function to identify regulators based on weighted bicNetworks and differential expression results from synapse and push results back to synapse ####
 
-# Load libraries
+#### Get command line arguments as inputs ####
+bicNet.id = 'syn8281722'
+rankConsNet.id = 'syn8281727'
+
+module.method = 'CFinder'
+path = '/mnt/Github/metanetwork/CFinder-2.0.6--1448/'
+
+repository = 'th1vairam/metanetworkSynapse'
+branchName = 'modules_dev'
+fileName = 'buildModules.R'  
+
+# apiKey.file = commandArgs(TRUE)[[8]];#'/shared/apikey.txt' 
+configPath = '/home/rstudio/.synapseConfig'
+library.path = '/mnt/mylibs'
+
+#### Set library paths ####
+.libPaths(library.path)
+
+#### Load Libraries ####
 library(data.table)
 library(tidyr)
 library(plyr)
 library(dplyr)
-library(stringr)
 
 library(igraph)
 library(metanetwork)
 
 library(synapseClient)
+library(githubr)
 
-library(foreach)
+library(parallel)
 library(doParallel)
+library(foreach)
 
-cl = makeCluster(2)
+nc = detectCores()
+if (nc > 2){
+  cl = makeCluster(nc - 2)
+} else {
+  cl = makeCluster(1)
+}
 registerDoParallel(cl)
 
-synapseLogin()
+#### Login to synapse ####
+synapseLogin(configPath = configPath)
 
-# Synapse parameters
-rc.net.id = 'syn7499788'
-bic.net.id = 'syn7805122'
+#### Get the latest commit of used files from github ####
+thisRepo <- githubr::getRepo(repository = repository, ref = "branch", refName = branchName)
+thisFile <- githubr::getPermlink(repository = thisRepo, repositoryPath= fileName)
 
-# Get bic network from synapse
-net.obj = synapseClient::synGet(bic.net.id)
-load(net.obj@filePath)
+#### Get input data from synapse and formulate adjacency matrix ####
+# Get bicNetworks.rda
+bic.obj = synGet(bicNet.id)
+load(bic.obj@filePath) # this will load an R object nameds bicNetworks
+all.used.ids = bicNet.id # for provenance
+writeLines(paste('Total number of edges', sum(as.matrix(bicNetworks$network))))
 
-# Get rank consensus network from synapse
-rc = read.csv(synGet(rc.net.id)@filePath, row.names = 1)
-rc[which(!(bicNetworks$network),arr.ind = T)] = 0
+# Get rankconsensus network for weights
+rank.cons = data.table::fread(synGet(rankConsNet.id)@filePath, data.table = F, header = T)
+rownames(rank.cons) = rank.cons$V1
+rank.cons$V1 = NULL
+all.used.ids = c(all.used.ids, rankConsNet.id)
 
-# Get the adjacency matrix
-adj <- data.matrix(rc)
+# Formulate adjacency matrix
+adj = rank.cons
+adj[!as.matrix(bicNetworks$network)] = 0
+adj = data.matrix(adj)
 
-# Perform module identification
-mod1 = findModules.CFinder(adj, path = '/mnt/Github/metanetwork/CFinder-2.0.6--1448/')
-# mod2 = findModules.edge_betweenness(adj)
-mod3 = findModules.fast_greedy(adj)
-mod4 = findModules.GANXiS(adj, '/mnt/Github/metanetwork/GANXiS_v3.0.2/')
-mod5 = findModules.hclust(adj)
-mod6 = findModules.infomap(adj)
-mod7 = findModules.label_prop(adj)
-mod8 = findModules.leading_eigen(adj)
-mod9 = findModules.linkcommunities(adj, min.module.size = 0)
-mod10 = findModules.louvain(adj)
-mod11 = findModules.spinglass(adj)
-mod12 = findModules.walktrap(adj)
+rm(list = c('bicNetworks', 'rank.cons'))
+gc()
 
-NQ = compute.LocalModularity(adj, mod3)
-Q = compute.Modularity(adj, mod3, method = 'Newman1')
-Q = compute.Modularity(adj, mod3, method = 'Newman2')
-Qds = compute.ModularityDensity(adj, mod3)
-MC = compute.ModuleQualityMetric(adj, mod3)
+#### Compute modules using specified algorithm ####
+# Get a specific algorithm
+CFinder = metanetwork::findModules.CFinder(adj, '/mnt/Github/metanetwork/CFinder-2.0.6--1448/', nperm = 3, min.module.size = 30)
+GANXiS = metanetwork::findModules.GANXiS(adj, '/mnt/Github/metanetwork/GANXiS_v3.0.2/', nperm = 3, min.module.size = 30)
+fast_greedy = metanetwork::findModules.fast_greedy(adj, nperm = 3, min.module.size = 30)
+label_prop = metanetwork::findModules.label_prop(adj, nperm = 3, min.module.size = 30)
+louvain = metanetwork::findModules.louvain(adj, nperm = 3, min.module.size = 30)
+walktrap = metanetwork::findModules.walktrap(adj, nperm = 3, min.module.size = 30)
+infomap = metanetwork::findModules.infomap(adj, nperm = 3, min.module.size = 30)
+linkcommunities = metanetwork::findModules.linkcommunities(adj, nperm = 3, min.module.size = 30)
+spinglass = metanetwork::findModules.spinglass(adj, nperm = 3, min.module.size = 30)

@@ -99,7 +99,7 @@ fold = Folder(name = 'Modules', parentId = synGet(bic.obj@properties$parentId, d
 fold = synStore(fold)
 
 # Create a methods folder
-fold1 = Folder(name = module.method, parentId = fold@properties$parentId)
+fold1 = Folder(name = module.method, parentId = fold@properties$id)
 fold1 = synStore(fold1)
 
 # Write results to synapse

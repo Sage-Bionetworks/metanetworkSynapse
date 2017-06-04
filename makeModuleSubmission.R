@@ -31,9 +31,9 @@ writeLines('#!/bin/bash', con = fp, sep = '\n')
 # Create submission scripts for each network each method
 objs = mapply(function(bicId, rankId, con, runId, modMethods, moduleExecPaths, repositoryName,
                        branchName, fileName, synapseConfigPath, rLibPath){
-  obj = mapply(function(modMethod, moduleExecPath, bicId, rankId, con, runId, repositoryName, branchName,
-                        fileName, synapseConfigPath, rLibPath){
-    for(i in runId){
+  for(i in runId){
+    obj = mapply(function(modMethod, moduleExecPath, bicId, rankId, con, runId, repositoryName, branchName,
+                          fileName, synapseConfigPath, rLibPath,i){
       fp1 = file(paste0('./submission.scripts/', bicId, '.', rankId, '.', modMethod, '.', i, '.sh'), open = 'w+')
       writeLines('#!/bin/bash', con = fp1, sep = '\n')
       writeLines(paste('Rscript -e "source(\'buildModules.R\')"', bicId,  rankId, modMethod, moduleExecPath, i, 
@@ -46,11 +46,11 @@ objs = mapply(function(bicId, rankId, con, runId, modMethods, moduleExecPaths, r
                        '-e', paste0('./submission.scripts/', bicId, '.', rankId, '.', modMethod, '.', i, '.err'),
                        paste0('./submission.scripts/', bicId, '.', rankId, '.', modMethod, '.', i, '.sh')),
                  con = con, sep = '\n')
-    }
-  }, 
-  modMethods, moduleExecPaths,
-  MoreArgs = list(bicId, rankId, con, runId, repositoryName, branchName, fileName,
-                  synapseConfigPath, rLibPath), SIMPLIFY = FALSE)
+    },
+    modMethods, moduleExecPaths,
+    MoreArgs = list(bicId, rankId, con, runId, repositoryName, branchName, fileName,
+                    synapseConfigPath, rLibPath,i), SIMPLIFY = FALSE)
+  }
 },
 bic.net.ids, rankCons.net.ids,
 MoreArgs = list(con = fp, runId = run.id, modMethods = module.methods, moduleExecPaths = module.exec.paths,

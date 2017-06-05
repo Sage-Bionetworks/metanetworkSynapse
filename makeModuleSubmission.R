@@ -1,13 +1,15 @@
 # Function to make submission scripts for module generation with sge
 
 #### Get inputs ####
-bic.net.ids = c(ROSMAP = 'syn8268669', MayoRNAseq.TCX = 'syn8276546', MayoRNAseq.CBE = 'syn8281722', MSBB.IFG = 'syn8349785',
+bic.net.ids = c(MayoRNAseq.TCX = 'syn8276546', MayoRNAseq.CBE = 'syn8281722', MSBB.IFG = 'syn8349785',
                 MSBB.PHG = 'syn8345109', MSBB.STG = 'syn8343704', MSBB.FP = 'syn8340017', MayoEGWAS.TCX = 'syn8419174',
                 MayoEGWAS.CBE = 'syn8421913')
+# ROSMAP = 'syn8268669', 
 
-rankCons.net.ids = c(ROSMAP = 'syn8268680', MayoRNAseq.TCX = 'syn8276556', MayoRNAseq.CBE = 'syn8281727',  MSBB.IFG = 'syn8349787',
+rankCons.net.ids = c(MayoRNAseq.TCX = 'syn8276556', MayoRNAseq.CBE = 'syn8281727',  MSBB.IFG = 'syn8349787',
                      MSBB.PHG = 'syn8345270', MSBB.STG = 'syn8343716', MSBB.FP = 'syn8340019', MayoEGWAS.TCX = 'syn8419231',
                      MayoEGWAS.CBE = 'syn8421921')
+# ROSMAP = 'syn8268680', 
 
 module.methods = c('CFinder', 'GANXiS', 'fast_greedy', 'label_prop', 'louvain', 'spinglass', 'walktrap', 'infomap', 'linkcommunities');
 module.exec.paths = c('/shared/metanetwork/CFinder-2.0.6--1448/', '/shared/metanetwork/GANXiS_v3.0.2/', replicate(7, './'));

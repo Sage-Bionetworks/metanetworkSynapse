@@ -1,6 +1,13 @@
 # Function to make submission scripts for consensus module generation with sge
 
-#### Get inputs ####
+library('dplyr')
+library('plyr')
+
+library('synapseClient')
+synapseLogin()
+
+
+### Get inputs ####
 bic.net.ids = c(ROSMAP = 'syn8268669', MayoRNAseq.TCX = 'syn8276546', MayoRNAseq.CBE = 'syn8281722', MSBB.IFG = 'syn8349785', 
                 MSBB.PHG = 'syn8345109', MSBB.STG = 'syn8343704', MSBB.FP = 'syn8340017', MayoEGWAS.TCX = 'syn8419174',
                 MayoEGWAS.CBE = 'syn8421913')

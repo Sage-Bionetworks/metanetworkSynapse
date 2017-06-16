@@ -93,6 +93,7 @@ partition.adj = lapply(modules.id, function(id){
   fread(synGet(id)@filePath, header = T, data.table =F)
 })
 names(partition.adj) = paste0('Method', 1:length(partition.adj))
+all.used.ids = c(all.used.ids, modules.id)
 
 partition.adj = mapply(function(mod, method){
   mod = mod %>%
@@ -111,11 +112,11 @@ partition.adj = partition.adj[sample(1:dim(partition.adj)[1], dim(partition.adj)
 
 #### Compute consensus modules using specified algorithm ####
 # Compute consensus modules nreps and choose the best solution
-mod <- findModules.consensusCluster(d = t(partition.adj), maxK = 100, reps = 50, pItem = 0.8, pFeature = 1,
-                                    clusterAlg = cons.method, innerLinkage = "average", distance = "pearson",
-                                    changeCDFArea = 0.001, nbreaks = 10, seed = 123456789.12345,
-                                    weightsItem = NULL, weightsFeature = NULL, corUse = "everything",
-                                    verbose = F)
+mod <- metanetwork::findModules.consensusCluster(d = t(partition.adj), maxK = 100, reps = 50, pItem = 0.8, pFeature = 1,
+                                                 clusterAlg = cons.method, innerLinkage = "average", distance = "pearson",
+                                                 changeCDFArea = 0.001, nbreaks = 10, seed = 123456789.12345,
+                                                 weightsItem = NULL, weightsFeature = NULL, corUse = "everything",
+                                                 verbose = F)
 
 # Find modularity quality metrics
 mod = as.data.frame(mod)
@@ -137,8 +138,8 @@ fold1 = synStore(fold1)
 
 # Write results to synapse
 system(paste('mkdir',bicNet.id))
-write.table(mod, file = paste0(bicNet.id,'/Consensus.',cons.method,'.modules.tsv'), row.names=F, quote=F, sep = '\t')
-obj = synapseClient::File(paste0(bicNet.id,'/Consensus.',cons.method,'.modules.tsv'), parentId = fold1$properties$id)
+write.table(mod, file = paste0(bicNet.id,'/Consensus.',cons.method,'.',run.id,'.modules.tsv'), row.names=F, quote=F, sep = '\t')
+obj = synapseClient::File(paste0(bicNet.id,'/Consensus.',cons.method,'.',run.id,'.modules.tsv'), parentId = fold1$properties$id)
 synapseClient::annotations(obj) = synapseClient::annotations(bic.obj)
 obj$annotations$fileType = "tsv"
 obj$annotations$analysisType = "consensusModuleIdentification"
@@ -148,8 +149,8 @@ obj$annotations$NQ = NQ
 obj$annotations$Qds = Qds
 obj = synapseClient::synStore(obj, used = all.used.ids, executed = thisFile, activityName = 'Consensus Module Identification')
 
-write.table(module.qc.metrics, file = paste0(bicNet.id,'/Consensus.',cons.method,'.moduleQCMetrics.tsv'), row.names=F, quote=F, sep = '\t')
-obj.qc = synapseClient::File(paste0(bicNet.id,'/Consensus.',cons.method,'.moduleQCMetrics.tsv'), parentId = fold1$properties$id)
+write.table(module.qc.metrics, file = paste0(bicNet.id,'/Consensus.',cons.method,'.',run.id,'.moduleQCMetrics.tsv'), row.names=F, quote=F, sep = '\t')
+obj.qc = synapseClient::File(paste0(bicNet.id,'/Consensus.',cons.method,'.',run.id,'.moduleQCMetrics.tsv'), parentId = fold1$properties$id)
 synapseClient::annotations(obj.qc) = synapseClient::annotations(obj)
 obj.qc$annotations$analysisType = "moduleQC"
 obj.qc = synapseClient::synStore(obj.qc, activity = synGetActivity(obj))

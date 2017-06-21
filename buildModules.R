@@ -113,6 +113,9 @@ obj$annotations$method = module.method
 obj$annotations$Q = Q
 obj$annotations$NQ = NQ
 obj$annotations$Qds = Qds
+obj$annotations$columnScaled = TRUE
+obj$annotations$winsorized = TRUE 
+obj$annotations$deprecated = FALSE
 obj = synapseClient::synStore(obj, used = all.used.ids, executed = thisFile, activityName = 'Module Identification')
 
 write.table(module.qc.metrics, file = paste0(bicNet.id,'/',module.method,'.',runId,'.moduleQCMetrics.tsv'), row.names=F, quote=F, sep = '\t')

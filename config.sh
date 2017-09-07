@@ -4,10 +4,10 @@
 outputpath="/shared/network/"
 
 # location of Expression data on Synapse
-dataSynId="syn8257637"
+dataSynId="syn8555302"
 
 # id of folder on Synapse that network files will go to
-parentId="syn8259323"
+parentId="syn10626379"
 
 # path to error output
 errorOutput="$outputpath/errorLogs"
@@ -16,4 +16,4 @@ errorOutput="$outputpath/errorLogs"
 outOutput="$outputpath/outLogs"
 
 # commit message
-versionCommitMessage="mayo rnaseq cerebellum rank consensus"
+versionCommitMessage="fix cranio bug"
